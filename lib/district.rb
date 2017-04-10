@@ -3,7 +3,7 @@ class District
 
   def initialize(args)
     @name = args[:name]
-    @repo = args[:repo] || nil
+    @repo = args[:repo]
   end
 
   def enrollment
