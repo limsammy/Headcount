@@ -1,3 +1,14 @@
+require 'rake'
+require 'rspec/core/rake_task'
+
+directory_name = "./test/test_files"
+Dir.mkdir(directory_name) unless File.exists?(directory_name)
+
+task :default => :test
+task :test do
+  Dir.glob('./test/*_test.rb').each { |file| require file}
+end
+
 namespace :sanitation do
   desc "Check line lengths & whitespace with Cane"
   task :lines do
