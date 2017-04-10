@@ -1,13 +1,10 @@
-require_relative 'district'
+require_relative 'enrollment'
 
-class DistrictRepository
-  attr_reader :enrollment_repo, :testing_repo, :econ_repo, :data
+class EnrollmentRepository
+  attr_reader :data
 
   def initialize
     @data = {}
-    @enrollment_repo = nil
-    @testing_repo = nil
-    @econ_repo = nil
   end
 
   def load_data
@@ -26,7 +23,8 @@ class DistrictRepository
     found.values
   end
 
-  def create_district(name)
-    data[name] = District.new({name: name, repo: self})
+  def create_enrollment(name)
+    data[name] = Enrollment.new({name: name})
+    # set district object on Enrollment?
   end
 end

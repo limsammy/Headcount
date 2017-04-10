@@ -19,7 +19,7 @@ class DistrictRepositoryTest < MiniTest::Test
   end
 
   def test_responds_to_load_file
-    assert_respond_to(@dr, :load_file)
+    assert_respond_to(@dr, :load_data)
   end
 
   def test_responds_to_find_by_name
