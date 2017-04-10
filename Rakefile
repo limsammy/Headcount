@@ -1,8 +1,7 @@
 require 'rake'
-require 'rspec/core/rake_task'
 
-directory_name = "./test/test_files"
-Dir.mkdir(directory_name) unless File.exists?(directory_name)
+# directory_name = "./test/test_files"
+# Dir.mkdir(directory_name) unless File.exists?(directory_name)
 
 task :default => :test
 task :test do
