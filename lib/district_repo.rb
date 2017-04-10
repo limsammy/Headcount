@@ -27,6 +27,6 @@ class DistrictRepository
   end
 
   def create_district(name)
-    data[name] = District.new({name: name})
+    data[name] = District.new({name: name, repo: self})
   end
 end
