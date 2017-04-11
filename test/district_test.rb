@@ -1,5 +1,5 @@
 require_relative 'test_helper'
-require_relative '../lib/district'
+
 
 class DistrictTest < MiniTest::Test
   attr_reader :d

@@ -1,5 +1,5 @@
 require_relative 'test_helper'
-require_relative '../lib/csv_parser'
+
 
 class DummyClass
   include CSVParser

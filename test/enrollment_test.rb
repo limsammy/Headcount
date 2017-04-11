@@ -1,5 +1,5 @@
 require_relative 'test_helper'
-require_relative '../lib/enrollment'
+
 
 class EnrollmentTest < MiniTest::Test
   attr_reader :e
