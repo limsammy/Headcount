@@ -7,8 +7,8 @@ module CSVQuery
   end
 
   def parse_file(file_name)
-    contents = load_file(file_name)
-    sanitize(contents)
+    load_file(file_name)
+    # sanitize(contents)
     # find_records(contents, query)
   end
 
