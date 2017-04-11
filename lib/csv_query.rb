@@ -25,7 +25,6 @@ module CSVQuery
   end
 
   def sanitize(file_name, header)
-    data = []
     if header == :data && get_column(file_name, header)[0].include?(".")
       csv_to_hash(file_name).each do |hash|
         hash[:data] = format_percent(hash[:data])
