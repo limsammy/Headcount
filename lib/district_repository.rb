@@ -1,5 +1,5 @@
 require_relative 'district'
-require_relative 'csv_query'
+require_relative 'csv_parser'
 require_relative 'enrollment_repository'
 
 class DistrictRepository
