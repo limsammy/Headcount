@@ -1,5 +1,5 @@
 require_relative 'test_helper'
-require_relative '../lib/district_repo'
+require_relative '../lib/district_repository'
 
 class DistrictRepositoryTest < MiniTest::Test
   attr_reader :dr
@@ -34,12 +34,6 @@ class DistrictRepositoryTest < MiniTest::Test
     assert_respond_to(@dr, :create_district)
   end
 
-  def test_create_district_adds_district_object_to_data
-    district = @dr.create_district("DISTRICT 1")
-    assert_equal 1, @dr.data.length
-    assert_instance_of District, @dr.data["DISTRICT 1"]
-  end
-
   def test_find_by_name_creates_district_if_none_exists
     assert_equal 0, @dr.data.length
     district = @dr.find_by_name("DISTRICT 1")
@@ -67,5 +61,40 @@ class DistrictRepositoryTest < MiniTest::Test
       assert district.name == "TEST 1" || district.name == "TEST 2"
       assert_instance_of District, district
     end
+  end
+
+  def test_populate_data_adds_districts_to_data
+    dummy = ["Colorado", "ACADEMY 20", "ADAMS COUNTY 14"]
+    assert_equal 0, @dr.data.length
+    @dr.populate_data(dummy)
+    assert_equal 3, @dr.data.length
+    assert @dr.data.key?("Colorado")
+    assert @dr.data.key?("ACADEMY 20")
+    assert @dr.data.key?("ADAMS COUNTY 14")
+    refute_nil @dr.data["Colorado"]
+    refute_nil @dr.data["ACADEMY 20"]
+    refute_nil @dr.data["ADAMS COUNTY 14"]
+  end
+
+  def test_populate_data_does_not_create_duplicates
+    dummy = ["Colorado", "ACADEMY 20", "ADAMS COUNTY 14"]
+    assert_equal 0, @dr.data.length
+    @dr.populate_data(dummy)
+    assert_equal 3, @dr.data.length
+    assert @dr.data.key?("Colorado")
+    assert @dr.data.key?("ACADEMY 20")
+    assert @dr.data.key?("ADAMS COUNTY 14")
+    refute_nil @dr.data["Colorado"]
+    refute_nil @dr.data["ACADEMY 20"]
+    refute_nil @dr.data["ADAMS COUNTY 14"]
+  end
+
+  def test_create_district_assigns_data_obj_to_district
+    dummy = ["Colorado", "ACADEMY 20", "ADAMS COUNTY 14"]
+    @dr.populate_data(dummy)
+    district = @dr.find_by_name("Colorado")
+    assert @dr.data.key?("Colorado")
+    assert_equal district, @dr.data["Colorado"]
+    assert_instance_of District, @dr.data["Colorado"]
   end
 end
