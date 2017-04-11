@@ -7,7 +7,8 @@ module CSVQuery
   end
 
   def parse_file(file_name, header)
-    sanitize(load_file(file_name), header)
+    contents = load_file(file_name)
+    sanitize(contents, header)
   end
 
   def get_column(file_name, header)
