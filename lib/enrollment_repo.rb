@@ -8,19 +8,14 @@ class EnrollmentRepository
   end
 
   def load_data
+    # populate @data keys with district names
+    # parse appropriate data and create/store enrollment objects
   end
 
   def find_by_name(name)
     name = name.upcase
-    create_district(name) unless data.key?(name)
+    create_enrollment(name) unless data.key?(name)
     data[name]
-  end
-
-  def find_all_matching(text)
-    found = data.select do |name, district|
-      name.include? text.upcase
-    end
-    found.values
   end
 
   def create_enrollment(name)

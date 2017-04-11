@@ -10,7 +10,10 @@ class DistrictRepository
     @econ_repo = nil
   end
 
-  def load_data
+  def load_data(args)
+    # populate @data keys with district names
+    # create and populate _repo if needed
+    # send appropriate data to repo
   end
 
   def find_by_name(name)

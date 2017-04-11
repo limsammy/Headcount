@@ -7,6 +7,6 @@ class District
   end
 
   def enrollment
-    @repo.enrollment_repo(name)
+    @repo.enrollment_repo.find_by_name(name)
   end
 end
