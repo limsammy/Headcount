@@ -6,6 +6,9 @@ class DistrictRepositoryTest < MiniTest::Test
 
   def setup
     @dr = DistrictRepository.new
+    @dr_args = {:enrollment => {
+      :kindergarten => "./data/Kindergartners in full-day program.csv"
+    }}
   end
 
   def test_district_repo_exists
@@ -34,17 +37,12 @@ class DistrictRepositoryTest < MiniTest::Test
     assert_respond_to(@dr, :create_district)
   end
 
-  def test_find_by_name_creates_district_if_none_exists
-    assert_equal 0, @dr.data.length
-    district = @dr.find_by_name("DISTRICT 1")
-    assert_equal 1, @dr.data.length
-  end
-
   def test_find_by_name_returns_district
     assert_equal 0, @dr.data.length
+    @dr.create_district("DISTRICT 1")
     district = @dr.find_by_name("DISTRICT 1")
     assert_equal 1, @dr.data.length
-    assert_equal district, @dr.data["DISTRICT 1"]
+    assert_equal district, @dr.data[0]
   end
 
   def test_find_all_matching_returns_empty_array
@@ -52,13 +50,13 @@ class DistrictRepositoryTest < MiniTest::Test
   end
 
   def test_find_all_matching_returns_array_of_found
-    district = @dr.find_by_name("District 1")
-    district_1 = @dr.find_by_name("Test 1")
-    district_2 = @dr.find_by_name("Test 2")
+    district = @dr.create_district("District 1")
+    district_1 = @dr.create_district("Test 1")
+    district_2 = @dr.create_district("Test 2")
     districts = @dr.find_all_matching("test")
     assert_equal 2, districts.length
     districts.each do |district|
-      assert district.name == "TEST 1" || district.name == "TEST 2"
+      assert district.name == "Test 1" || district.name == "Test 2"
       assert_instance_of District, district
     end
   end
@@ -68,33 +66,50 @@ class DistrictRepositoryTest < MiniTest::Test
     assert_equal 0, @dr.data.length
     @dr.populate_data(dummy)
     assert_equal 3, @dr.data.length
-    assert @dr.data.key?("Colorado")
-    assert @dr.data.key?("ACADEMY 20")
-    assert @dr.data.key?("ADAMS COUNTY 14")
-    refute_nil @dr.data["Colorado"]
-    refute_nil @dr.data["ACADEMY 20"]
-    refute_nil @dr.data["ADAMS COUNTY 14"]
+    @dr.data.each do |district|
+      assert_instance_of District, district
+    end
+    assert_equal "Colorado", @dr.data[0].name
+    assert_equal "ACADEMY 20", @dr.data[1].name
+    assert_equal "ADAMS COUNTY 14", @dr.data[2].name
   end
 
   def test_populate_data_does_not_create_duplicates
-    dummy = ["Colorado", "ACADEMY 20", "ADAMS COUNTY 14"]
+    dummy = ["Colorado", "ACADEMY 20", "ADAMS COUNTY 14", "ACADEMY 20"]
     assert_equal 0, @dr.data.length
     @dr.populate_data(dummy)
     assert_equal 3, @dr.data.length
-    assert @dr.data.key?("Colorado")
-    assert @dr.data.key?("ACADEMY 20")
-    assert @dr.data.key?("ADAMS COUNTY 14")
-    refute_nil @dr.data["Colorado"]
-    refute_nil @dr.data["ACADEMY 20"]
-    refute_nil @dr.data["ADAMS COUNTY 14"]
+    @dr.data.each do |district|
+      assert_instance_of District, district
+    end
+    assert_equal "Colorado", @dr.data[0].name
+    assert_equal "ACADEMY 20", @dr.data[1].name
+    assert_equal "ADAMS COUNTY 14", @dr.data[2].name
   end
 
   def test_create_district_assigns_data_obj_to_district
     dummy = ["Colorado", "ACADEMY 20", "ADAMS COUNTY 14"]
     @dr.populate_data(dummy)
     district = @dr.find_by_name("Colorado")
-    assert @dr.data.key?("Colorado")
-    assert_equal district, @dr.data["Colorado"]
-    assert_instance_of District, @dr.data["Colorado"]
+    assert_equal 3, @dr.data.length
+    assert_equal district, @dr.data[0]
+    assert_instance_of District, @dr.data[0]
+  end
+
+  def test_load_data_populates_districts
+    @dr.load_data(@dr_args)
+    assert_equal 181, @dr.data.length
+    refute_nil @dr.find_by_name("Colorado")
+    refute_nil @dr.find_by_name("ACADEMY 20")
+  end
+
+  def test_once_created_districts_can_access_enrollment
+    @dr.load_data(@dr_args)
+    district = @dr.find_by_name("Colorado")
+    k_data_by_year = district.enrollment.kindergarten_participation_by_year
+    k_data_in_2010 = district.enrollment.kindergarten_participation_in_year(2010)
+    assert_equal 11, k_data_by_year.length
+    assert_equal 0.672, k_data_by_year[2011]
+    assert_equal 0.64, k_data_in_2010
   end
 end
