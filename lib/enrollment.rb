@@ -3,8 +3,8 @@ class Enrollment
 
   def initialize(args)
     @name = args[:name]
-    @repo = args[:repo]
-    @data = {}
+    args.delete(:name)
+    @data = args
   end
 
   def kindergarten_participation_by_year
@@ -13,5 +13,12 @@ class Enrollment
 
   def kindergarten_participation_in_year(year)
     @data[:kindergarten_participation][year]
+  end
+
+  def update_data(args)
+    args.delete(:name)
+    args.each do |category, value|
+      @data[category].merge!(value)
+    end
   end
 end
