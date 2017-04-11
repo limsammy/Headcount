@@ -25,14 +25,14 @@ module CSVQuery
     contents.to_a.map {|row| row.to_hash } #returns array of hashes, each hash storing data relevant to the district
   end
 
-  def sanitize(file_name, header)
-    if header == :data && get_column(file_name, header)[0].include?(".")
-      csv_to_hash(file_name).each do |hash|
+  def sanitize(contents, header)
+    if header == :data && get_column(contents, header)[0].include?(".")
+      csv_to_hash(contents).each do |hash|
         hash[:data] = format_percent(hash[:data])
         hash
       end
     elsif header == :location
-      csv_to_hash(file_name).each do |hash|
+      csv_to_hash(contents).each do |hash|
         hash[:location] = hash[:location].upcase
         hash
       end
