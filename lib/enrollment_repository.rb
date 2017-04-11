@@ -26,6 +26,7 @@ class EnrollmentRepository
   end
 
   def process_row(row, data_category)
+    row[:location] = row[:location].upcase
     if row[:dataformat] == "Percent"
       row[:data] = format_percent(row[:data])
     end
