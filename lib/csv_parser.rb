@@ -14,10 +14,6 @@ module CSVParser
   end
 
   ### Working but not used for now ###
-  def csv_to_hash(contents)
-    contents.to_a.map { |row| row.to_hash } #returns array of hashes, each hash storing data relevant to the district
-  end
-
   def find_records(contents,query) # returns array of CSV objects of the data
     search_in = query[:search_in].to_sym
     search_for = query[:find]
@@ -28,6 +24,9 @@ module CSVParser
   end
 end
 
+# def csv_to_hash(contents)
+#   contents.to_a.map { |row| row.to_hash } #returns array of hashes, each hash storing data relevant to the district
+# end
 # def get_column(contents, header)
 #   contents.map do |row|
 #     row[header]
