@@ -10,36 +10,33 @@ class EnrollmentRepository
   end
 
   def load_data(args)
+    added_districts = []
     args[:enrollment].each do |category, file|
       contents = parse_file(file)
-      process_data(contents, category)
+      added_districts = added_districts + process_data(contents, category)
     end
-  end
-
-  def translate_category(category)
-    categories = {
-      kindergarten: :kindergarten_participation,
-    }
-    categories[category]
+    added_districts.uniq
   end
 
   def process_data(contents, category)
     data_category = translate_category(category)
-    contents.each do |row|
-      if row[:dataformat] == "Percent"
-        row[:data] = format_percent(row[:data])
-      end
-      enrollment_data = {
-        :name => row[:location],
-        data_category => {row[:timeframe].to_i => row[:data]}
-      }
-      if find_by_name(row[:location])
-        enrollment = find_by_name(row[:location])
-        enrollment.update_data(enrollment_data)
-      else
-        create_enrollment(enrollment_data)
-      end
+    contents.map do |row|
+      process_row(row, data_category)
     end
+  end
+
+  def process_row(row, data_category)
+    if row[:dataformat] == "Percent"
+      row[:data] = format_percent(row[:data])
+    end
+    enrollment_data = make_enrollment_data(row, data_category)
+    enrollment = find_by_name(row[:location])
+    if enrollment
+      enrollment.update_data(enrollment_data)
+    else
+      create_enrollment(enrollment_data)
+    end
+    row[:location]
   end
 
   def find_by_name(name)
@@ -48,5 +45,19 @@ class EnrollmentRepository
 
   def create_enrollment(enrollment_data)
     data << Enrollment.new(enrollment_data)
+  end
+
+  private
+
+  def translate_category(category)
+    categories = {
+      kindergarten: :kindergarten_participation,
+    }
+    categories[category]
+  end
+
+  def make_enrollment_data(row, data_category)
+    { :name => row[:location],
+      data_category => {row[:timeframe].to_i => row[:data]} }
   end
 end
