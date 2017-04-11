@@ -16,13 +16,6 @@ class EnrollmentTest < MiniTest::Test
     assert_equal "Test", @e.name
   end
 
-  def test_update_data_add_data_to_category
-    # args = {:name => "ACADEMY 20", :kindergarten_participation => {2011 => 0.35356}}
-    # @e.update_data(args)
-    # assert_equal 2, @e.data[:kindergarten_participation].length
-    # assert_equal 0.35356, @e.data[:kindergarten_participation][2011]
-  end
-
   def test_can_get_participation_by_year
     args = {:name => "ACADEMY 20", :kindergarten_participation => {2011 => 0.35356}}
     @e.update_data(args)
