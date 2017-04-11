@@ -6,35 +6,28 @@ module CSVQuery
     CSV.open file_name, headers:true, header_converters: :symbol
   end
 
-  def parse_file(file_name, header)
+  def parse_file(file_name, query)
     contents = load_file(file_name)
-    sanitize(contents, header)
+    sanitize(contents)
+    find_records(contents, query)
   end
 
-  def get_column(file_name, header)
-    contents = load_file(file_name)
-
-    contents.map do |row|
-      row[header]
+  def find_records(contents,query)
+    search_in = query[:search_in].to_sym
+    search_for = query[:find]
+    result = contents.select do |row|
+      row[search_in] == search_for
     end
+    csv_to_hash(result)
   end
 
-  def csv_to_hash(file_name)
-    contents = load_file(file_name)
-
-    contents.to_a.map {|row| row.to_hash } #returns array of hashes, each hash storing data relevant to the district
-  end
-
-  def sanitize(contents, header)
-    if header == :data && get_column(contents, header)[0].include?(".")
-      csv_to_hash(contents).each do |hash|
-        hash[:data] = format_percent(hash[:data])
-        hash
+  def sanitize(contents)
+    contents.each do |row|
+      if row[:dataformat] == "Percent"
+        row[:data] = format_percent(row[:data])
       end
-    elsif header == :location
-      csv_to_hash(contents).each do |hash|
-        hash[:location] = hash[:location].upcase
-        hash
+      if row[:location] != "Colorado"
+        row[:location] = row[:location].upcase
       end
     end
   end
@@ -42,4 +35,14 @@ module CSVQuery
   def format_percent(number)
     number.to_f.round(3)
   end
+
+  def csv_to_hash(contents)
+    contents.to_a.map {|row| row.to_hash } #returns array of hashes, each hash storing data relevant to the district
+  end
 end
+
+# def get_column(contents, header)
+#   contents.map do |row|
+#     row[header]
+#   end
+# end
