@@ -1,13 +1,10 @@
 require 'csv'
 require 'pry'
 
-module CSVQuery
-  def load_file(file_name)
-    CSV.open file_name, headers:true, header_converters: :symbol
-  end
+module CSVParser
 
   def parse_file(file_name)
-    load_file(file_name)
+    CSV.open file_name, headers:true, header_converters: :symbol
     # sanitize(contents)
     # find_records(contents, query)
   end
