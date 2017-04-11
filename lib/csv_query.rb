@@ -6,19 +6,10 @@ module CSVQuery
     CSV.open file_name, headers:true, header_converters: :symbol
   end
 
-  def parse_file(file_name, query)
+  def parse_file(file_name)
     contents = load_file(file_name)
     sanitize(contents)
-    find_records(contents, query)
-  end
-
-  def find_records(contents,query)
-    search_in = query[:search_in].to_sym
-    search_for = query[:find]
-    result = contents.select do |row|
-      row[search_in] == search_for
-    end
-    csv_to_hash(result)
+    # find_records(contents, query)
   end
 
   def sanitize(contents)
@@ -36,8 +27,18 @@ module CSVQuery
     number.to_f.round(3)
   end
 
+  ### Working but not used for now ###
   def csv_to_hash(contents)
     contents.to_a.map {|row| row.to_hash } #returns array of hashes, each hash storing data relevant to the district
+  end
+
+  def find_records(contents,query)
+    search_in = query[:search_in].to_sym
+    search_for = query[:find]
+    result = contents.select do |row|
+      row[search_in] == search_for
+    end
+    result
   end
 end
 

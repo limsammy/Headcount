@@ -7,7 +7,10 @@ class EnrollmentRepository
     @data = {}
   end
 
-  def load_data
+  def load_data(args)
+    args[:enrollment].each do |file|
+
+    end
     # populate @data keys with district names
     # parse appropriate data and create/store enrollment objects
   end
@@ -18,8 +21,8 @@ class EnrollmentRepository
     data[name]
   end
 
-  def create_enrollment(name)
-    data[name] = Enrollment.new({name: name})
+  def create_enrollment(name, enrollment_data)
+    data[name] = Enrollment.new({name: name, enrollment_data})
     # set district object on Enrollment?
   end
 end

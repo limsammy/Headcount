@@ -6,7 +6,7 @@ class DistrictRepository
   attr_reader :enrollment_repo, :testing_repo, :econ_repo, :data
 
   def initialize
-    @data = {}
+    @data = []
     @enrollment_repo = nil
     @testing_repo = nil
     @econ_repo = nil
@@ -43,6 +43,6 @@ class DistrictRepository
   end
 
   def create_district(name)
-    District.new({name: name, repo: self})
+    data << District.new({name: name, repo: self})
   end
 end
