@@ -61,35 +61,35 @@ class DistrictRepositoryTest < MiniTest::Test
   end
 
   def test_populate_data_adds_districts_to_data
-    dummy = ["Colorado", "ACADEMY 20", "ADAMS COUNTY 14"]
+    dummy = ["COLORADO", "ACADEMY 20", "ADAMS COUNTY 14"]
     assert_equal 0, @dr.data.length
     @dr.populate_data(dummy)
     assert_equal 3, @dr.data.length
     @dr.data.each do |district|
       assert_instance_of District, district
     end
-    assert_equal "Colorado", @dr.data[0].name
+    assert_equal "COLORADO", @dr.data[0].name
     assert_equal "ACADEMY 20", @dr.data[1].name
     assert_equal "ADAMS COUNTY 14", @dr.data[2].name
   end
 
   def test_populate_data_does_not_create_duplicates
-    dummy = ["Colorado", "ACADEMY 20", "ADAMS COUNTY 14", "ACADEMY 20"]
+    dummy = ["COLORADO", "ACADEMY 20", "ADAMS COUNTY 14", "ACADEMY 20"]
     assert_equal 0, @dr.data.length
     @dr.populate_data(dummy)
     assert_equal 3, @dr.data.length
     @dr.data.each do |district|
       assert_instance_of District, district
     end
-    assert_equal "Colorado", @dr.data[0].name
+    assert_equal "COLORADO", @dr.data[0].name
     assert_equal "ACADEMY 20", @dr.data[1].name
     assert_equal "ADAMS COUNTY 14", @dr.data[2].name
   end
 
   def test_create_district_assigns_data_obj_to_district
-    dummy = ["Colorado", "ACADEMY 20", "ADAMS COUNTY 14"]
+    dummy = ["COLORADO", "ACADEMY 20", "ADAMS COUNTY 14"]
     @dr.populate_data(dummy)
-    district = @dr.find_by_name("Colorado")
+    district = @dr.find_by_name("COLORADO")
     assert_equal 3, @dr.data.length
     assert_equal district, @dr.data[0]
     assert_instance_of District, @dr.data[0]
@@ -98,13 +98,13 @@ class DistrictRepositoryTest < MiniTest::Test
   def test_load_data_populates_districts
     @dr.load_data(@dr_args)
     assert_equal 181, @dr.data.length
-    refute_nil @dr.find_by_name("Colorado")
+    refute_nil @dr.find_by_name("COLORADO")
     refute_nil @dr.find_by_name("ACADEMY 20")
   end
 
   def test_once_created_districts_can_access_enrollment
     @dr.load_data(@dr_args)
-    district = @dr.find_by_name("Colorado")
+    district = @dr.find_by_name("COLORADO")
     k_data_by_year = district.enrollment.kindergarten_participation_by_year
     k_data_in_2010 = district.enrollment.kindergarten_participation_in_year(2010)
     assert_equal 11, k_data_by_year.length
