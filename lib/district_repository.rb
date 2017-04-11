@@ -1,6 +1,6 @@
 require_relative 'district'
 require_relative 'csv_query'
-require_relative 'enrollment_repo'
+require_relative 'enrollment_repository'
 
 class DistrictRepository
   attr_reader :enrollment_repo, :testing_repo, :econ_repo, :data
