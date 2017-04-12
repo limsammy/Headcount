@@ -31,12 +31,7 @@ class EnrollmentRepository
     sanitize_percent(row)
     enrollment_data = make_enrollment_data(row, data_category)
     enrollment = find_by_name(row[:location])
-    if enrollment
-      enrollment.update_data(enrollment_data)
-    else
-      create_enrollment(enrollment_data)
-    end
-    row[:location]
+    populate_data(row, enrollment_data, enrollment)
   end
 
   def find_by_name(name)
@@ -59,8 +54,8 @@ class EnrollmentRepository
     end
   end
 
-  def populate_data(row, enrollment_data)
-    if find_by_name(row[:location])
+  def populate_data(row, enrollment_data, enrollment)
+    if enrollment
       enrollment.update_data(enrollment_data)
     else
       create_enrollment(enrollment_data)
