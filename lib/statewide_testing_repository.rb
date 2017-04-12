@@ -30,7 +30,11 @@ class StatewideTestingRepository
     if row[:dataformat] == "Percent"
       row[:data] = format_percent(row[:data])
     end
-    testing_data = make_testing_data(row, data_category)
+    sub_category = translate_sub_category(data_category)
+    if row[sub_category] == "Hawaiian/Pacific Islander"
+      row[sub_category] = "Pacific Islander"
+    end
+    testing_data = make_testing_data(row, data_category, sub_category)
     statewide_test = find_by_name(row[:location])
     if statewide_test
       statewide_test.update_data(testing_data)
@@ -52,7 +56,6 @@ class StatewideTestingRepository
 
   def translate_category(category)
     categories = {
-
     }
     categories[category] || category
   end
@@ -68,11 +71,10 @@ class StatewideTestingRepository
     sub_categories[category]
   end
 
-  def make_testing_data(row, data_category)
-    sub_category = translate_sub_category(data_category)
+  def make_testing_data(row, data_category, sub_category)
     { :name => row[:location],
       data_category => {
-        row[sub_category] => {
+        row[sub_category].to_sym => {
           row[:timeframe].to_i => row[:data]
         }
       }
