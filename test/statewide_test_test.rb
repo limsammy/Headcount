@@ -5,50 +5,60 @@ class StatewideTestTest < MiniTest::Test
   # attr_reader :swt
 
   def setup
-    @swt = Enrollment.new({
+    @swt_seed_data = {
       :name => "TEST",
       :third_grade => {
-        :math    => {2008 => 0.697},
-        :reading => {2008 => 0.703},
-        :writing => {2008 => 0.501}
+        2008 => {
+          :math    => 0.697,
+          :reading => 0.703,
+          :writing => 0.501
+        }
       },
       :eighth_grade => {
-        :math    => {2008 => 0.469},
-        :reading => {2008 => 0.703},
-        :writing => {2008 => 0.529}
+        2008 => {
+          :math    => 0.469,
+          :reading => 0.703,
+          :writing => 0.529
+        }
       },
       :math => {
-        :all_students     => {2011 => 0.5573},
-        :asian            => {2011 => 0.7094},
-        :black            => {2011 => 0.3333},
-        :pacific_islander => {2011 => 0.541},
-        :hispanic         => {2011 => 0.3926},
-        :native_american  => {2011 => 0.3981},
-        :two_or_more      => {2011 => 0.6101},
-        :white            => {2011 => 0.6585}
+        2011 => {
+          :all_students     => 0.5573,
+          :asian            => 0.7094,
+          :black            => 0.3333,
+          :pacific_islander => 0.541,
+          :hispanic         => 0.3926,
+          :native_american  => 0.3981,
+          :two_or_more      => 0.6101,
+          :white            => 0.6585
+        }
       },
       :reading => {
-        :all_students     => {2011 => 0.68},
-        :asian            => {2011 => 0.7482},
-        :black            => {2011 => 0.4861},
-        :pacific_islander => {2011 => 0.6586},
-        :hispanic         => {2011 => 0.4984},
-        :native_american  => {2011 => 0.527},
-        :two_or_more      => {2011 => 0.7438},
-        :white            => {2011 => 0.7893}
+        2011 => {
+          :all_students     => 0.68,
+          :asian            => 0.7482,
+          :black            => 0.4861,
+          :pacific_islander => 0.6586,
+          :hispanic         => 0.4984,
+          :native_american  => 0.527,
+          :two_or_more      => 0.7438,
+          :white            => 0.7893
+        }
       },
       :writing => {
-        :all_students     => {2011 => 0.5531},
-        :asian            => {2011 => 0.6569},
-        :black            => {2011 => 0.3701},
-        :pacific_islander => {2011 => 0.5583},
-        :hispanic         => {2011 => 0.368},
-        :native_american  => {2011 => 0.3788},
-        :two_or_more      => {2011 => 0.6169},
-        :white            => {2011 => 0.6633}
+        2011 => {
+          :all_students     => 0.5531,
+          :asian            => 0.6569,
+          :black            => 0.3701,
+          :pacific_islander => 0.5583,
+          :hispanic         => 0.368,
+          :native_american  => 0.3788,
+          :two_or_more      => 0.6169,
+          :white            => 0.6633
+        }
       }
-    })
-
+    }
+    @swt = StatewideTest.new(@swt_seed_data)
   end
 
   def test_statewide_test_exists
@@ -60,11 +70,132 @@ class StatewideTestTest < MiniTest::Test
   end
 
   def test_swt_responds_to_proficient_by_grade
-    skip
+    assert_respond_to @swt, :proficient_by_grade
   end
 
   def test_swt_by_grade_raises_error_if_not_3_or_8
-    skip
+    assert_raises(UnknownDataError){@swt.proficient_by_grade(4)}
+  end
+
+  def test_can_initialize_with_data
+    assert_equal @swt.data[:third_grade], @swt_seed_data[:third_grade]
+    assert_equal @swt.data[:eighth_grade], @swt_seed_data[:eighth_grade]
+    assert_equal @swt.data[:math], @swt_seed_data[:math]
+    assert_equal @swt.data[:reading], @swt_seed_data[:reading]
+    assert_equal @swt.data[:writing], @swt_seed_data[:writing]
+  end
+
+  def test_can_update_data_third_grade_data
+    new_third_grade_math_data = {
+      :name => "TEST",
+      :third_grade => {
+        2009 => {
+          :math    => 0.691
+        }
+      }
+    }
+    new_third_grade_reading_data = {
+      :name => "TEST",
+      :third_grade => {
+        2009 => {
+          :reading => 0.726
+        }
+      }
+    }
+    new_third_grade_writing_data = {
+      :name => "TEST",
+      :third_grade => {
+        2009 => {
+          :writing => 0.536
+        }
+      }
+    }
+    @swt.update_data(new_third_grade_math_data)
+    @swt.update_data(new_third_grade_reading_data)
+    @swt.update_data(new_third_grade_writing_data)
+    assert_equal 0.691, @swt.data[:third_grade][2009][:math]
+    assert_equal 0.726, @swt.data[:third_grade][2009][:reading]
+    assert_equal 0.536, @swt.data[:third_grade][2009][:writing]
+    assert_equal 0.697, @swt.data[:third_grade][2008][:math]
+  end
+
+  def test_can_update_data_csap_data
+    new_csap_math_data = {
+      :name => "TEST",
+      :math => {
+        2012 => {
+          :all_students => 0.558
+        }
+      }
+    }
+    @swt.update_data(new_csap_math_data)
+    new_csap_math_data = {
+      :name => "TEST",
+      :math => {
+        2012 => {
+          :asian => 0.7192
+        }
+      }
+    }
+    @swt.update_data(new_csap_math_data)
+    new_csap_math_data = {
+      :name => "TEST",
+      :math => {
+        2012 => {
+          :black => 0.3359
+        }
+      }
+    }
+    @swt.update_data(new_csap_math_data)
+    new_csap_math_data = {
+      :name => "TEST",
+      :math => {
+        2012 => {
+          :pacific_islander => 0.5055
+        }
+      }
+    }
+    @swt.update_data(new_csap_math_data)
+    new_csap_math_data = {
+      :name => "TEST",
+      :math => {
+        2012 => {
+          :hispanic => 0.3898
+        }
+      }
+    }
+    @swt.update_data(new_csap_math_data)
+    new_csap_math_data = {
+      :name => "TEST",
+      :math => {
+        2012 => {
+          :native_american => 0.4013
+        }
+      }
+    }
+    @swt.update_data(new_csap_math_data)
+    new_csap_math_data = {
+      :name => "TEST",
+      :math => {
+        2012 => {
+          :two_or_more => 0.6145
+        }
+      }
+    }
+    @swt.update_data(new_csap_math_data)
+    new_csap_math_data = {
+      :name => "TEST",
+      :math => {
+        2012 => {
+          :white => 0.6618
+        }
+      }
+    }
+    @swt.update_data(new_csap_math_data)
+    assert_equal 0.6618, @swt.data[:math][2012][:white]
+    assert_equal 0.6145, @swt.data[:math][2012][:two_or_more]
+    assert_equal 0.4013, @swt.data[:math][2012][:native_american]
+    assert_equal 0.6585, @swt.data[:math][2011][:white]
   end
 
   def test_swt_by_grade_returns_proficiency_for_3rd
