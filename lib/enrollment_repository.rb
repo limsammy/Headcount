@@ -1,5 +1,6 @@
 require_relative 'enrollment'
 require_relative 'csv_parser'
+require 'pry'
 
 class EnrollmentRepository
   include CSVParser
@@ -26,18 +27,10 @@ class EnrollmentRepository
   end
 
   def process_row(row, data_category)
-    row[:location] = row[:location].upcase
-    if row[:dataformat] == "Percent"
-      row[:data] = format_percent(row[:data])
-    end
+    sanitize(row)
     enrollment_data = make_enrollment_data(row, data_category)
     enrollment = find_by_name(row[:location])
-    if enrollment
-      enrollment.update_data(enrollment_data)
-    else
-      create_enrollment(enrollment_data)
-    end
-    row[:location]
+    populate_data(row, enrollment_data, enrollment)
   end
 
   def find_by_name(name)
@@ -49,6 +42,20 @@ class EnrollmentRepository
   end
 
   private
+
+  def sanitize(row)
+    row[:location] = row[:location].upcase
+    row[:data] = format_percent(row[:data]) if row[:dataformat] == "Percent"
+  end
+
+  def populate_data(row, enrollment_data, enrollment)
+    if enrollment
+      enrollment.update_data(enrollment_data)
+    else
+      create_enrollment(enrollment_data)
+    end
+    row[:location]
+  end
 
   def translate_category(category)
     categories = {
