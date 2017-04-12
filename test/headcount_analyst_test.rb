@@ -20,6 +20,14 @@ class HeadcountAnalystTest < MiniTest::Test
     assert_respond_to(@ha, :kindergarten_participation_rate_variation)
   end
 
+  def test_headcount_analyst_responds_to_kindergarten_participation_correlates_with_high_school_graduation
+    assert_respond_to(@ha, :kindergarten_participation_correlates_with_high_school_graduation)
+  end
+
+  def test_headcount_analyst_responds_to_kindergarten_participation_against_high_school_graduation
+    assert_respond_to(@ha, :kindergarten_participation_against_high_school_graduation)
+  end
+
   def test_kindergarten_participation_rate_variation_returns_right_value
     result = @ha.kindergarten_participation_rate_variation('ACADEMY 20', :against => 'COLORADO')
     assert_equal 0.766, result
@@ -52,5 +60,10 @@ class HeadcountAnalystTest < MiniTest::Test
     result = @ha.count_all_correlations
     assert_instance_of Fixnum, result
     assert result < 180
+  end
+
+  def test_can_correlate_across_districts
+    result = @ha.kindergarten_participation_correlates_with_high_school_graduation(:across => ['ACADEMY 20', 'ADAMS COUNTY 14', 'ADAMS-ARAPAHOE 28J'])
+    refute result
   end
 end
