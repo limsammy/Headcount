@@ -10,7 +10,7 @@ class HeadcountAnalyst
   def kindergarten_participation_correlates_with_high_school_graduation(args)
     district = args[:for] || args[:across]
     if district.is_a? Array
-      districts = district.map {|name| @district_repository.find_by_name(name)}
+      districts = district.map {|name| find_district(name)}
       correlation_count = count_all_correlations(districts)
       has_correlation([correlation_count, districts.length])
     elsif district == "STATEWIDE"
