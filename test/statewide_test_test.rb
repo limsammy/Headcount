@@ -69,14 +69,6 @@ class StatewideTestTest < MiniTest::Test
     assert_equal "TEST", @swt.name
   end
 
-  def test_swt_responds_to_proficient_by_grade
-    assert_respond_to @swt, :proficient_by_grade
-  end
-
-  def test_swt_by_grade_raises_error_if_not_3_or_8
-    assert_raises(UnknownDataError){@swt.proficient_by_grade(4)}
-  end
-
   def test_can_initialize_with_data
     assert_equal @swt.data[:third_grade], @swt_seed_data[:third_grade]
     assert_equal @swt.data[:eighth_grade], @swt_seed_data[:eighth_grade]
@@ -198,17 +190,33 @@ class StatewideTestTest < MiniTest::Test
     assert_equal 0.6585, @swt.data[:math][2011][:white]
   end
 
+  def test_swt_responds_to_proficient_by_grade
+    assert_respond_to @swt, :proficient_by_grade
+  end
+
+  def test_swt_by_grade_raises_error_if_not_3_or_8
+    assert_raises(UnknownDataError){@swt.proficient_by_grade(4)}
+  end
+
   def test_swt_by_grade_returns_proficiency_for_3rd
-    skip
+    expected = {2008 => {
+      :math    => 0.697,
+      :reading => 0.703,
+      :writing => 0.501
+    }}
+    result = @swt.proficient_by_grade(3)
+    assert_equal expected, result
   end
 
   def test_swt_responds_to_proficient_by_race_or_ethnicity
-    skip
+    assert_respond_to @swt, :proficient_by_race_or_ethnicity
   end
 
   def test_swt_by_race_raises_error_if_not_in_allowed
-    skip
-    allowed = [:asian, :black, :pacific_islander, :hispanic, :native_american, :two_or_more, :white]
+    assert_raises(UnknownDataError){@swt.proficient_by_race_or_ethnicity(:blue)}
+  end
+
+  def test_swt_by_grade_returns_proficiency_for_
   end
 
   def test_swt_responds_to_proficient_for_subject_by_grade_in_year

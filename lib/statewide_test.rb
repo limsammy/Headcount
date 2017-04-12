@@ -12,6 +12,13 @@ class StatewideTest
   def proficient_by_grade(grade)
     raise UnknownDataError unless [3,8].include?(grade)
     # can we use group_by here
+    return @data[:third_grade] if grade == 3
+    return @data[:eighth_grade] if grade == 8
+  end
+
+  def proficient_by_race_or_ethnicity(race)
+    allowed = [:asian, :black, :pacific_islander, :hispanic, :native_american, :two_or_more, :white]
+    raise UnknownDataError unless allowed.include?(race)
   end
 
   def update_data(args, look_in = @data)
