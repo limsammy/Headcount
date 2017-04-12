@@ -216,7 +216,10 @@ class StatewideTestTest < MiniTest::Test
     assert_raises(UnknownDataError){@swt.proficient_by_race_or_ethnicity(:blue)}
   end
 
-  def test_swt_by_grade_returns_proficiency_for_
+  def test_swt_by_grade_returns_proficiency_for_asian
+    result = @swt.proficient_by_race_or_ethnicity(:asian)
+    expected = { 2011 => {:math=>0.7094, :reading=>0.7482, :writing=>0.6569}}
+     assert_equal expected, result
   end
 
   def test_swt_responds_to_proficient_for_subject_by_grade_in_year
