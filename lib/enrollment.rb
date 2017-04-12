@@ -15,10 +15,22 @@ class Enrollment
     @data[:kindergarten_participation][year]
   end
 
+  def graduation_rate_by_year
+    @data[:high_school_graduation]
+  end
+
+  def graduation_rate_in_year(year)
+    @data[:high_school_graduation][year]
+  end
+
   def update_data(args)
     args.delete(:name)
     args.each do |category, value|
-      @data[category].merge!(value)
+      if @data[category].nil?
+        @data[category] = value
+      else
+        @data[category].merge!(value)
+      end
     end
   end
 end
