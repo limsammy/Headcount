@@ -12,6 +12,26 @@ class EnrollmentTest < MiniTest::Test
     assert @e
   end
 
+  def test_respond_to_kindergarten_participation_by_year
+    assert_respond_to(@e, :kindergarten_participation_by_year)
+  end
+
+  def test_respond_to_kindergarten_partiipation_by_specific_year
+    assert_respond_to(@e, :kindergarten_participation_in_year)
+  end
+
+  def test_respond_to_graduation_rate_by_year
+    assert_respond_to(@e, :graduation_rate_by_year)
+  end
+
+  def test_respond_to_graduation_rate_in_specific_year
+    assert_respond_to(@e, :graduation_rate_in_year)
+  end
+
+  def test_respond_to_update_data
+    assert_respond_to(@e, :graduation_rate_in_year)
+  end
+
   def test_district_has_a_name
     assert_equal "Test", @e.name
   end
