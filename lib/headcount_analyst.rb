@@ -8,17 +8,16 @@ class HeadcountAnalyst
   end
 
   def kindergarten_participation_correlates_with_high_school_graduation(args)
-    district = args[:for] || args[:across]
-    if district.is_a? Array
-      districts = district.map {|name| find_district(name)}
+    if args.key?(:across)
+      districts = args[:across].map {|name| find_district(name)}
       correlation_count = count_all_correlations(districts)
       has_correlation([correlation_count, districts.length])
-    elsif district == "STATEWIDE"
+    elsif args[:for] == "STATEWIDE"
       correlation_count = count_all_correlations
       length_without_CO = (@district_repository.data.length - 1.0)
       has_correlation([correlation_count, length_without_CO])
     else
-      variation = kindergarten_participation_against_high_school_graduation(district)
+      variation = kindergarten_participation_against_high_school_graduation(args[:for])
       variation > 0.6 && variation < 1.5
     end
   end
