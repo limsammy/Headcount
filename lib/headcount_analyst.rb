@@ -1,6 +1,3 @@
-require 'bigdecimal'
-require 'bigdecimal/util'
-
 class HeadcountAnalyst
 
   def initialize(district_repository)
