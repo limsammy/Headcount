@@ -246,22 +246,25 @@ class StatewideTestTest < MiniTest::Test
   end
 
   def test_swt_responds_to_proficient_for_subject_by_race_in_year
-    skip
+    assert_respond_to @swt, :proficient_for_subject_by_race_in_year
   end
 
-  def test_swt_by_grade_in_year_raises_error_for_grade
-    skip
-    allowed = [3, 8]
+  def test_swt_by_grade_in_year_raises_error_if_not_in_allowed_race
+    assert_raises(UnknownDataError){@swt.proficient_for_subject_by_race_in_year(:math, :blue, 2012)}
   end
 
-  def test_swt_by_grade_in_year_raises_error_if_not_in_allowed
-    skip
-    allowed = [:asian, :black, :pacific_islander, :hispanic, :native_american, :two_or_more, :white]
+  def test_swt_by_grade_in_year_raises_error_if_not_in_allowed_subject
+    assert_raises(UnknownDataError){@swt.proficient_for_subject_by_race_in_year(:literature, :white, 2012)}
   end
 
   def test_swt_by_grade_in_year_raises_error_for_unknown_year
-    skip
-    too_early = 2000
-    too_late = 2020
+    assert_raises(UnknownDataError){@swt.proficient_for_subject_by_race_in_year(:math, :white, 2000)}
+    assert_raises(UnknownDataError){@swt.proficient_for_subject_by_race_in_year(:math, :white, 3000)}
+  end
+
+  def test_swt_by_grade_in_year_returns_proficiency_for_math_asian_2011
+    result = @swt.proficient_for_subject_by_race_in_year(:math, :asian, 2011)
+    expected = 0.7094
+    assert_equal expected, result
   end
 end
