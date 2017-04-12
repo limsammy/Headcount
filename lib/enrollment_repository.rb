@@ -45,7 +45,7 @@ class EnrollmentRepository
 
   def sanitize(row)
     row[:location] = row[:location].upcase
-    row[:data] = format_percent(row[:data]) if row[:dataformat] == "Percent"\
+    row[:data] = format_percent(row[:data]) if row[:dataformat] == "Percent"
   end
 
   def populate_data(row, enrollment_data, enrollment)
