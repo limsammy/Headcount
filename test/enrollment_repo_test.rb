@@ -55,4 +55,8 @@ class EnrollmentRepositoryTest < MiniTest::Test
     assert_instance_of Array, result
     assert_equal 181, result.length
   end
+
+  def test_case_name
+    skip
+  end
 end
