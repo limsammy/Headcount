@@ -52,9 +52,9 @@ class EnrollmentRepository
 
   def translate_category(category)
     categories = {
-      kindergarten: :kindergarten_participation,
+      kindergarten: :kindergarten_participation
     }
-    categories[category]
+    categories[category] || category
   end
 
   def make_enrollment_data(row, data_category)
