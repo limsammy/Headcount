@@ -8,18 +8,23 @@ class HeadcountAnalyst
   end
 
   def kindergarten_participation_correlates_with_high_school_graduation(args)
-    district = args[:for]
-    if district == "STATEWIDE"
+    district = args[:for] || args[:across]
+    if district.is_a? Array
+      districts = district.map {|name| @district_repository.find_by_name(name)}
+      correlation_count = count_all_correlations(districts)
+      has_correlation([correlation_count, districts.length])
+    elsif district == "STATEWIDE"
       correlation_count = count_all_correlations
-      correlation_count / (@district_repository.data.length - 1.0) > 0.7
+      length_without_CO = (@district_repository.data.length - 1.0)
+      has_correlation([correlation_count, length_without_CO])
     else
       variation = kindergarten_participation_against_high_school_graduation(district)
       variation > 0.6 && variation < 1.5
     end
   end
 
-  def count_all_correlations
-    @district_repository.data.count do |district|
+  def count_all_correlations(set = @district_repository.data)
+    set.count do |district|
       next if district.name == "COLORADO"
       args = {for: district.name}
       kindergarten_participation_correlates_with_high_school_graduation(args)
@@ -78,6 +83,10 @@ class HeadcountAnalyst
 
   def find_district(district_name)
     @district_repository.find_by_name(district_name)
+  end
+
+  def has_correlation(values)
+    values[0] / values[1] > 0.7
   end
 
   def find_variation(values)
