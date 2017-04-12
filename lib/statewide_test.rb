@@ -9,17 +9,34 @@ class StatewideTest
     @data = args
   end
 
+  def validate_args(args)
+    valid = {
+      :grade => [3,8],
+      :race => [:asian, :black, :pacific_islander, :hispanic, :native_american, :two_or_more, :white],
+      :subject => [:math, :reading, :writing],
+      :year => [*(2008..2014)]
+    }
+    args.each do |set, value|
+      raise UnknownDataError unless valid[set].include?(value)
+    end
+  end
+
   def proficient_by_grade(grade)
-    raise UnknownDataError unless [3,8].include?(grade)
+    validate_args({grade:grade})
     return @data[:third_grade] if grade == 3
     return @data[:eighth_grade] if grade == 8
   end
 
   def proficient_by_race_or_ethnicity(race)
-    allowed = [:asian, :black, :pacific_islander, :hispanic, :native_american, :two_or_more, :white]
-    raise UnknownDataError unless allowed.include?(race)
+    validate_args({race:race})
     years = get_years_data(race)
     format_to_year_data(years)
+  end
+
+  def proficient_for_subject_by_grade_in_year(subject, grade, year)
+    validate_args({grade:grade, subject:subject, year:year})
+    return @data[:third_grade][year][subject] if grade == 3
+    return @data[:eighth_grade][year][subject] if grade == 8
   end
 
   def get_years_data(filter)
