@@ -27,8 +27,7 @@ class EnrollmentRepository
   end
 
   def process_row(row, data_category)
-    sanitize_location(row)
-    sanitize_percent(row)
+    sanitize(row)
     enrollment_data = make_enrollment_data(row, data_category)
     enrollment = find_by_name(row[:location])
     populate_data(row, enrollment_data, enrollment)
@@ -44,14 +43,9 @@ class EnrollmentRepository
 
   private
 
-  def sanitize_location(row)
+  def sanitize(row)
     row[:location] = row[:location].upcase
-  end
-
-  def sanitize_percent(row)
-    if row[:dataformat] == "Percent"
-      row[:data] = format_percent(row[:data])
-    end
+    row[:data] = format_percent(row[:data]) if row[:dataformat] == "Percent"\
   end
 
   def populate_data(row, enrollment_data, enrollment)
