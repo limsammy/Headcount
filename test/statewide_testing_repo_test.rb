@@ -1,17 +1,19 @@
 require_relative 'test_helper'
 
 class StatewideTestingRepositoryTest < MiniTest::Test
-  attr_reader :er
+  # attr_reader :er
 
   def setup
-    @er = StatewideTestingRepository.new
-    @statewide_testing_args = {:statewide_testing => {
-      :third_grade  => "./data/3rd grade students scoring proficient or above on the CSAP_TCAP.csv",
-      :eighth_grade => "./data/8th grade students scoring proficient or above on the CSAP_TCAP.csv",
-      :math         => "./data/Average proficiency on the CSAP_TCAP by race_ethnicity_ Math.csv",
-      :reading      => "./data/Average proficiency on the CSAP_TCAP by race_ethnicity_ Reading.csv",
-      :writing      => "./data/Average proficiency on the CSAP_TCAP by race_ethnicity_ Writing.csv"
-    }}
+    @swtr = StatewideTestingRepository.new
+    @statewide_testing_args = {
+      :statewide_testing => {
+        :third_grade  => "./data/3rd grade students scoring proficient or above on the CSAP_TCAP.csv",
+        :eighth_grade => "./data/8th grade students scoring proficient or above on the CSAP_TCAP.csv",
+        :math         => "./data/Average proficiency on the CSAP_TCAP by race_ethnicity_ Math.csv",
+        :reading      => "./data/Average proficiency on the CSAP_TCAP by race_ethnicity_ Reading.csv",
+        :writing      => "./data/Average proficiency on the CSAP_TCAP by race_ethnicity_ Writing.csv"
+      }
+    }
     @statewide_test_data = {
       :name => "DISTRICT 1",
       :third_grade => {
@@ -58,45 +60,45 @@ class StatewideTestingRepositoryTest < MiniTest::Test
   end
 
   def test_statewide_testing_repo_exists
-    assert @er
+    assert @swtr
   end
 
   def test_initializes_with_no_data
-    assert_empty @er.data
+    assert_empty @swtr.data
   end
 
   def test_responds_to_load_file
-    assert_respond_to(@er, :load_data)
+    assert_respond_to(@swtr, :load_data)
   end
 
   def test_responds_to_find_by_name
-    assert_respond_to(@er, :find_by_name)
+    assert_respond_to(@swtr, :find_by_name)
   end
 
   def test_responds_to_create_statewide_test
-    assert_respond_to(@er, :create_statewide_test)
+    assert_respond_to(@swtr, :create_statewide_test)
   end
 
   def test_responds_to_process_data
-    assert_respond_to(@er, :process_data)
+    assert_respond_to(@swtr, :process_data)
   end
 
   def test_create_statewide_test_adds_statewide_test_object_to_data
-    statewide_test = @er.create_statewide_test(@statewide_test_data)
-    assert_equal 1, @er.data.length
-    assert_instance_of StatewideTest, @er.data[0]
+    statewide_test = @swtr.create_statewide_test(@statewide_test_data)
+    assert_equal 1, @swtr.data.length
+    assert_instance_of StatewideTest, @swtr.data[0]
   end
 
   def test_find_by_name_returns_statewide_test
-    assert_equal 0, @er.data.length
-    statewide_test = @er.create_statewide_test(@statewide_test_data)
-    assert_equal 1, @er.data.length
-    statewide_test = @er.find_by_name("DISTRICT 1")
-    assert_equal statewide_test, @er.data[0]
+    assert_equal 0, @swtr.data.length
+    statewide_test = @swtr.create_statewide_test(@statewide_test_data)
+    assert_equal 1, @swtr.data.length
+    statewide_test = @swtr.find_by_name("DISTRICT 1")
+    assert_equal statewide_test, @swtr.data[0]
   end
 
   def test_load_data_returns_array
-    result = @er.load_data(@statewide_test_args)
+    result = @swtr.load_data(@statewide_testing_args)
     assert_instance_of Array, result
     assert_equal 181, result.length
   end

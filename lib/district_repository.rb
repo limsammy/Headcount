@@ -1,5 +1,6 @@
 require_relative 'district'
 require_relative 'enrollment_repository'
+require_relative 'statewide_testing_repository'
 
 class DistrictRepository
   attr_reader :enrollment_repo, :testing_repo, :econ_repo, :data
@@ -15,6 +16,11 @@ class DistrictRepository
     if args.key?(:enrollment)
       @enrollment_repo = EnrollmentRepository.new if @enrollment_repo.nil?
       district_data = @enrollment_repo.load_data({enrollment: args[:enrollment]})
+      populate_data(district_data)
+    end
+    if args.key?(:statewide_testing)
+      @testing_repo ||= StatewideTestingRepository.new
+      district_data = @testing_repo.load_data({statewide_testing: args[:statewide_testing]})
       populate_data(district_data)
     end
   end

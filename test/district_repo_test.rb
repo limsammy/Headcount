@@ -5,9 +5,14 @@ class DistrictRepositoryTest < MiniTest::Test
 
   def setup
     @dr = DistrictRepository.new
-    @dr_args = {:enrollment => {
-      :kindergarten => "./data/Kindergartners in full-day program.csv"
-    }}
+    @dr_args = {
+      :enrollment => {
+        :kindergarten => "./data/Kindergartners in full-day program.csv"
+      },
+      :statewide_testing => {
+        :third_grade  => "./data/3rd grade students scoring proficient or above on the CSAP_TCAP.csv"
+      }
+    }
   end
 
   def test_district_repo_exists
@@ -110,5 +115,13 @@ class DistrictRepositoryTest < MiniTest::Test
     assert_equal 11, k_data_by_year.length
     assert_equal 0.672, k_data_by_year[2011]
     assert_equal 0.64, k_data_in_2010
+  end
+
+  def test_once_created_districts_can_access_statewide_test
+    @dr.load_data(@dr_args)
+    district = @dr.find_by_name("COLORADO")
+    assert_respond_to(district, :statewide_test)
+    statewide_test = district.statewide_test
+    assert_instance_of StatewideTest, statewide_test
   end
 end

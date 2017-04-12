@@ -26,18 +26,18 @@ class StatewideTestingRepository
   end
 
   def process_row(row, data_category)
-    # row[:location] = row[:location].upcase
-    # if row[:dataformat] == "Percent"
-    #   row[:data] = format_percent(row[:data])
-    # end
-    # enrollment_data = make_enrollment_data(row, data_category)
-    # enrollment = find_by_name(row[:location])
-    # if enrollment
-    #   enrollment.update_data(enrollment_data)
-    # else
-    #   create_enrollment(enrollment_data)
-    # end
-    # row[:location]
+    row[:location] = row[:location].upcase
+    if row[:dataformat] == "Percent"
+      row[:data] = format_percent(row[:data])
+    end
+    testing_data = make_testing_data(row, data_category)
+    statewide_test = find_by_name(row[:location])
+    if statewide_test
+      statewide_test.update_data(testing_data)
+    else
+      create_statewide_test(testing_data)
+    end
+    row[:location]
   end
 
   def find_by_name(name)
@@ -57,7 +57,7 @@ class StatewideTestingRepository
     categories[category] || category
   end
 
-  def translate_sub_category(category, sub_category)
+  def translate_sub_category(category)
     sub_categories = {
       :third_grade  => :score,
       :eighth_grade => :score,
@@ -69,9 +69,12 @@ class StatewideTestingRepository
   end
 
   def make_testing_data(row, data_category)
+    sub_category = translate_sub_category(data_category)
     { :name => row[:location],
-      data_category[sub_category] => {
-        row[:timeframe].to_i => row[:data]
+      data_category => {
+        row[sub_category] => {
+          row[:timeframe].to_i => row[:data]
+        }
       }
     }
   end

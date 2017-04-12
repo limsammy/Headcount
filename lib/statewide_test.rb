@@ -1,4 +1,4 @@
-class Enrollment
+class StatewideTest
   attr_reader :name
 
   def initialize(args)
@@ -7,21 +7,21 @@ class Enrollment
     @data = args
   end
 
-  def kindergarten_participation_by_year
-    @data[:kindergarten_participation]
-  end
-
-  def kindergarten_participation_in_year(year)
-    @data[:kindergarten_participation][year]
-  end
-
-  def graduation_rate_by_year
-    @data[:high_school_graduation]
-  end
-
-  def graduation_rate_in_year(year)
-    @data[:high_school_graduation][year]
-  end
+  # def kindergarten_participation_by_year
+  #   @data[:kindergarten_participation]
+  # end
+  #
+  # def kindergarten_participation_in_year(year)
+  #   @data[:kindergarten_participation][year]
+  # end
+  #
+  # def graduation_rate_by_year
+  #   @data[:high_school_graduation]
+  # end
+  #
+  # def graduation_rate_in_year(year)
+  #   @data[:high_school_graduation][year]
+  # end
 
   def update_data(args)
     args.delete(:name)
