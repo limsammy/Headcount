@@ -74,13 +74,8 @@ class StatewideTestingRepository
   def make_testing_data(row, data_category, sub_category)
     { :name => row[:location],
       data_category => {
-<<<<<<< HEAD
         row[:timeframe].to_i => {
           row[sub_category].to_sym => row[:data]
-=======
-        row[sub_category].to_sym => {
-          row[:timeframe].to_i => row[:data]
->>>>>>> 71721447c3cf6daac0c76548ce888d8827c15495
         }
       }
     }
