@@ -18,10 +18,6 @@ class EconomicProfileTest < MiniTest::Test
     assert @ep
   end
 
-  # def test_respond_to_kindergarten_participation_by_year
-  #   assert_respond_to(@ep, :kindergarten_participation_by_year)
-  # end
-
   def test_respond_to_update_data
     assert_respond_to(@ep, :update_data)
   end
@@ -30,7 +26,7 @@ class EconomicProfileTest < MiniTest::Test
     assert_equal "Test", @ep.name
   end
 
-  def test_can_update_data_lunch_data
+  def test_can_update_data
     new_2000_percentage_data = {name: 'Test', :free_or_reduced_price_lunch => {2000 => {:percentage => 0.027}}}
     new_2000_total_data = {name: 'Test', :free_or_reduced_price_lunch => {2000 => {:total => 195149}}}
     new_median_2006_2010 = {name: 'Test', :median_household_income => {[2006, 2010] => 56456}}
@@ -46,5 +42,29 @@ class EconomicProfileTest < MiniTest::Test
     assert_equal 56456, @ep.data[:median_household_income][[2006, 2010]]
     assert_equal 57685, @ep.data[:median_household_income][[2007, 2011]]
     assert_equal 60000, @ep.data[:median_household_income][[2008, 2012]]
+  end
+
+  def test_respond_to_median_household_income_in_year
+    assert_respond_to(@ep, :median_household_income_in_year)
+  end
+
+  def test_respond_to_median_household_income_average
+    assert_respond_to(@ep, :median_household_income_average)
+  end
+
+  def test_respond_to_children_in_poverty_in_year
+    assert_respond_to(@ep, :children_in_poverty_in_year)
+  end
+
+  def test_respond_to_free_or_reduced_price_lunch_percentage_in_year
+    assert_respond_to(@ep, :free_or_reduced_price_lunch_percentage_in_year)
+  end
+
+  def test_respond_to_free_or_reduced_price_lunch_number_in_year
+    assert_respond_to(@ep, :free_or_reduced_price_lunch_number_in_year)
+  end
+
+  def test_respond_to_title_i_in_year
+    assert_respond_to(@ep, :title_i_in_year)
   end
 end

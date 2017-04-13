@@ -33,7 +33,7 @@ class EnrollmentTest < MiniTest::Test
   end
 
   def test_enrollment_has_a_name
-    assert_equal "Test", @e.name
+    assert_equal "TEST", @e.name
   end
 
   def test_can_get_participation_by_year
