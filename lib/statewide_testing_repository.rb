@@ -26,21 +26,22 @@ class StatewideTestRepository
   end
 
   def process_row(row, data_category)
-    sanitize(row, data_category)
     sub_category = get_sub_category(data_category)
-    row[sub_category] = row[sub_category].downcase.gsub(" ", "_")
+    sanitize(row, sub_category)
     testing_data = make_testing_data(row, data_category, sub_category)
-    statewide_test = find_by_name(row[:location])
-    if statewide_test
-      statewide_test.update_data(testing_data)
-    else
-      create_statewide_test(testing_data)
-    end
-    row[:location]
+    # statewide_test = find_by_name(row[:location])
+    # if statewide_test
+    #   statewide_test.update_data(testing_data)
+    # else
+    #   create_statewide_test(testing_data)
+    # end
+    # row[:location]
+    populate_data(row, testing_data)
   end
 
   def sanitize(row, sub_category)
     row[:location] = row[:location].upcase
+    row[sub_category] = row[sub_category].downcase.gsub(" ", "_")
     if row[:dataformat] == "Percent"
       row[:data] = format_percent(row[:data])
     end
@@ -51,6 +52,16 @@ class StatewideTestRepository
 
   def get_sub_category(category)
     translate_sub_category(category)
+  end
+
+  def populate_data(row, data)
+    statewide_test = find_by_name(row[:location])
+    if statewide_test
+      statewide_test.update_data(data)
+    else
+      create_statewide_test(data)
+    end
+    row[:location]
   end
 
   def find_by_name(name)
