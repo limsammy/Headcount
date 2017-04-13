@@ -6,12 +6,7 @@ class EnrollmentBuilder
     @repository = repository
   end
 
-  # def self.build_data(category, file)
-  #   builder = EnrollmentBuilder.new
-  #   builder.build_data(category, file)
-  # end
-
-  def build_data(category, file)
+  def build_enrollment(category, file)
     contents = parse_file(file)
     process_data(contents, category)
   end

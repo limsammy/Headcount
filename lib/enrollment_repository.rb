@@ -12,10 +12,8 @@ class EnrollmentRepository
   def load_data(args)
     added_districts = []
     args[:enrollment].each do |category, file|
-      # contents = parse_file(file)
-      # added_districts << process_data(contents, category) # Enrollment_Builder.new(contents, category).found_districts
       builder = EnrollmentBuilder.new(self)
-      added_districts << builder.build_data(category, file)
+      added_districts << builder.build_enrollment(category, file)
     end
     added_districts.flatten.uniq
   end
