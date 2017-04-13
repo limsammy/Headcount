@@ -1,8 +1,6 @@
 require_relative 'test_helper'
 
 class EnrollmentBuilderTest < MiniTest::Test
-  attr_reader :eb
-
   def setup
     @er = EnrollmentRepository.new
     @eb = EnrollmentBuilder.new(@er)

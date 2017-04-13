@@ -1,8 +1,6 @@
 require_relative 'test_helper'
 
 class StatewideTestBuilderTest < MiniTest::Test
-  # attr_reader :er
-
   def setup
     @swtr = StatewideTestRepository.new
     @builder = StatewideTestBuilder.new(@swtr)

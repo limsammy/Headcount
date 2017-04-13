@@ -1,4 +1,5 @@
 require_relative '../csv_parser'
+
 class EnrollmentBuilder
   include CSVParser
 
