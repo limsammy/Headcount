@@ -26,7 +26,7 @@ class StatewideTestRepository
   end
 
   def process_row(row, data_category)
-    sub_category = get_sub_category(data_category)
+    sub_category = sub_categories[data_category]
     sanitize(row, sub_category)
     testing_data = make_testing_data(row, data_category, sub_category)
     populate_data(row, testing_data)
@@ -48,15 +48,14 @@ class StatewideTestRepository
     categories[category] || category
   end
 
-  def translate_sub_category(category)
-    sub_categories = {
+  def sub_categories
+    {
       :third_grade  => :score,
       :eighth_grade => :score,
       :math         => :race_ethnicity,
       :reading      => :race_ethnicity,
       :writing      => :race_ethnicity
     }
-    sub_categories[category]
   end
 
   def sanitize(row, sub_category)
@@ -68,10 +67,6 @@ class StatewideTestRepository
     if row[sub_category] == "Hawaiian/Pacific Islander"
       row[sub_category] = "Pacific Islander"
     end
-  end
-
-  def get_sub_category(category)
-    translate_sub_category(category)
   end
 
   def populate_data(row, data)
