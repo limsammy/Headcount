@@ -61,7 +61,6 @@ class EconomicProfileRepositoryTest < MiniTest::Test
   end
 
   def test_load_data_returns_array
-    # skip
     result = @epr.load_data(@economic_profile_args)
     assert_instance_of Array, result
     assert_equal 181, result.length
