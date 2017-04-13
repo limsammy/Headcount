@@ -1,10 +1,10 @@
 require_relative 'test_helper'
 
-class StatewideTestingRepositoryTest < MiniTest::Test
+class StatewideTestRepositoryTest < MiniTest::Test
   # attr_reader :er
 
   def setup
-    @swtr = StatewideTestingRepository.new
+    @swtr = StatewideTestRepository.new
     @statewide_testing_args = {
       :statewide_testing => {
         :third_grade  => "./data/3rd grade students scoring proficient or above on the CSAP_TCAP.csv",
@@ -101,5 +101,28 @@ class StatewideTestingRepositoryTest < MiniTest::Test
     result = @swtr.load_data(@statewide_testing_args)
     assert_instance_of Array, result
     assert_equal 181, result.length
+    assert_includes result, "AULT-HIGHLAND RE-9"
+    assert_includes result, "BUFFALO RE-4"
+  end
+
+  def test_subject_by_race_in_year_from_harness
+    @swtr.load_data(@statewide_testing_args)
+    testing = @swtr.find_by_name("AULT-HIGHLAND RE-9")
+    assert_in_delta 0.611, testing.proficient_for_subject_by_race_in_year(:math, :white, 2012), 0.005
+    assert_in_delta 0.310, testing.proficient_for_subject_by_race_in_year(:math, :hispanic, 2014), 0.005
+    assert_in_delta 0.794, testing.proficient_for_subject_by_race_in_year(:reading, :white, 2013), 0.005
+    assert_in_delta 0.278, testing.proficient_for_subject_by_race_in_year(:writing, :hispanic, 2014), 0.005
+
+    testing = @swtr.find_by_name("BUFFALO RE-4")
+    assert_in_delta 0.65, testing.proficient_for_subject_by_race_in_year(:math, :white, 2012), 0.005
+    assert_in_delta 0.437, testing.proficient_for_subject_by_race_in_year(:math, :hispanic, 2014), 0.005
+    assert_in_delta 0.76, testing.proficient_for_subject_by_race_in_year(:reading, :white, 2013), 0.005
+    assert_in_delta 0.375, testing.proficient_for_subject_by_race_in_year(:writing, :hispanic, 2014), 0.005
+  end
+
+  def test_proficiency_by_subject_and_year_when_no_data
+    @swtr.load_data(@statewide_testing_args)
+    testing = @swtr.find_by_name("PLATEAU VALLEY 50")
+    assert_equal "N/A", testing.proficient_for_subject_by_grade_in_year(:reading, 8, 2011)
   end
 end

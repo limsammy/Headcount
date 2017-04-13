@@ -1,7 +1,7 @@
 require_relative 'statewide_test'
 require_relative 'csv_parser'
 
-class StatewideTestingRepository
+class StatewideTestRepository
   include CSVParser
   attr_reader :data
 
@@ -34,6 +34,7 @@ class StatewideTestingRepository
     if row[sub_category] == "Hawaiian/Pacific Islander"
       row[sub_category] = "Pacific Islander"
     end
+    row[sub_category] = row[sub_category].downcase.gsub(" ", "_")
     testing_data = make_testing_data(row, data_category, sub_category)
     statewide_test = find_by_name(row[:location])
     if statewide_test

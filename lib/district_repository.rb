@@ -19,7 +19,7 @@ class DistrictRepository
       populate_data(district_data)
     end
     if args.key?(:statewide_testing)
-      @testing_repo ||= StatewideTestingRepository.new
+      @testing_repo ||= StatewideTestRepository.new
       district_data = @testing_repo.load_data({statewide_testing: args[:statewide_testing]})
       populate_data(district_data)
     end
