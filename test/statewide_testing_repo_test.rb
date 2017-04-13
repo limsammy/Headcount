@@ -1,8 +1,6 @@
 require_relative 'test_helper'
 
 class StatewideTestRepositoryTest < MiniTest::Test
-  # attr_reader :er
-
   def setup
     @swtr = StatewideTestRepository.new
     @statewide_testing_args = {
@@ -75,23 +73,9 @@ class StatewideTestRepositoryTest < MiniTest::Test
     assert_respond_to(@swtr, :find_by_name)
   end
 
-  def test_responds_to_create_statewide_test
-    assert_respond_to(@swtr, :create_statewide_test)
-  end
-
-  def test_responds_to_process_data
-    assert_respond_to(@swtr, :process_data)
-  end
-
-  def test_create_statewide_test_adds_statewide_test_object_to_data
-    statewide_test = @swtr.create_statewide_test(@statewide_test_data)
-    assert_equal 1, @swtr.data.length
-    assert_instance_of StatewideTest, @swtr.data[0]
-  end
-
   def test_find_by_name_returns_statewide_test
     assert_equal 0, @swtr.data.length
-    statewide_test = @swtr.create_statewide_test(@statewide_test_data)
+    statewide_test = StatewideTestBuilder.new(@swtr).create_statewide_test(@statewide_test_data)
     assert_equal 1, @swtr.data.length
     statewide_test = @swtr.find_by_name("DISTRICT 1")
     assert_equal statewide_test, @swtr.data[0]
