@@ -1,5 +1,5 @@
 class EconomicProfile
-  attr_reader :name
+  attr_reader :name, :data
 
   def initialize(args)
     @name = args[:name]
@@ -7,13 +7,13 @@ class EconomicProfile
     @data = args
   end
 
-  def update_data(args)
-    args.delete(:name)
+  def update_data(args, look_in = @data)
+    args.delete(:name) if args.key?(:name)
     args.each do |category, value|
-      if @data[category].nil?
-        @data[category] = value
+      if look_in[category].nil?
+        look_in[category] = value
       else
-        @data[category].merge!(value)
+        update_data(value, look_in[category])
       end
     end
   end
