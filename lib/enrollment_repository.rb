@@ -59,7 +59,7 @@ class EnrollmentRepository
 
   def translate_category(category)
     categories = {
-      kindergarten: :kindergarten_participation
+      :kindergarten => :kindergarten_participation
     }
     categories[category] || category
   end

@@ -1,6 +1,5 @@
 require_relative 'test_helper'
 
-
 class EnrollmentRepositoryTest < MiniTest::Test
   attr_reader :er
 
@@ -28,7 +27,7 @@ class EnrollmentRepositoryTest < MiniTest::Test
     assert_respond_to(@er, :find_by_name)
   end
 
-  def test_responds_to_create_district
+  def test_responds_to_create_enrollment
     assert_respond_to(@er, :create_enrollment)
   end
 
