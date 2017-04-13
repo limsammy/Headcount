@@ -57,9 +57,11 @@ class HeadcountAnalyst
   end
 
   def find_average_years_for_district(years)
+    years = years.reject{|year, value| value == "N/A"}
     our_sum = years.values.inject(0) do |sum, value|
       sum + value
     end
+    return 0 if years.length == 0
     our_sum / years.length
   end
 

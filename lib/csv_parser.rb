@@ -10,6 +10,7 @@ module CSVParser
   end
 
   def format_percent(number)
+    return "N/A" if number == "N/A"
     number.to_f.round(3)
   end
 

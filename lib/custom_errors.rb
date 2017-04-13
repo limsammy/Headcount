@@ -1,0 +1,2 @@
+class UnknownDataError < RuntimeError
+end
