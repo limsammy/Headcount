@@ -1,5 +1,5 @@
 class District
-  attr_reader :name
+  attr_reader :name, :repo
 
   def initialize(args)
     @name = args[:name]
