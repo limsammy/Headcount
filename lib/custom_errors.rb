@@ -1,5 +1,11 @@
-class UnknownDataError < RuntimeError
+class UnknownDataError < StandardError
+  def initialize(msg = '')
+    super
+  end
 end
 
-class InsufficientInformationError < RuntimeError
+class InsufficientInformationError < StandardError
+  def initialize(msg = '')
+    super
+  end
 end
