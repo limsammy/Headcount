@@ -11,7 +11,7 @@ class HeadcountAnalystTest < MiniTest::Test
     @dr.load_data(@dr_args)
     @ha = HeadcountAnalyst.new(@dr)
 
-    @swt = StatewideTestRepository.new
+    # @swt = StatewideTestRepository.new
     @statewide_testing_args = {
       :statewide_testing => {
         :third_grade  => "./data/3rd grade students scoring proficient or above on the CSAP_TCAP.csv",
@@ -21,8 +21,8 @@ class HeadcountAnalystTest < MiniTest::Test
         :writing      => "./data/Average proficiency on the CSAP_TCAP by race_ethnicity_ Writing.csv"
       }
     }
-    @swt.load_data(@statewide_testing_args)
-    @ha_test = HeadcountAnalyst.new(@swt)
+    @dr.load_data(@statewide_testing_args)
+    @ha_test = HeadcountAnalyst.new(@dr)
   end
 
   def test_headcount_analyst_exists
@@ -88,12 +88,18 @@ class HeadcountAnalystTest < MiniTest::Test
     assert_raises(InsufficientInformationError){@ha_test.top_statewide_test_year_over_year_growth(subject: :math)}
   end
 
-  def test_raises_error_if_grade_is_missing
+  def test_raises_error_if_grade_not_allowed
     assert_raises(UnknownDataError){@ha_test.top_statewide_test_year_over_year_growth(grade: 10)}
   end
 
+  # def test_allows_grade
+  #   assert_raises(UnknownDataError){@ha_test.top_statewide_test_year_over_year_growth(grade: 8)}
+  # end
+
   def test_can_find_top_statewide_test_year_over_year_growth
+    skip
     expected = 0.123
     result = @ha_test.top_statewide_test_year_over_year_growth(grade: 3, subject: :math)
+    assert_equal expected, result
   end
 end
