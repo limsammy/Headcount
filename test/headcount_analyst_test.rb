@@ -28,6 +28,10 @@ class HeadcountAnalystTest < MiniTest::Test
     assert_respond_to(@ha, :kindergarten_participation_against_high_school_graduation)
   end
 
+  def test_headcount_analyst_responds_to_kindergarten_participation_against_high_school_graduation
+    assert_respond_to(@ha, :top_statewide_test_year_over_year_growth)
+  end
+
   def test_kindergarten_participation_rate_variation_returns_right_value
     result = @ha.kindergarten_participation_rate_variation('ACADEMY 20', :against => 'COLORADO')
     assert_equal 0.766, result
