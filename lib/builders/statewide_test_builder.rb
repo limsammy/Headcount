@@ -13,16 +13,16 @@ class StatewideTestBuilder
     process_data(contents, category)
   end
 
-  def process_data(contents, data_category)
+  def process_data(contents, category)
     contents.map do |row|
-      process_row(row, data_category)
+      process_row(row, category)
     end
   end
 
-  def process_row(row, data_category)
-    sub_category = sub_categories[data_category]
+  def process_row(row, category)
+    sub_category = sub_categories[category]
     sanitize(row, sub_category)
-    testing_data = make_testing_data(row, data_category, sub_category)
+    testing_data = make_testing_data(row, category, sub_category)
     populate_data(row, testing_data)
   end
 
@@ -63,9 +63,9 @@ class StatewideTestBuilder
     row[:location]
   end
 
-  def make_testing_data(row, data_category, sub_category)
+  def make_testing_data(row, category, sub_category)
     { :name => row[:location],
-      data_category => {
+      category => {
         row[:timeframe].to_i => {
           row[sub_category].to_sym => row[:data]
         }

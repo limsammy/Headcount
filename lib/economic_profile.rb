@@ -32,6 +32,7 @@ class EconomicProfile
   end
 
   def update_data(args, look_in = @data)
+    # binding.pry
     args.delete(:name) if args.key?(:name)
     args.each do |category, value|
       if look_in[category].nil?

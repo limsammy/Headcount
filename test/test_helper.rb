@@ -16,6 +16,7 @@ require_relative '../lib/builders/enrollment_builder'
 require_relative '../lib/enrollment'
 
 require_relative '../lib/economic_profile_repository'
+require_relative '../lib/builders/economic_profile_builder'
 require_relative '../lib/economic_profile'
 
 require_relative '../lib/statewide_testing_repository'

@@ -29,7 +29,7 @@ class DistrictRepository
     if args.key?(:economic_profile)
       @economic_profile_repo ||= EconomicProfileRepository.new
       district_data = @economic_profile_repo.load_data({economic_profile: args[:economic_profile]})
-      # populate_data(district_data)
+      populate_data(district_data)
     end
   end
 
