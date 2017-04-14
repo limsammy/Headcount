@@ -102,6 +102,9 @@ class HeadcountAnalyst
 
   def top_statewide_test_year_over_year_growth(data)
     raise InsufficientInformationError unless data.has_key?(:grade)
+    unless data[:grade] == 3 or data[:grade] == 8
+      raise UnknownDataError, "#{data[:grade]} is not a known grade"
+    end
     # end
   end
 end

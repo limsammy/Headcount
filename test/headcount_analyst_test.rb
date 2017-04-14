@@ -88,6 +88,10 @@ class HeadcountAnalystTest < MiniTest::Test
     assert_raises(InsufficientInformationError){@ha_test.top_statewide_test_year_over_year_growth(subject: :math)}
   end
 
+  def test_raises_error_if_grade_does_not_validate
+    assert_raises(UnknownDataError){@ha_test.top_statewide_test_year_over_year_growth(grade: 10)}
+  end
+
   def test_can_find_top_statewide_test_year_over_year_growth
     skip
     result = @ha_test.top_statewide_test_year_over_year_growth()
