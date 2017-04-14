@@ -1,7 +1,10 @@
+require_relative 'custom_errors'
+
 class HeadcountAnalyst
 
-  def initialize(district_repository)
+  def initialize(district_repository = nil, statewide_repository = nil)
     @district_repository = district_repository
+    @statewide_repository = statewide_repository
   end
 
   def kindergarten_participation_correlates_with_high_school_graduation(args)
@@ -97,7 +100,8 @@ class HeadcountAnalyst
     end
   end
 
-  def top_statewide_test_year_over_year_growth
-    p nil
+  def top_statewide_test_year_over_year_growth(data)
+    raise InsufficientInformationError unless data.has_key?(:grade)
+    # end
   end
 end

@@ -83,4 +83,13 @@ class HeadcountAnalystTest < MiniTest::Test
     result = @ha.kindergarten_participation_correlates_with_high_school_graduation(:across => ['ACADEMY 20', 'ADAMS COUNTY 14', 'ADAMS-ARAPAHOE 28J'])
     refute result
   end
+
+  def test_raises_error_if_missing_grade_arg
+    assert_raises(InsufficientInformationError){@ha_test.top_statewide_test_year_over_year_growth(subject: :math)}
+  end
+
+  def test_can_find_top_statewide_test_year_over_year_growth
+    skip
+    result = @ha_test.top_statewide_test_year_over_year_growth()
+  end
 end
