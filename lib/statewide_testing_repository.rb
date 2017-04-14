@@ -1,3 +1,5 @@
+require_relative './builders/statewide_test_builder'
+
 class StatewideTestRepository
   attr_reader :data
 
