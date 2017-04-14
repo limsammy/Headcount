@@ -8,7 +8,7 @@ class EnrollmentTest < MiniTest::Test
     @e = Enrollment.new({name: 'TEST', :kindergarten_participation => {2010 => 0.3915}})
   end
 
-  def test_district_exists
+  def test_enrollment_exists
     assert @e
   end
 
@@ -29,10 +29,10 @@ class EnrollmentTest < MiniTest::Test
   end
 
   def test_respond_to_update_data
-    assert_respond_to(@e, :graduation_rate_in_year)
+    assert_respond_to(@e, :update_data)
   end
 
-  def test_district_has_a_name
+  def test_enrollment_has_a_name
     assert_equal "TEST", @e.name
   end
 
