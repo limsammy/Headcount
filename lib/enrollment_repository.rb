@@ -1,4 +1,3 @@
-require_relative 'enrollment'
 require_relative './builders/enrollment_builder'
 require 'pry'
 
