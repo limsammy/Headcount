@@ -10,6 +10,19 @@ class HeadcountAnalystTest < MiniTest::Test
     }}
     @dr.load_data(@dr_args)
     @ha = HeadcountAnalyst.new(@dr)
+
+    @swt = StatewideTestRepository.new
+    @statewide_testing_args = {
+      :statewide_testing => {
+        :third_grade  => "./data/3rd grade students scoring proficient or above on the CSAP_TCAP.csv",
+        :eighth_grade => "./data/8th grade students scoring proficient or above on the CSAP_TCAP.csv",
+        :math         => "./data/Average proficiency on the CSAP_TCAP by race_ethnicity_ Math.csv",
+        :reading      => "./data/Average proficiency on the CSAP_TCAP by race_ethnicity_ Reading.csv",
+        :writing      => "./data/Average proficiency on the CSAP_TCAP by race_ethnicity_ Writing.csv"
+      }
+    }
+    @swt.load_data(@statewide_testing_args)
+    @ha_test = HeadcountAnalyst.new(@swt)
   end
 
   def test_headcount_analyst_exists
@@ -28,8 +41,8 @@ class HeadcountAnalystTest < MiniTest::Test
     assert_respond_to(@ha, :kindergarten_participation_against_high_school_graduation)
   end
 
-  def test_headcount_analyst_responds_to_kindergarten_participation_against_high_school_graduation
-    assert_respond_to(@ha, :top_statewide_test_year_over_year_growth)
+  def test_headcount_analyst_responds_to_top_statewide_test_year_over_year_growth
+    assert_respond_to(@ha_test, :top_statewide_test_year_over_year_growth)
   end
 
   def test_kindergarten_participation_rate_variation_returns_right_value

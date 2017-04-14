@@ -96,4 +96,8 @@ class HeadcountAnalyst
       find_variation([val_1, val_2])
     end
   end
+
+  def top_statewide_test_year_over_year_growth
+    p nil
+  end
 end
