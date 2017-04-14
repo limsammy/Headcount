@@ -1,4 +1,5 @@
 require_relative 'custom_errors'
+require 'pry'
 
 class HeadcountAnalyst
 
@@ -105,6 +106,27 @@ class HeadcountAnalyst
     unless data[:grade] == 3 or data[:grade] == 8
       raise UnknownDataError, "#{data[:grade]} is not a known grade"
     end
-    # end
+  end
+
+  def testing_data_for_grade_and_subject(data)
+    
+  end
+
+  def test_for_grade_and_subject(grade, subject)
+    @district_repository.districts.map do |district|
+      name = district[0]
+      test_object = @district_repository.find_by_name(name).testing_repo
+      data = test_data_validator(test_object)
+      next if data.empty?
+      first_year, last_year = data.keys.first, data.keys.last
+      data_start, data_end = data[first_year][subject], data[last_year][subject]
+      [name, {first_year => data_start, last_year => data_end}]
+    end.reject {|item| item.nil?}.to_h
+  end
+
+  def test_data_validator(test_object)
+    test_object.proficient_by_grade(data[:grade]).find_all do |year, subjects|
+      subjects.include?(data[:subject]) && subjects[data[:subject]] != 0.0
+    end.to_h
   end
 end
