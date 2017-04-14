@@ -1,4 +1,5 @@
 require 'pry'
+require_relative './builders/economic_profile_builder'
 
 class EconomicProfileRepository
   attr_reader :data
