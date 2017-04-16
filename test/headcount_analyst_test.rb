@@ -96,6 +96,11 @@ class HeadcountAnalystTest < MiniTest::Test
   #   assert_raises(UnknownDataError){@ha_test.top_statewide_test_year_over_year_growth(grade: 8)}
   # end
 
+  def test_calculate_top_district_for_category
+    @ha_test.calculate_top_district_for_category(grade: 3, subject: :math)
+  end
+  
+
   def test_can_find_top_statewide_test_year_over_year_growth
     skip
     expected = 0.123

@@ -28,6 +28,10 @@ class StatewideTest
     return @data[:eighth_grade] if grade == 8
   end
 
+  def find_by_category(grade)
+    
+  end
+
   def proficient_by_race_or_ethnicity(race)
     validate_args({race:race})
     years = get_years_data(race)

@@ -112,6 +112,25 @@ class HeadcountAnalyst
     # end
   end
 
+  def calculate_top_district_for_category(data)
+    binding.pry
+    data = @district_repository.testing_repo.find_by_category(data[:grade])
+  end
+
+
+
+  # def calculate_growth(grade, subject, top)
+  #   binding.pry
+  #   data = @district_repository.testing_repo.map do |item|
+  #       item.data[grade]
+  #       end
+  #   result = data.map do |item|
+  #       item.map do |item|
+  #         {item[:year] => item[subject.to_s]}
+  #       end
+  #   end
+  # end
+
   # def find_top_test_across_grade(grade, top)
   #   math = find_calcs_by_subject(grade, 'math', top)
   #   reading = find_calcs_by_subject(grade, 'reading', top)
@@ -183,18 +202,6 @@ class HeadcountAnalyst
   # def find_calcs_by_subject(grade, subject, top)
   #   average = calculate_growth(grade, subject, top)
   #   find_single(average, top)
-  # end
-
-  # def calculate_growth(grade, subject, top)
-  #   binding.pry
-  #   data = @district_repository.testing_repo.map do |item|
-  #       item.data[grade]
-  #       end
-  #   result = data.map do |item|
-  #       item.map do |item|
-  #         {item[:year] => item[subject.to_s]}
-  #       end
-  #   end
   # end
 
   # def find_single(average, top)

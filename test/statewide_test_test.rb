@@ -59,6 +59,17 @@ class StatewideTestTest < MiniTest::Test
       }
     }
     @swt = StatewideTest.new(@swt_seed_data)
+
+    @headcount_seed_data = {
+      :statewide_testing => {
+        :third_grade  => "./data/3rd grade students scoring proficient or above on the CSAP_TCAP.csv",
+        :eighth_grade => "./data/8th grade students scoring proficient or above on the CSAP_TCAP.csv",
+        :math         => "./data/Average proficiency on the CSAP_TCAP by race_ethnicity_ Math.csv",
+        :reading      => "./data/Average proficiency on the CSAP_TCAP by race_ethnicity_ Reading.csv",
+        :writing      => "./data/Average proficiency on the CSAP_TCAP by race_ethnicity_ Writing.csv"
+      }
+    }
+    @ha = StatewideTest.new(headcount_seed_data)
   end
 
   def test_statewide_test_exists
@@ -266,5 +277,9 @@ class StatewideTestTest < MiniTest::Test
     result = @swt.proficient_for_subject_by_race_in_year(:math, :asian, 2011)
     expected = 0.7094
     assert_equal expected, result
+
+  def test_find_by_category_loads_data
+    result = @ha.load_data(@headcount_seed_data)
+    @swtr.find_by_by_category(:)
   end
 end
