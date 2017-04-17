@@ -126,8 +126,9 @@ class HeadcountAnalyst
 
   def find_multiple_top_district_growths(collection, top)
     final = []
-    sorted = collection.sort_by { |k| k[:growth].to_f.round(3) }
-    sorted
+    sorted = collection.delete_if {|k,v| k[:growth] == 0.0}
+    sorted = collection.sort_by {|k| k[:growth]}
+    puts sorted.reverse
     # top.times do |i|
     #   final << [sorted[:name], sorted[:growth]]
     #   sorted.delete_at(i)
