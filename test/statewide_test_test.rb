@@ -356,16 +356,11 @@ class StatewideTestTest < MiniTest::Test
   end
 
   def test_find_by_category_finds_third_grade_data_of_subject
-    @ha.find_by_category(3, :math) # Succesfully returns hash of all :math data for each year
-    # Looks like:
-    # [
-    #   {
-    #     2008 => {:third_grade=>0.697}},
-    #   {
-    #     2009 => {:third_grade=>0.691}},
-    #   {
-    #     2010=>{:third_grade=>0.706}
-    #   }
-    # ]
+    expected = {
+      2008 => 0.697,
+      2009 => 0.691,
+      2010 => 0.706
+    }
+    assert_equal expected, @ha.find_by_category(3, :math)
   end
 end
