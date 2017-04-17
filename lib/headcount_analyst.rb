@@ -119,10 +119,14 @@ class HeadcountAnalyst
     end
   end
 
-  # def find_single_top_district_growth(collection)
-  #   collection.select{|x| x[:type] == type}
-  #    .max_by{|x| x[:value_length]}
-  # end
+  def find_single_top_district_growth(collection)
+    # binding.pry
+    top = collection.max_by{|x| x[:growth]}
+    final = []
+    final << top[:name]
+    final << top[:growth]
+    return final
+  end
 
   # def calculate_growth(grade, subject, top)
   #   binding.pry

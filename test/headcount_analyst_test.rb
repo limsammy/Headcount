@@ -92,10 +92,6 @@ class HeadcountAnalystTest < MiniTest::Test
     assert_raises(UnknownDataError){@ha_test.top_statewide_test_year_over_year_growth(grade: 10)}
   end
 
-  # def test_allows_grade
-  #   assert_raises(UnknownDataError){@ha_test.top_statewide_test_year_over_year_growth(grade: 8)}
-  # end
-
   def test_get_districts_and_growths
     assert_instance_of Array, @ha_test.get_districts_and_growths(3, :math)
   end
@@ -104,15 +100,15 @@ class HeadcountAnalystTest < MiniTest::Test
     assert_equal 'ACADEMY 20', @ha_test.get_districts_and_growths(3, :math)[1][:name]
   end
 
-  def test_can_find_top_statewide_test_year_over_year_growth
-    skip
-    expected = 0.123
-    result = @ha_test.top_statewide_test_year_over_year_growth(grade: 3, subject: :math)
-    assert_equal expected, result
-  end
-
-  # def find_single_top_district_growth
-  #   expected = 0
-  #   assert_equal expected, @ha_test.find_single_top_district_growth(@ha_test.get_districts_and_growths(3, :math))
+  # def test_can_find_top_statewide_test_year_over_year_growth
+  #   skip
+  #   expected = 0.123
+  #   result = @ha_test.top_statewide_test_year_over_year_growth(grade: 3, subject: :math)
+  #   assert_equal expected, result
   # end
+
+  def test_can_find_single_top_district_growth
+    expected = ['SPRINGFIELD RE-4', 0.14916666666666667]
+    assert_equal expected, @ha_test.find_single_top_district_growth(@ha_test.get_districts_and_growths(3, :math))
+  end
 end
