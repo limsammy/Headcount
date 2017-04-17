@@ -29,7 +29,7 @@ class StatewideTest
   end
 
   def find_by_category(grade, subject = nil)
-    validate_args({grade:grade})
+    validate_args({grade:grade}) # SAM: Do we need to validate again here?
     if grade == 3
       if subject.nil?
         return get_all_subjects_for_grade_by_year(:third_grade)
@@ -56,13 +56,14 @@ class StatewideTest
   def get_all_subjects_for_grade_by_year(grade)
     formatted = {}
     @data[grade].each do |year, test_collection|
-      formatted[year] = test_collection.values.inject(:+)
+      formatted[year] = test_collection.values.inject(0) {|sum, n| sum + n.to_f}
     end
     formatted
   end
 
   def growth_by_grade_over_years(grade, subject = nil)
-    validate_args({grade:grade, subject:subject})
+    validate_args({grade:grade})
+    validate_args({subject:subject}) if !subject.nil?
     max_year = find_by_category(grade, subject).keys.max
     min_year = find_by_category(grade, subject).keys.min
     max_val = find_by_category(grade, subject)[max_year].to_f
