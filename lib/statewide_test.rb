@@ -40,7 +40,11 @@ class StatewideTest
         return get_category_by_years_test(subject, :third_grade)
       end
     elsif grade == 8
-      return @data[:eighth_grade]
+      if subject.nil?
+        return @data[:eighth_grade]
+      else
+        return get_category_by_years_test(subject, :eighth_grade)
+      end
     end
   end
 

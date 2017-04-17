@@ -363,4 +363,13 @@ class StatewideTestTest < MiniTest::Test
     }
     assert_equal expected, @ha.find_by_category(3, :math)
   end
+
+  def test_find_by_category_finds_eighth_grade_data_of_subject
+    expected = {
+      2008 => 0.469,
+      2009 => 0.499,
+      2010 => 0.510
+    }
+    assert_equal expected, @ha.find_by_category(8, :math)
+  end
 end
