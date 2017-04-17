@@ -16,7 +16,6 @@ class StatewideTest
       :subject => [:math, :reading, :writing],
       :year => valid_3_or_8_years,
       :csap_year => valid_ethnicity_years
-      :categories => [3, 8, :math, :reading, :writing]
     }
     args.each do |set, value|
       raise UnknownDataError unless valid[set].include?(value)
