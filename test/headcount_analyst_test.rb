@@ -97,8 +97,11 @@ class HeadcountAnalystTest < MiniTest::Test
   # end
 
   def test_calculate_top_district_for_category
-    expected = 0
-    assert_equal expected, @ha_test.calculate_top_district_for_category(3, :math)
+    assert_instance_of Array, @ha_test.calculate_top_district_for_category(3, :math)
+  end
+
+  def test_calculate_top_district_for_category_has_district_data_pair
+    assert @ha_test.calculate_top_district_for_category(3, :math)[1].key?('ACADEMY 20')
   end
 
   def test_can_find_top_statewide_test_year_over_year_growth

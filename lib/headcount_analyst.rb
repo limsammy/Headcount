@@ -112,9 +112,9 @@ class HeadcountAnalyst
     end
   end
 
-  def calculate_top_district_for_category(grade, subject)
+  def calculate_top_district_for_category(grade, subject)\
     @district_repository.testing_repo.data.map do |test_object|
-      test_object.growth_by_grade_over_years(grade, subject)
+      {test_object.name => test_object.growth_by_grade_over_years(grade, subject)}
     end
   end
 
