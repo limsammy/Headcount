@@ -76,7 +76,7 @@ class StatewideTestTest < MiniTest::Test
         2010 => {
           :math    => 0.706,
           :reading => 0.698,
-          :writing => 0.5014
+          :writing => 0.514
         }
       },
       :eighth_grade => {
@@ -84,6 +84,16 @@ class StatewideTestTest < MiniTest::Test
           :math    => 0.469,
           :reading => 0.703,
           :writing => 0.529
+        },
+        2009 => {
+          :math    => 0.499,
+          :reading => 0.726,
+          :writing => 0.528
+        },
+        2010 => {
+          :math    => 0.510,
+          :reading => 0.679,
+          :writing => 0.549
         }
       },
       :math => {
