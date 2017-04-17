@@ -106,19 +106,23 @@ class HeadcountAnalyst
       raise UnknownDataError, "#{data[:grade]} is not a known grade." if data[:grade] != 3 && data[:grade] != 8
     # end
     if data.key?(:subject)
-      calculate_top_district_for_category(data[:grade], data[:subject])
+      binding.pry
+      get_districts_and_growths(data[:grade], data[:subject])
     # else
       # find_top_test_across_grade(data[:grade])
     end
   end
 
-  def calculate_top_district_for_category(grade, subject)\
+  def get_districts_and_growths(grade, subject)
     @district_repository.testing_repo.data.map do |test_object|
-      {test_object.name => test_object.growth_by_grade_over_years(grade, subject)}
+      {:name => test_object.name, :growth => test_object.growth_by_grade_over_years(grade, subject)}
     end
   end
 
-
+  # def find_single_top_district_growth(collection)
+  #   collection.select{|x| x[:type] == type}
+  #    .max_by{|x| x[:value_length]}
+  # end
 
   # def calculate_growth(grade, subject, top)
   #   binding.pry
