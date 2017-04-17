@@ -11,6 +11,9 @@ class DistrictRepositoryTest < MiniTest::Test
       },
       :statewide_testing => {
         :third_grade  => "./data/3rd grade students scoring proficient or above on the CSAP_TCAP.csv"
+      },
+      :economic_profile => {
+        :median_household_income => "./data/Median household income.csv"
       }
     }
   end
@@ -22,7 +25,7 @@ class DistrictRepositoryTest < MiniTest::Test
   def test_initializes_with_no_repos
     assert_nil @dr.enrollment_repo
     assert_nil @dr.testing_repo
-    assert_nil @dr.econ_repo
+    assert_nil @dr.economic_profile_repo
   end
 
   def test_responds_to_load_file
@@ -107,7 +110,7 @@ class DistrictRepositoryTest < MiniTest::Test
     refute_nil @dr.find_by_name("ACADEMY 20")
   end
 
-  def test_once_created_districts_can_access_enrollment
+  def test_districts_can_access_enrollment
     @dr.load_data(@dr_args)
     district = @dr.find_by_name("COLORADO")
     k_data_by_year = district.enrollment.kindergarten_participation_by_year
@@ -117,11 +120,19 @@ class DistrictRepositoryTest < MiniTest::Test
     assert_equal 0.64, k_data_in_2010
   end
 
-  def test_once_created_districts_can_access_statewide_test
+  def test_districts_can_access_statewide_test
     @dr.load_data(@dr_args)
     district = @dr.find_by_name("COLORADO")
     assert_respond_to(district, :statewide_test)
     statewide_test = district.statewide_test
     assert_instance_of StatewideTest, statewide_test
+  end
+
+  def test_districts_can_access_economic_profile
+    @dr.load_data(@dr_args)
+    district = @dr.find_by_name("COLORADO")
+    assert_respond_to(district, :economic_profile)
+    economic_profile = district.economic_profile
+    assert_instance_of EconomicProfile, economic_profile
   end
 end

@@ -14,8 +14,8 @@ class StatewideTest
       :grade => [3,8],
       :race => [:asian, :black, :pacific_islander, :hispanic, :native_american, :two_or_more, :white],
       :subject => [:math, :reading, :writing],
-      :year => [*(2008..2014)],
-      :csap_year => [*(2011..2014)],
+      :year => valid_3_or_8_years,
+      :csap_year => valid_ethnicity_years
       :categories => [3, 8, :math, :reading, :writing]
     }
     args.each do |set, value|
@@ -133,5 +133,22 @@ class StatewideTest
         update_data(value, look_in[category])
       end
     end
+  end
+
+  private
+
+  def valid_3_or_8_years
+    third_years = @data[:third_grade].keys.flatten.sort
+    eigth_years = @data[:eighth_grade].keys.flatten.sort
+    years = third_years + eigth_years
+    [*(years.first..years.last)]
+  end
+
+  def valid_ethnicity_years
+    reading_years = @data[:reading].keys.flatten.sort
+    math_years = @data[:math].keys.flatten.sort
+    writing_years = @data[:writing].keys.flatten.sort
+    years = reading_years + math_years + writing_years
+    [*(years.first..years.last)]
   end
 end
