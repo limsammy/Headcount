@@ -37,11 +37,19 @@ class StatewideTest
         return @data[:third_grade]
       else
         binding.pry
-        return get_category_by_years(subject, :third_grade).flatten
+        return format_years_output(get_category_by_years(subject, :third_grade), :third_grade)
       end
     elsif grade == 8
       return @data[:eighth_grade]
     end
+  end
+
+  def format_years_output(output, grade)
+    formatted = {}
+    output.first.each do |year, data|
+      formatted[year] = data[grade]
+    end
+    formatted
   end
 
   def proficient_by_race_or_ethnicity(race)
