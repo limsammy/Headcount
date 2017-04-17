@@ -123,7 +123,8 @@ class HeadcountAnalystTest < MiniTest::Test
   end
 
   def test_top_statewide_works_for_grade
+    expected = ['SPRINGFIELD RE-4', 0.399]
     result = @ha_test.top_statewide_test_year_over_year_growth(grade: 3)
-    assert_equal 6, result
+    assert_equal expected, result
   end
 end
