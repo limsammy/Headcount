@@ -372,4 +372,9 @@ class StatewideTestTest < MiniTest::Test
     }
     assert_equal expected, @ha.find_by_category(8, :math)
   end
+
+  def test_find_growth_over_years_for_eighth_grade_math
+    expected = 0.020500000000000018
+    assert_equal expected, @ha.growth_by_grade_over_years(8, :math)
+  end
 end

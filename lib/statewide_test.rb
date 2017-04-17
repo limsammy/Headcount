@@ -37,26 +37,33 @@ class StatewideTest
         return @data[:third_grade]
       else
         # binding.pry
-        return get_category_by_years_test(subject, :third_grade)
+        return get_category_by_years_test(:third_grade, subject)
       end
     elsif grade == 8
       if subject.nil?
         return @data[:eighth_grade]
       else
-        return get_category_by_years_test(subject, :eighth_grade)
+        return get_category_by_years_test(:eighth_grade, subject)
       end
     end
   end
 
-  def get_category_by_years_test(subject, category)
+  def get_category_by_years_test(category, subject)
     formatted = {}
-    # binding.pry
     @data[category].each do |year, test_result|
       formatted[year] =  test_result[subject]
-      # binding.pry
-      # {year => {category => breakdown[criteria]}}
     end
     formatted
+  end
+
+  def growth_by_grade_over_years(grade, subject = nil)
+    validate_args({grade:grade, subject:subject})
+    max_year = find_by_category(grade, subject).keys.max
+    min_year = find_by_category(grade, subject).keys.min
+    max_val = find_by_category(grade, subject)[max_year]
+    min_val = find_by_category(grade, subject)[min_year]
+    # binding.pry
+    (max_val - min_val) / (max_year - min_year)
   end
 
   # def format_years_output(output, grade)
