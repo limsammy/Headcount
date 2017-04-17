@@ -377,4 +377,9 @@ class StatewideTestTest < MiniTest::Test
     expected = 0.020500000000000018
     assert_equal expected, @ha.growth_by_grade_over_years(8, :math)
   end
+
+  def test_find_growth_over_years_for_third_grade_math
+    expected = 0.004500000000000004
+    assert_equal expected, @ha.growth_by_grade_over_years(3, :math)
+  end
 end
