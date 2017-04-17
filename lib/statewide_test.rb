@@ -30,13 +30,11 @@ class StatewideTest
   end
 
   def find_by_category(grade, subject = nil)
-    validate_args({categories:grade})
-    # binding.pry
+    validate_args({grade:grade})
     if grade == 3
       if subject.nil?
         return @data[:third_grade]
       else
-        # binding.pry
         return get_category_by_years_test(:third_grade, subject)
       end
     elsif grade == 8
@@ -60,19 +58,10 @@ class StatewideTest
     validate_args({grade:grade, subject:subject})
     max_year = find_by_category(grade, subject).keys.max
     min_year = find_by_category(grade, subject).keys.min
-    max_val = find_by_category(grade, subject)[max_year]
-    min_val = find_by_category(grade, subject)[min_year]
-    # binding.pry
+    max_val = find_by_category(grade, subject)[max_year].to_f
+    min_val = find_by_category(grade, subject)[min_year].to_f
     (max_val - min_val) / (max_year - min_year)
   end
-
-  # def format_years_output(output, grade)
-  #   formatted = {}
-  #   output.each do |data|
-  #     formatted[grade] = data[output]
-  #   end
-  #   formatted
-  # end
 
   def proficient_by_race_or_ethnicity(race)
     validate_args({race:race})

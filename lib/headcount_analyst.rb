@@ -105,16 +105,17 @@ class HeadcountAnalyst
       raise InsufficientInformationError, 'A grade must be provided to answer this question.' unless data.key?(:grade)
       raise UnknownDataError, "#{data[:grade]} is not a known grade." if data[:grade] != 3 && data[:grade] != 8
     # end
-    # if data[:subject].nil?
-    #   find_top_test_across_grade(data[:grade], data[:top])
+    if data.key?(:subject)
+      calculate_top_district_for_category(data[:grade], data[:subject])
     # else
-    #   find_calcs_by_subject(data[:grade], data[:subject], data[:top])
-    # end
+      # find_top_test_across_grade(data[:grade])
+    end
   end
 
-  def calculate_top_district_for_category(data)
-    binding.pry
-    data = @district_repository.testing_repo.find_by_category(data[:grade])
+  def calculate_top_district_for_category(grade, subject)
+    @district_repository.testing_repo.data.map do |test_object|
+      test_object.growth_by_grade_over_years(grade, subject)
+    end
   end
 
 
