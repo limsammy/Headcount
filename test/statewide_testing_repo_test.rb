@@ -73,14 +73,6 @@ class StatewideTestRepositoryTest < MiniTest::Test
     assert_respond_to(@swtr, :find_by_name)
   end
 
-  def test_find_by_name_returns_statewide_test
-    assert_equal 0, @swtr.data.length
-    statewide_test = StatewideTestBuilder.new(@swtr).create_statewide_test(@statewide_test_data)
-    assert_equal 1, @swtr.data.length
-    statewide_test = @swtr.find_by_name("DISTRICT 1")
-    assert_equal statewide_test, @swtr.data[0]
-  end
-
   def test_load_data_returns_array
     result = @swtr.load_data(@statewide_testing_args)
     assert_instance_of Array, result

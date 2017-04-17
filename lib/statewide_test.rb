@@ -16,6 +16,7 @@ class StatewideTest
       :subject => [:math, :reading, :writing],
       :year => valid_3_or_8_years,
       :csap_year => valid_ethnicity_years
+      :categories => [3, 8, :math, :reading, :writing]
     }
     args.each do |set, value|
       raise UnknownDataError unless valid[set].include?(value)
@@ -26,6 +27,40 @@ class StatewideTest
     validate_args({grade:grade})
     return @data[:third_grade] if grade == 3
     return @data[:eighth_grade] if grade == 8
+  end
+
+  def find_by_category(grade, subject = nil)
+    validate_args({grade:grade})
+    if grade == 3
+      if subject.nil?
+        return @data[:third_grade]
+      else
+        return get_category_by_years_test(:third_grade, subject)
+      end
+    elsif grade == 8
+      if subject.nil?
+        return @data[:eighth_grade]
+      else
+        return get_category_by_years_test(:eighth_grade, subject)
+      end
+    end
+  end
+
+  def get_category_by_years_test(category, subject)
+    formatted = {}
+    @data[category].each do |year, test_result|
+      formatted[year] =  test_result[subject]
+    end
+    formatted
+  end
+
+  def growth_by_grade_over_years(grade, subject = nil)
+    validate_args({grade:grade, subject:subject})
+    max_year = find_by_category(grade, subject).keys.max
+    min_year = find_by_category(grade, subject).keys.min
+    max_val = find_by_category(grade, subject)[max_year].to_f
+    min_val = find_by_category(grade, subject)[min_year].to_f
+    (max_val - min_val) / (max_year - min_year)
   end
 
   def proficient_by_race_or_ethnicity(race)

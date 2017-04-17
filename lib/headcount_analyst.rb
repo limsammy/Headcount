@@ -1,3 +1,6 @@
+require_relative 'custom_errors'
+require 'pry'
+
 class HeadcountAnalyst
 
   def initialize(district_repository)
@@ -96,4 +99,146 @@ class HeadcountAnalyst
       find_variation([val_1, val_2])
     end
   end
+
+  def top_statewide_test_year_over_year_growth(data)
+    # data.each do |set, value|
+      raise InsufficientInformationError, 'A grade must be provided to answer this question.' unless data.key?(:grade)
+      raise UnknownDataError, "#{data[:grade]} is not a known grade." if data[:grade] != 3 && data[:grade] != 8
+    # end
+    if data.key?(:subject)
+      binding.pry
+      get_districts_and_growths(data[:grade], data[:subject])
+    # else
+      # find_top_test_across_grade(data[:grade])
+    end
+  end
+
+  def get_districts_and_growths(grade, subject)
+    @district_repository.testing_repo.data.map do |test_object|
+      {:name => test_object.name, :growth => test_object.growth_by_grade_over_years(grade, subject)}
+    end
+  end
+
+  def find_single_top_district_growth(collection)
+    # binding.pry
+    top = collection.max_by{|x| x[:growth]}
+    final = []
+    final << top[:name]
+    final << top[:growth]
+    return final
+  end
+
+  # def calculate_growth(grade, subject, top)
+  #   binding.pry
+  #   data = @district_repository.testing_repo.map do |item|
+  #       item.data[grade]
+  #       end
+  #   result = data.map do |item|
+  #       item.map do |item|
+  #         {item[:year] => item[subject.to_s]}
+  #       end
+  #   end
+  # end
+
+  # def find_top_test_across_grade(grade, top)
+  #   math = find_calcs_by_subject(grade, 'math', top)
+  #   reading = find_calcs_by_subject(grade, 'reading', top)
+  #   writing = find_calcs_by_subject(grade, 'writing', top)
+  #   combine_subjects(math, reading, writing, grade)
+  # end
+
+  # def average(math, reading, writing, grade)
+  #   names = @district_repository.testing_repo.name
+  #   math = names.zip(math)
+  #   reading = names.zip(reading)
+  #   writing = names.zip(writing)
+  #   combine_subjects(math, reading, writing, grade)
+  # end
+
+  # def combine_subjects(math, reading, writing)
+  #   sum = math.reduce ({}) do |result, item|
+  #     if result[item[0]].nil?
+  #       result[item[0]] = item[1]
+  #     else
+  #       result[item] << item
+  #     end
+  #     result
+  #   end
+
+  #   writing.map do |item|
+  #     if add_all[item[0]].nil?
+  #       add_all.store(item[0], item[1])
+  #     else
+  #        add_all[item[0]] = [add_all[item[0]], item[1]]
+  #      end
+  #    end
+
+  #   reading.map do |item|
+  #      if add_all[item[0]].nil?
+  #        add_all.store(item[0], item[1])
+  #      else
+  #         add_all[item[0]] = [add_all[item[0]], item[1]]
+  #       end
+  #     end
+
+  #   averages = add_all.map do |item|
+  #     x = item.flatten
+  #     [x[0], x[1..-1].reduce(:+)/x.size - 1]
+  #   end
+  #   result_across_subjects(averages)
+  # end
+
+  # def result_across_subjects(averages)
+  #   names = averages.map do |item|
+  #     item[0]
+  #   end
+  #   values = averages.map do |item|
+  #     item[1]
+  #   end
+  #   value = values.max
+  #   index = values.find_index(value)
+  #   names[index]
+  #   [names[index], value]
+  # end
+
+  # def find_calcs_across_all_subjects(grade, math, reading, writing)
+  #   math = calculate_growth(grade, 'math', top)
+  #   reading = calculate_growth(grade, 'reading', top)
+  #   writing = calculate_growth(grade, 'writing', top)
+  #   combine_subjects(math, reading, writing, grade)
+  # end
+
+  # def find_calcs_by_subject(grade, subject, top)
+  #   average = calculate_growth(grade, subject, top)
+  #   find_single(average, top)
+  # end
+
+  # def find_single(average, top)
+  #   if top.nil?
+  #     no_nil = eliminate_nil(average)
+  #     value = no_nil.max
+  #     index = average.find_index(value)
+  #     name = @district_repository.testing_repo
+  #     [name, value]
+  #   else
+  #     find_multiple(average, top)
+  #   end
+  # end
+
+  # def find_multiple(average, top)
+  #   name = @district_repository.testing_repo
+  #   no_nil = eliminate_nil(average)
+  #   values = no_nil.sort_by do |element|
+  #     element * -1
+  #   end
+  #   result = values[0..(top - 1)].map do |item|
+  #     [name[average.find_index(item)], item]
+  #   end
+  # end
+
+  # def eliminate_nil(average)
+  #   average.reject do |item|
+  #       item.nil? || item.is_a?(Fixnum)
+  #   end
+  # end
 end
