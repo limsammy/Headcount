@@ -32,13 +32,13 @@ class StatewideTest
     validate_args({grade:grade})
     if grade == 3
       if subject.nil?
-        return @data[:third_grade]
+        return get_all_subjects_for_grade_by_year(:third_grade)
       else
         return get_category_by_years_test(:third_grade, subject)
       end
     elsif grade == 8
       if subject.nil?
-        return @data[:eighth_grade]
+        return get_all_subjects_for_grade_by_year(:eighth_grade)
       else
         return get_category_by_years_test(:eighth_grade, subject)
       end
@@ -49,6 +49,14 @@ class StatewideTest
     formatted = {}
     @data[category].each do |year, test_result|
       formatted[year] =  test_result[subject]
+    end
+    formatted
+  end
+
+  def get_all_subjects_for_grade_by_year(grade)
+    formatted = {}
+    @data[grade].each do |year, test_collection|
+      formatted[year] = test_collection.values.inject(:+)
     end
     formatted
   end

@@ -343,17 +343,17 @@ class StatewideTestTest < MiniTest::Test
     assert_equal expected, result
   end
 
-  def test_find_by_category_finds_third_grade_seed_data
-    result = @swt1.find_by_category(3)[2008][:math]
-    expected = 0.697
-    assert_equal expected, result
-  end
+  # def test_find_by_category_finds_third_grade_seed_data => depreciated
+  #   result = @swt1.find_by_category(3)[2008][:math]
+  #   expected = 0.697
+  #   assert_equal expected, result
+  # end
 
-  def test_find_by_category_finds_eighth_grade_seed_data
-    result = @swt1.find_by_category(8)[2008][:math]
-    expected = 0.469
-    assert_equal expected, result
-  end
+  # def test_find_by_category_finds_eighth_grade_seed_data => depreciated
+  #   result = @swt1.find_by_category(8)[2008][:math]
+  #   expected = 0.469
+  #   assert_equal expected, result
+  # end
 
   def test_find_by_category_finds_third_grade_data_of_subject
     expected = {
@@ -381,5 +381,21 @@ class StatewideTestTest < MiniTest::Test
   def test_find_growth_over_years_for_third_grade_math
     expected = 0.005
     assert_equal expected, @swt1.growth_by_grade_over_years(3, :math)
+  end
+
+  def test_find_by_category_will_find_all_subjects_for_grade
+    expected = {2008=>1.9009999999999998,
+                2009=>1.9529999999999998,
+                2010=>1.918}
+    result = @swt1.find_by_category(3)
+    assert_equal expected, result
+  end
+
+  def test_get_all_subjects_for_grade_by_year_returns_correct_output
+    expected = {2008=>1.9009999999999998,
+                2009=>1.9529999999999998,
+                2010=>1.918}
+    result = @swt1.get_all_subjects_for_grade_by_year(:third_grade)
+    assert_equal expected, result
   end
 end

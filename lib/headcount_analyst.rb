@@ -107,10 +107,12 @@ class HeadcountAnalyst
       find_single_top_district_growth(get_districts_and_growths(data[:grade], data[:subject]))
     elsif data.key?(:subject) && data.key?(:top)
       find_multiple_top_district_growths(get_districts_and_growths(data[:grade], data[:subject]), data[:top])
+    elsif !data.key?(:subject) && !data.key?(:top)
+      find_single_top_district_growth(get_districts_and_growths(data[:grade]))
     end
   end
 
-  def get_districts_and_growths(grade, subject)
+  def get_districts_and_growths(grade, subject = nil)
     @district_repository.testing_repo.data.map do |test_object|
       {:name => test_object.name, :growth => test_object.growth_by_grade_over_years(grade, subject)}
     end
@@ -126,7 +128,7 @@ class HeadcountAnalyst
 
   def find_multiple_top_district_growths(collection, top)
     final = []
-    sorted = collection.delete_if {|k,v| k[:growth] == 0.0}
+    sorted = collection.delete_if {|k| k[:growth] == 0.0}
     sorted = collection.sort_by {|k| k[:growth]}.reverse
     top.times do |i|
       final << [sorted[i][:name], sorted[i][:growth]]

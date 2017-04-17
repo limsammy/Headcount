@@ -121,4 +121,9 @@ class HeadcountAnalystTest < MiniTest::Test
     result = @ha_test.top_statewide_test_year_over_year_growth(grade: 3, top: 7, subject: :math)
     assert_equal 7, result.count
   end
+
+  def test_top_statewide_works_for_grade
+    result = @ha_test.top_statewide_test_year_over_year_growth(grade: 3)
+    assert_equal 6, result
+  end
 end
