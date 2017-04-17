@@ -101,13 +101,11 @@ class HeadcountAnalyst
   end
 
   def top_statewide_test_year_over_year_growth(data)
-    # data.each do |set, value|
       raise InsufficientInformationError, 'A grade must be provided to answer this question.' unless data.key?(:grade)
       raise UnknownDataError, "#{data[:grade]} is not a known grade." if data[:grade] != 3 && data[:grade] != 8
-    # end
     if data.key?(:subject)
       binding.pry
-      get_districts_and_growths(data[:grade], data[:subject])
+      find_single_top_district_growth(get_districts_and_growths(data[:grade], data[:subject]))
     # else
       # find_top_test_across_grade(data[:grade])
     end
