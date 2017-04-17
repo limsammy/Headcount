@@ -374,12 +374,12 @@ class StatewideTestTest < MiniTest::Test
   end
 
   def test_find_growth_over_years_for_eighth_grade_math
-    expected = 0.020500000000000018
+    expected = 0.021
     assert_equal expected, @swt1.growth_by_grade_over_years(8, :math)
   end
 
   def test_find_growth_over_years_for_third_grade_math
-    expected = 0.004500000000000004
+    expected = 0.005
     assert_equal expected, @swt1.growth_by_grade_over_years(3, :math)
   end
 end
