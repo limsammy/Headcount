@@ -29,12 +29,17 @@ class StatewideTest
     return @data[:eighth_grade] if grade == 8
   end
 
-  def find_by_category(category)
-    validate_args({categories:category})
+  def find_by_category(grade, subject = nil)
+    validate_args({categories:grade})
     # binding.pry
-    if category == 3
-      return @data[:third_grade]
-    elsif category == 8
+    if grade == 3
+      if subject.nil?
+        return @data[:third_grade]
+      else
+        binding.pry
+        return get_category_by_years(subject, :third_grade).flatten
+      end
+    elsif grade == 8
       return @data[:eighth_grade]
     end
   end

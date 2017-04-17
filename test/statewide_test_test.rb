@@ -354,4 +354,8 @@ class StatewideTestTest < MiniTest::Test
     expected = 0.469
     assert_equal expected, result
   end
+
+  def test_find_by_category_finds_third_grade_data_of_subject
+    @ha.find_by_category(3, :math)
+  end
 end
