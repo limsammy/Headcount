@@ -15,7 +15,8 @@ class StatewideTest
       :race => [:asian, :black, :pacific_islander, :hispanic, :native_american, :two_or_more, :white],
       :subject => [:math, :reading, :writing],
       :year => [*(2008..2014)],
-      :csap_year => [*(2011..2014)]
+      :csap_year => [*(2011..2014)],
+      :categories => [3, 8, :math, :reading, :writing]
     }
     args.each do |set, value|
       raise UnknownDataError unless valid[set].include?(value)
@@ -28,8 +29,12 @@ class StatewideTest
     return @data[:eighth_grade] if grade == 8
   end
 
-  def find_by_category(grade)
-    
+  def find_by_category(category)
+    validate_args({categories:category})
+    binding.pry
+    if category == 3
+      return @data[:third_grade]
+    end
   end
 
   def proficient_by_race_or_ethnicity(race)

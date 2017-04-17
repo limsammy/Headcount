@@ -61,15 +61,69 @@ class StatewideTestTest < MiniTest::Test
     @swt = StatewideTest.new(@swt_seed_data)
 
     @headcount_seed_data = {
-      :statewide_testing => {
-        :third_grade  => "./data/3rd grade students scoring proficient or above on the CSAP_TCAP.csv",
-        :eighth_grade => "./data/8th grade students scoring proficient or above on the CSAP_TCAP.csv",
-        :math         => "./data/Average proficiency on the CSAP_TCAP by race_ethnicity_ Math.csv",
-        :reading      => "./data/Average proficiency on the CSAP_TCAP by race_ethnicity_ Reading.csv",
-        :writing      => "./data/Average proficiency on the CSAP_TCAP by race_ethnicity_ Writing.csv"
+      :name => "HEADCOUNT TEST",
+      :third_grade => {
+        2008 => {
+          :math    => 0.697,
+          :reading => 0.703,
+          :writing => 0.501
+        },
+        2009 => {
+          :math    => 0.691,
+          :reading => 0.726,
+          :writing => 0.536
+        },
+        2010 => {
+          :math    => 0.706,
+          :reading => 0.698,
+          :writing => 0.5014
+        }
+      },
+      :eighth_grade => {
+        2008 => {
+          :math    => 0.469,
+          :reading => 0.703,
+          :writing => 0.529
+        }
+      },
+      :math => {
+        2011 => {
+          :all_students     => 0.5573,
+          :asian            => 0.7094,
+          :black            => 0.3333,
+          :pacific_islander => 0.541,
+          :hispanic         => 0.3926,
+          :native_american  => 0.3981,
+          :two_or_more      => 0.6101,
+          :white            => 0.6585
+        }
+      },
+      :reading => {
+        2011 => {
+          :all_students     => 0.68,
+          :asian            => 0.7482,
+          :black            => 0.4861,
+          :pacific_islander => 0.6586,
+          :hispanic         => 0.4984,
+          :native_american  => 0.527,
+          :two_or_more      => 0.7438,
+          :white            => 0.7893
+        }
+      },
+      :writing => {
+        2011 => {
+          :all_students     => 0.5531,
+          :asian            => 0.6569,
+          :black            => 0.3701,
+          :pacific_islander => 0.5583,
+          :hispanic         => 0.368,
+          :native_american  => 0.3788,
+          :two_or_more      => 0.6169,
+          :white            => 0.6633
+        }
       }
     }
-    @ha = StatewideTest.new(headcount_seed_data)
+    @ha = StatewideTest.new(@headcount_seed_data)
   end
 
   def test_statewide_test_exists
@@ -277,9 +331,10 @@ class StatewideTestTest < MiniTest::Test
     result = @swt.proficient_for_subject_by_race_in_year(:math, :asian, 2011)
     expected = 0.7094
     assert_equal expected, result
+  end
 
-  def test_find_by_category_loads_data
-    result = @ha.load_data(@headcount_seed_data)
-    @swtr.find_by_by_category(:)
+  def test_find_by_category_finds_third_grade_seed_data
+    result = @ha.find_by_category(3)
+    assert_instance_of Hash, result
   end
 end
