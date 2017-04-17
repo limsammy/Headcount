@@ -101,13 +101,18 @@ class HeadcountAnalystTest < MiniTest::Test
   end
 
   def test_can_find_single_top_district_growth
-    expected = ['SPRINGFIELD RE-4', 0.14916666666666667]
+    expected = ['SPRINGFIELD RE-4', 0.149]
     assert_equal expected, @ha_test.find_single_top_district_growth(@ha_test.get_districts_and_growths(3, :math))
   end
 
   def test_can_find_top_statewide_test_year_over_year_growth
-    expected = ['SPRINGFIELD RE-4', 0.14916666666666667]
+    expected = ['SPRINGFIELD RE-4', 0.149]
     result = @ha_test.top_statewide_test_year_over_year_growth(grade: 3, subject: :math)
     assert_equal expected, result
+  end
+
+  def test_find_multiple_top_district_growths_returns_right_amount
+    result = @ha_test.top_statewide_test_year_over_year_growth(grade: 3, top: 3, subject: :math)
+    assert_equal nil, result
   end
 end

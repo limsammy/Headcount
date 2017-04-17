@@ -59,7 +59,7 @@ class StatewideTest
     min_year = find_by_category(grade, subject).keys.min
     max_val = find_by_category(grade, subject)[max_year].to_f
     min_val = find_by_category(grade, subject)[min_year].to_f
-    (max_val - min_val) / (max_year - min_year)
+    ((max_val - min_val) / (max_year - min_year)).round(3)
   end
 
   def proficient_by_race_or_ethnicity(race)

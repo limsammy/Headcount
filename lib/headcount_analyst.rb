@@ -103,10 +103,10 @@ class HeadcountAnalyst
   def top_statewide_test_year_over_year_growth(data)
       raise InsufficientInformationError, 'A grade must be provided to answer this question.' unless data.key?(:grade)
       raise UnknownDataError, "#{data[:grade]} is not a known grade." if data[:grade] != 3 && data[:grade] != 8
-    if data.key?(:subject)
+    if data.key?(:subject) && !data.key?(:top)
       find_single_top_district_growth(get_districts_and_growths(data[:grade], data[:subject]))
-    # else
-      # find_top_test_across_grade(data[:grade])
+    elsif data.key?(:subject) && data.key?(:top)
+      find_multiple_top_district_growths(get_districts_and_growths(data[:grade], data[:subject]), data[:top])
     end
   end
 
@@ -122,5 +122,16 @@ class HeadcountAnalyst
     final << top[:name]
     final << top[:growth]
     return final
+  end
+
+  def find_multiple_top_district_growths(collection, top)
+    final = []
+    sorted = collection.sort_by { |k| k[:growth].to_f.round(3) }
+    sorted
+    # top.times do |i|
+    #   final << [sorted[:name], sorted[:growth]]
+    #   sorted.delete_at(i)
+    # end
+    # final
   end
 end
