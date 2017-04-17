@@ -31,9 +31,11 @@ class StatewideTest
 
   def find_by_category(category)
     validate_args({categories:category})
-    binding.pry
+    # binding.pry
     if category == 3
       return @data[:third_grade]
+    elsif category == 8
+      return @data[:eighth_grade]
     end
   end
 

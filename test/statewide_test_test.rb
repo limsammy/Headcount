@@ -344,7 +344,14 @@ class StatewideTestTest < MiniTest::Test
   end
 
   def test_find_by_category_finds_third_grade_seed_data
-    result = @ha.find_by_category(3)
-    assert_instance_of Hash, result
+    result = @ha.find_by_category(3)[2008][:math]
+    expected = 0.697
+    assert_equal expected, result
+  end
+
+  def test_find_by_category_finds_eighth_grade_seed_data
+    result = @ha.find_by_category(8)[2008][:math]
+    expected = 0.469
+    assert_equal expected, result
   end
 end
