@@ -1,5 +1,3 @@
-require_relative './builders/result_entry_builder'
-
 class ResultSet
   attr_reader :matching_districts, :statewide_average
 
