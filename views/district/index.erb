@@ -1,16 +1,9 @@
 <%= File.read("./views/template_parts/header.erb") %>
 <%= File.read("./views/template_parts/nav.erb") %>
-  <h1>Welcome to the Headcount Analyst page for <%= "#{district_name}" %></h1>
-  <table>
-    <tr>
-      <th>Enrollment</th>
-      <th>Statewide Testing</th>
-      <th>Economic Profile</th>
-    </tr>
-    <tr>
-      <td><a href='/districts/<%= "#{district_slug}" %>/enrollment.html'>Enrollment</a></td>
-      <td><a href='/districts/<%= "#{district_slug}" %>/testing.html'>Statewide Testing</a></td>
-      <td><a href='/districts/<%= "#{district_slug}" %>/economic.html'>Economic Profile</a></td>
-    </tr>
-  </table>
+  <h2 class="sub-header">Welcome to the Headcount Analyst page for <%= "#{district_name}" %></h2>
+  <p>
+    <button type="button" class="btn btn-lg btn-default" href='/districts/<%= "#{district_slug}" %>/enrollment.html'>Enrollment</button>
+    <button type="button" class="btn btn-lg btn-primary" href='/districts/<%= "#{district_slug}" %>/testing.html'>Statewide Testing</button>
+    <button type="button" class="btn btn-lg btn-success" href='/districts/<%= "#{district_slug}" %>/economic.html'>Economic Profile</button>
+  </p>
 <%= File.read("./views/template_parts/footer.erb") %>

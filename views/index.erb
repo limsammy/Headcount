@@ -1,6 +1,9 @@
 <%= File.read("./views/template_parts/header.erb") %>
 <%= File.read("./views/template_parts/nav.erb") %>
-  <table>
+
+<h2 class="sub-header">View Information specific information:</h2>
+<div class="table-responsive">
+  <table class="table table-striped">
     <tr>
       <th>District</th>
       <th>Enrollment</th>
@@ -16,4 +19,5 @@
       </tr>
     <% end %>
   </table>
+</div>
 <%= File.read("./views/template_parts/footer.erb") %>
