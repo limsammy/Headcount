@@ -398,4 +398,9 @@ class StatewideTestTest < MiniTest::Test
     result = @swt1.get_all_subjects_for_grade_by_year(:third_grade)
     assert_equal expected, result
   end
+
+  # def test_average_growth_across_years
+  #   result = @swt1.average_growth_across_years(:third_grade)
+  #   assert_equal 2, result
+  # end
 end

@@ -1,4 +1,5 @@
 require_relative 'custom_errors'
+require 'pry'
 
 class StatewideTest
   attr_reader :name, :data
@@ -29,11 +30,12 @@ class StatewideTest
   end
 
   def find_by_category(grade, subject = nil)
-    validate_args({grade:grade}) # SAM: Do we need to validate again here?
+    validate_args({grade:grade}) # SAM: Do we need to validate again here? --- I believe so, that's taking direct input of a key so I think we need it to throw an error if we put in something not in the validator
     if grade == 3
       if subject.nil?
         return get_all_subjects_for_grade_by_year(:third_grade)
       else
+        # binding.pry
         return get_category_by_years_test(:third_grade, subject)
       end
     elsif grade == 8
@@ -41,6 +43,7 @@ class StatewideTest
         return get_all_subjects_for_grade_by_year(:eighth_grade)
       else
         return get_category_by_years_test(:eighth_grade, subject)
+        # binding.pry
       end
     end
   end
@@ -48,7 +51,9 @@ class StatewideTest
   def get_category_by_years_test(category, subject)
     formatted = {}
     @data[category].each do |year, test_result|
-      formatted[year] =  test_result[subject]
+      if test_result[subject].to_f != 0.0
+        formatted[year] =  test_result[subject]
+      end
     end
     formatted
   end
@@ -56,7 +61,7 @@ class StatewideTest
   def get_all_subjects_for_grade_by_year(grade)
     formatted = {}
     @data[grade].each do |year, test_collection|
-      formatted[year] = test_collection.values.inject(0) {|sum, n| sum + n.to_f}
+      formatted[year] = test_collection.values.inject(0) {|sum, n| sum + n.to_f} / 3
     end
     formatted
   end
@@ -68,8 +73,23 @@ class StatewideTest
     min_year = find_by_category(grade, subject).keys.min
     max_val = find_by_category(grade, subject)[max_year].to_f
     min_val = find_by_category(grade, subject)[min_year].to_f
-    ((max_val - min_val) / (max_year - min_year)).round(3)
+    year_dif = max_year.to_i - min_year.to_i
+    # if !max_year.nil? && !min_year.nil?
+    if year_dif != 0
+      ((max_val - min_val) / (max_year - min_year)).round(3)
+    else
+      0.0
+    end
   end
+
+  # def find_max_year(grade, subject = nil)
+  #   find_by_category(grade, subject).each
+  # end
+
+  # def average_growth_across_years(grade)
+  #   final = 0
+  #   average = get_all_subjects_for_grade_by_year(grade)
+  # end
 
   def proficient_by_race_or_ethnicity(race)
     validate_args({race:race})
