@@ -2,6 +2,7 @@ require_relative 'custom_errors'
 require 'pry'
 
 class HeadcountAnalyst
+  attr_reader :district_repository
 
   def initialize(district_repository)
     @district_repository = district_repository

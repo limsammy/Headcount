@@ -2,3 +2,5 @@ coverage
 dtr.md
 Gemfile.lock
 *_spike*
+/build/
+!/build/build_plan.md

@@ -1,0 +1,27 @@
+<html>
+<head>
+  <meta charset='utf-8'>
+  <title>Headcount Analyst!</title>
+</head>
+<body>
+  <h1>Welcome to the Headcount Analyst.</h1>
+  <a href="/headcount-analyst.html">View Headcount Dashboard</a>
+  <p>or you can view information by district:</p>
+  <table>
+    <tr>
+      <th>District</th>
+      <th>Enrollment</th>
+      <th>Statewide Testing</th>
+      <th>Economic Profile</th>
+    </tr>
+  <% districts.each do |district| %>
+      <tr>
+        <td><a href='./districts/<%= "#{district[:slug]}" %>/index.html'><%= "#{district[:name]}" %></a></td>
+        <td><a href='./districts/<%= "#{district[:slug]}" %>/enrollment.html'>Enrollment</a></td>
+        <td><a href='./districts/<%= "#{district[:slug]}" %>/testing.html'>Statewide Testing</a></td>
+        <td><a href='./districts/<%= "#{district[:slug]}" %>/economic.html'>Economic Profile</a></td>
+      </tr>
+    <% end %>
+  </table>
+</body>
+</html>

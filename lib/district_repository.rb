@@ -1,6 +1,7 @@
 require_relative 'district'
 require_relative 'enrollment_repository'
 require_relative 'statewide_testing_repository'
+require_relative 'economic_profile_repository'
 
 class DistrictRepository
   attr_reader :enrollment_repo,
