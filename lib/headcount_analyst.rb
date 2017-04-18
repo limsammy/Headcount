@@ -103,7 +103,7 @@ class HeadcountAnalyst
   def top_statewide_test_year_over_year_growth(data)
     raise InsufficientInformationError, 'A grade must be provided to answer this question.' unless data.key?(:grade)
     raise UnknownDataError, "#{data[:grade]} is not a known grade." if data[:grade] != 3 && data[:grade] != 8
-    growths = get_districts_and_growths(data[:grade], data[:subject])
+    growths = get_districts_and_growths(data[:grade], [data[:subject]])
     if !data.key?(:top)
       find_single_top_district_growth(growths)
     elsif data.key?(:top)
@@ -111,13 +111,17 @@ class HeadcountAnalyst
     end
   end
 
-  def get_districts_and_growths(grade, subject = nil)
-    if !subject.nil?
-      @district_repository.testing_repo.data.map do |test_object|
-        {:name => test_object.name, :growth => test_object.growth_by_grade_over_years(grade, subject)}
+  def get_districts_and_growths(grade, subjects)
+    subjects = [:math, :reading, :writing] if subjects.compact.empty?
+    @district_repository.testing_repo.data.map do |test_object|
+      # find districts growth in each subject
+      # test_object.growth_by_grade_over_years(grade, subject)
+      # get each subjects growth, then add and average by subjects.length
+      sum = subjects.reduce(0) do |sum, subject|
+        sum + test_object.growth_by_grade_over_years(grade, subject)
       end
-    else
-
+      average = sum / subjects.length
+      {:name => test_object.name, :growth => average}
     end
   end
 

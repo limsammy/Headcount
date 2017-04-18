@@ -93,16 +93,16 @@ class HeadcountAnalystTest < MiniTest::Test
   end
 
   def test_get_districts_and_growths
-    assert_instance_of Array, @ha_test.get_districts_and_growths(3, :math)
+    assert_instance_of Array, @ha_test.get_districts_and_growths(3, [:math])
   end
 
   def test_get_districts_and_growths_has_district_data_pair
-    assert_equal 'ACADEMY 20', @ha_test.get_districts_and_growths(3, :math)[1][:name]
+    assert_equal 'ACADEMY 20', @ha_test.get_districts_and_growths(3, [:math])[1][:name]
   end
 
   def test_can_find_single_top_district_growth
     expected = ["WILEY RE-13 JT", 0.3]
-    assert_equal expected, @ha_test.find_single_top_district_growth(@ha_test.get_districts_and_growths(3, :math))
+    assert_equal expected, @ha_test.find_single_top_district_growth(@ha_test.get_districts_and_growths(3, [:math]))
   end
 
   def test_can_find_top_statewide_test_year_over_year_growth
@@ -123,8 +123,8 @@ class HeadcountAnalystTest < MiniTest::Test
   end
 
   def test_top_statewide_works_for_grade
-    expected = ["WILEY RE-13 JT", 0.3]
-    result = @ha_test.top_statewide_test_year_over_year_growth(grade: 3, top: 10)
+    expected = ["SANGRE DE CRISTO RE-22J", 0.07166666666666666]
+    result = @ha_test.top_statewide_test_year_over_year_growth(grade: 3)
     assert_equal expected, result
   end
 end
