@@ -127,4 +127,8 @@ class HeadcountAnalystTest < MiniTest::Test
     result = @ha_test.top_statewide_test_year_over_year_growth(grade: 3)
     assert_equal expected, result
   end
+
+  def test_weight_throws_error_if_not_1
+    assert_raises (UnknownDataError){@ha_test.top_statewide_test_year_over_year_growth(grade: 8, :weighting => {:math => 0.6, :reading => 0.5, :writing => 0.0})}
+  end
 end

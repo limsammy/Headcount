@@ -100,10 +100,28 @@ class HeadcountAnalyst
     end
   end
 
+  def validate_args(args)
+    valid = {
+      :grade => [3,8],
+      :subject => [:math, :reading, :writing],
+      :top => [*(1..181)]
+    }
+    args.each do |set, value|
+      if set != :weighting
+        is_valid = valid[set].include?(value)
+      else
+        is_valid = value.reduce(0) {|sum, (subject, weight)| sum + weight} == 1
+      end
+      raise UnknownDataError unless is_valid
+    end
+  end
+
   def top_statewide_test_year_over_year_growth(data)
     raise InsufficientInformationError, 'A grade must be provided to answer this question.' unless data.key?(:grade)
-    raise UnknownDataError, "#{data[:grade]} is not a known grade." if data[:grade] != 3 && data[:grade] != 8
-    growths = get_districts_and_growths(data[:grade], [data[:subject]])
+    # raise UnknownDataError, "#{data[:grade]} is not a known grade." if data[:grade] != 3 && data[:grade] != 8
+    # raise UnknownDataError, "Weights do not add up to 1." if data[:weighting].reduce(0) {|sum, (subject, weight)| sum + weight} == 1
+    validate_args(data)
+    growths = get_districts_and_growths(data[:grade], [data[:subject]], data[:weighting])
     if !data.key?(:top)
       find_single_top_district_growth(growths)
     elsif data.key?(:top)
@@ -111,7 +129,7 @@ class HeadcountAnalyst
     end
   end
 
-  def get_districts_and_growths(grade, subjects)
+  def get_districts_and_growths(grade, subjects, weight = nil)
     subjects = [:math, :reading, :writing] if subjects.compact.empty?
     @district_repository.testing_repo.data.map do |test_object|
       # find districts growth in each subject
