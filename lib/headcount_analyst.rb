@@ -103,26 +103,22 @@ class HeadcountAnalyst
   def top_statewide_test_year_over_year_growth(data)
     raise InsufficientInformationError, 'A grade must be provided to answer this question.' unless data.key?(:grade)
     raise UnknownDataError, "#{data[:grade]} is not a known grade." if data[:grade] != 3 && data[:grade] != 8
-    if data.key?(:subject) && !data.key?(:top)
-      growths = get_districts_and_growths(data[:grade], data[:subject])
-      find_single_top_district_growth(grwoths)
-    elsif data.key?(:subject) && data.key?(:top)
-      growths = data[:grade], data[:subject]), data[:top]
-      find_multiple_top_district_growths(get_districts_and_growths(growths)
-    elsif !data.key?(:subject) && !data.key?(:top)
-      growths = get_districts_and_growths(data[:grade])
+    growths = get_districts_and_growths(data[:grade], data[:subject])
+    if !data.key?(:top)
       find_single_top_district_growth(growths)
-    elsif !data.key?(:subject) && data.key?(:top)
-      growths = get_districts_and_growths(data[:grade]), data[:top]
-      find_multiple_top_district_growths(growths)
+    elsif data.key?(:top)
+      find_multiple_top_district_growths(growths, data[:top])
     end
   end
 
   def get_districts_and_growths(grade, subject = nil)
-    @district_repository.testing_repo.data.map do |test_object|
-      {:name => test_object.name, :growth => test_object.growth_by_grade_over_years(grade, subject)}
-    end
+    if !subject.nil?
+      @district_repository.testing_repo.data.map do |test_object|
+        {:name => test_object.name, :growth => test_object.growth_by_grade_over_years(grade, subject)}
+      end
+    else
 
+    end
   end
 
   def find_single_top_district_growth(collection)
