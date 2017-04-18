@@ -1,5 +1,5 @@
 class EconomicProfile
-  attr_reader :name, 
+  attr_reader :name,
               :data
 
   def initialize(args)
@@ -51,7 +51,7 @@ class EconomicProfile
   def average_number_of_lunch_students
     lunch_data = @data[:free_or_reduced_price_lunch]
     students = sum_lunch_student_totals(lunch_data.values)
-    students / lunch_data.length
+    (students / lunch_data.length).round(3)
   end
 
   def title_i_in_year(year)

@@ -168,32 +168,48 @@ class HeadcountAnalyst
   end
 
   def high_poverty_and_high_school_graduation
-    matching_districts = collect_district_result_entries
-    state_data = {
-      name: "COLORADO",
-      free_and_reduced_price_lunch_rate: state_average(matching_districts, :free_and_reduced_price_lunch_rate),
-      children_in_poverty_rate: state_average(matching_districts, :children_in_poverty_rate),
-      high_school_graduation_rate: state_average(matching_districts, :high_school_graduation_rate)
-    }
-    state_results = ResultEntry.new(state_data)
-    # remove district objects that don't meet criteria
-    result_set = ResultSet.new(
-                            matching_districts: matching_districts,
-                            statewide_average: state_results
-                          )
-    result_set.statewide_average
-    # Above the statewide average in number of students qualifying for free and reduced price lunch
-    # Above the statewide average percentage of school-aged children in poverty
-    # Above the statewide average high school graduation rate
+    districts = collect_district_result_entries
+    state_data = {name: "COLORADO"}
+    state_data.merge!(state_average(districts, :free_and_reduced_price_lunch_rate))
+    state_data.merge!(state_average(districts, :children_in_poverty_rate))
+    state_data.merge!(state_average(districts, :high_school_graduation_rate))
+    statewide = ResultEntry.new(state_data)
+    matching_districts = reject_low_districts(districts, statewide)
+    ResultSet.new(
+      matching_districts: matching_districts,
+      statewide_average: statewide
+    )
   end
 
   private
+
+  def reject_low_districts(districts, statewide)
+    districts.keep_if do |district|
+      meets_all_high_poverty_high_grad_rate_criteria(district,statewide)
+    end
+  end
+
+  def meets_all_high_poverty_high_grad_rate_criteria(d, co)
+    higher_lunch?(d, co) && higher_poverty?(d, co) && higher_grad?(d, co)
+  end
+
+  def higher_lunch?(d, co)
+    d.free_and_reduced_price_lunch_rate > co.free_and_reduced_price_lunch_rate
+  end
+
+  def higher_poverty?(d, co)
+    d.children_in_poverty_rate > co.children_in_poverty_rate
+  end
+
+  def higher_grad?(d, co)
+    d.high_school_graduation_rate > co.high_school_graduation_rate
+  end
 
   def state_average(districts, category)
     sum = districts.reduce(0) do |sum, district|
       sum + district.send(category)
     end
-    sum / districts.length
+    {category => (sum / districts.length).round(3)}
   end
 
   def average_lunch_students(economic_object)
@@ -201,11 +217,11 @@ class HeadcountAnalyst
   end
 
   def average_poverty_students(economic_object)
-    find_average_of_year_data(economic_object.data[:children_in_poverty])
+    find_average_of_year_data(economic_object.data[:children_in_poverty]).round(3)
   end
 
   def average_high_school_grad(enrollment_object)
-    find_average_of_year_data(enrollment_object.data[:high_school_graduation])
+    find_average_of_year_data(enrollment_object.data[:high_school_graduation]).round(3)
   end
 
   def collect_district_result_entries
@@ -221,9 +237,6 @@ class HeadcountAnalyst
       }
       ResultEntry.new(data)
     end.compact
-  end
-
-  def state_lunch_average(matching_districts)
   end
 
   def find_district(district_name)

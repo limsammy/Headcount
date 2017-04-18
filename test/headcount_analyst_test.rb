@@ -144,12 +144,12 @@ class HeadcountAnalystTest < MiniTest::Test
     assert_instance_of ResultSet, @ha.high_poverty_and_high_school_graduation
   end
 
-  def test_high_high_school_grad_and_high_poverty_returns
-    assert_equal 0, @ha.high_poverty_and_high_school_graduation
-  end
-
   def test_high_high_school_grad_and_high_poverty_districts_is_array
     assert_instance_of Array, @ha.high_poverty_and_high_school_graduation.matching_districts
+  end
+
+  def test_high_high_school_grad_and_high_poverty_districts_has_2_districts
+    assert_equal 2, @ha.high_poverty_and_high_school_graduation.matching_districts.length
   end
 
   def test_high_high_school_grad_and_high_poverty_statewide_is_resultentry
