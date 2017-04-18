@@ -1,4 +1,5 @@
 require_relative 'custom_errors'
+require_relative 'result_set'
 require 'pry'
 
 class HeadcountAnalyst
@@ -135,5 +136,13 @@ class HeadcountAnalyst
       final << [sorted[i][:name], sorted[i][:growth]]
     end
     final
+  end
+
+  def high_poverty_and_high_school_graduation
+    # state_results
+    result_set = ResultSet.new(matching_districts: [], statewide_average: state_results)
+    # Above the statewide average in number of students qualifying for free and reduced price lunch
+    # Above the statewide average percentage of school-aged children in poverty
+    # Above the statewide average high school graduation rate
   end
 end

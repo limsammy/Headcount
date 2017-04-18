@@ -123,4 +123,16 @@ class HeadcountAnalystTest < MiniTest::Test
     result = @ha.top_statewide_test_year_over_year_growth(grade: 3)
     assert_equal expected, result
   end
+
+  def test_high_high_school_grad_and_high_poverty_creates_resultset
+    assert_instance_of ResultSet, @ha.high_poverty_and_high_school_graduation
+  end
+
+  def test_high_high_school_grad_and_high_poverty_districts_is_array
+    assert_instance_of Array, @ha.high_poverty_and_high_school_graduation.matching_districts
+  end
+
+  def test_high_high_school_grad_and_high_poverty_statewide_is_resultentry
+    assert_instance_of ResultEntry, @ha.high_poverty_and_high_school_graduation.statewide_average
+  end
 end
