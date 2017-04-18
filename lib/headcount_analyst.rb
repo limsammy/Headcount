@@ -106,6 +106,7 @@ class HeadcountAnalyst
       :subject => [:math, :reading, :writing],
       :top => [*(1..181)]
     }
+    raise InsufficientInformationError, 'A grade must be provided to answer this question.' unless args.key?(:grade)
     args.each do |set, value|
       if set != :weighting
         is_valid = valid[set].include?(value)
@@ -117,7 +118,6 @@ class HeadcountAnalyst
   end
 
   def top_statewide_test_year_over_year_growth(data)
-    raise InsufficientInformationError, 'A grade must be provided to answer this question.' unless data.key?(:grade)
     validate_args(data)
     growths = get_districts_and_growths(data[:grade], [data[:subject]], data[:weighting])
     if !data.key?(:top)
@@ -162,13 +162,11 @@ class HeadcountAnalyst
 
   def find_multiple_top_district_growths(collection, top)
     final = []
-    # binding.pry
     sorted = collection.delete_if {|k| k[:growth] == 0.0}
     sorted = collection.sort_by {|k| k[:growth]}.reverse
     top.times do |i|
       final << [sorted[i][:name], sorted[i][:growth]]
     end
-    # binding.pry
     final
   end
 end
