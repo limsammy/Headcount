@@ -93,26 +93,26 @@ class HeadcountAnalystTest < MiniTest::Test
   end
 
   def test_get_districts_and_growths
-    assert_instance_of Array, @ha_test.get_districts_and_growths(3, :math)
+    assert_instance_of Array, @ha_test.get_districts_and_growths(3, [:math])
   end
 
   def test_get_districts_and_growths_has_district_data_pair
-    assert_equal 'ACADEMY 20', @ha_test.get_districts_and_growths(3, :math)[1][:name]
+    assert_equal 'ACADEMY 20', @ha_test.get_districts_and_growths(3, [:math])[1][:name]
   end
 
   def test_can_find_single_top_district_growth
-    expected = ['SPRINGFIELD RE-4', 0.149]
-    assert_equal expected, @ha_test.find_single_top_district_growth(@ha_test.get_districts_and_growths(3, :math))
+    expected = ["WILEY RE-13 JT", 0.3]
+    assert_equal expected, @ha_test.find_single_top_district_growth(@ha_test.get_districts_and_growths(3, [:math]))
   end
 
   def test_can_find_top_statewide_test_year_over_year_growth
-    expected = ['SPRINGFIELD RE-4', 0.149]
+    expected = ["WILEY RE-13 JT", 0.3]
     result = @ha_test.top_statewide_test_year_over_year_growth(grade: 3, subject: :math)
     assert_equal expected, result
   end
 
   def test_find_multiple_top_district_growths_returns_right_amount
-    expected = [["SPRINGFIELD RE-4", 0.149], ["WESTMINSTER 50", 0.1], ["CENTENNIAL R-1", 0.088]]
+    expected = [["WILEY RE-13 JT", 0.3], ["SANGRE DE CRISTO RE-22J", 0.072], ["COTOPAXI RE-3", 0.07]]
     result = @ha_test.top_statewide_test_year_over_year_growth(grade: 3, top: 3, subject: :math)
     assert_equal expected, result
   end
@@ -123,8 +123,18 @@ class HeadcountAnalystTest < MiniTest::Test
   end
 
   def test_top_statewide_works_for_grade
-    expected = ['SPRINGFIELD RE-4', 0.399]
+    expected = ["SANGRE DE CRISTO RE-22J", 0.07166666666666666]
     result = @ha_test.top_statewide_test_year_over_year_growth(grade: 3)
     assert_equal expected, result
+  end
+
+  def test_weight_throws_error_if_not_1
+    assert_raises (UnknownDataError){@ha_test.top_statewide_test_year_over_year_growth(grade: 8, :weighting => {:math => 0.6, :reading => 0.5, :writing => 0.0})}
+  end
+
+  def test_weighting_results_by_subject
+    top_performer = @ha_test.top_statewide_test_year_over_year_growth(grade: 8, :weighting => {:math => 0.5, :reading => 0.5, :writing => 0.0})
+    assert_equal "OURAY R-1", top_performer.first
+    assert_in_delta 0.153, top_performer.last, 0.005
   end
 end

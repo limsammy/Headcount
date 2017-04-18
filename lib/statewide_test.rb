@@ -1,4 +1,5 @@
 require_relative 'custom_errors'
+require 'pry'
 
 class StatewideTest
   attr_reader :name, :data
@@ -28,35 +29,20 @@ class StatewideTest
     return @data[:eighth_grade] if grade == 8
   end
 
-  def find_by_category(grade, subject = nil)
-    validate_args({grade:grade}) # SAM: Do we need to validate again here?
+  def find_by_category(grade, subject)
     if grade == 3
-      if subject.nil?
-        return get_all_subjects_for_grade_by_year(:third_grade)
-      else
-        return get_category_by_years_test(:third_grade, subject)
-      end
+      return get_category_by_years_test(:third_grade, subject)
     elsif grade == 8
-      if subject.nil?
-        return get_all_subjects_for_grade_by_year(:eighth_grade)
-      else
-        return get_category_by_years_test(:eighth_grade, subject)
-      end
+      return get_category_by_years_test(:eighth_grade, subject)
     end
   end
 
   def get_category_by_years_test(category, subject)
     formatted = {}
     @data[category].each do |year, test_result|
-      formatted[year] =  test_result[subject]
-    end
-    formatted
-  end
-
-  def get_all_subjects_for_grade_by_year(grade)
-    formatted = {}
-    @data[grade].each do |year, test_collection|
-      formatted[year] = test_collection.values.inject(0) {|sum, n| sum + n.to_f}
+      if test_result[subject].to_f != 0.0
+        formatted[year] =  test_result[subject]
+      end
     end
     formatted
   end
@@ -64,11 +50,21 @@ class StatewideTest
   def growth_by_grade_over_years(grade, subject = nil)
     validate_args({grade:grade})
     validate_args({subject:subject}) if !subject.nil?
-    max_year = find_by_category(grade, subject).keys.max
-    min_year = find_by_category(grade, subject).keys.min
-    max_val = find_by_category(grade, subject)[max_year].to_f
-    min_val = find_by_category(grade, subject)[min_year].to_f
-    ((max_val - min_val) / (max_year - min_year)).round(3)
+    scores = find_by_category(grade, subject)
+    average_scores(scores)
+  end
+
+  def average_scores(scores)
+    max_year = scores.keys.max
+    min_year = scores.keys.min
+    max_val = scores[max_year].to_f
+    min_val = scores[min_year].to_f
+    year_dif = max_year.to_i - min_year.to_i
+    if year_dif != 0
+      ((max_val - min_val) / (max_year - min_year)).round(3)
+    else
+      0.0
+    end
   end
 
   def proficient_by_race_or_ethnicity(race)
