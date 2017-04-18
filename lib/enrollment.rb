@@ -1,5 +1,6 @@
 class Enrollment
-  attr_reader :name
+  attr_reader :name,
+              :data
 
   def initialize(args)
     @name = args[:name]

@@ -2,7 +2,8 @@ require_relative 'custom_errors'
 require 'pry'
 
 class StatewideTest
-  attr_reader :name, :data
+  attr_reader :name, 
+              :data
 
   def initialize(args)
     @name = args[:name]

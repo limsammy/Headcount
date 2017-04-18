@@ -15,6 +15,12 @@ class HeadcountAnalystTest < MiniTest::Test
         :math         => "./data/Average proficiency on the CSAP_TCAP by race_ethnicity_ Math.csv",
         :reading      => "./data/Average proficiency on the CSAP_TCAP by race_ethnicity_ Reading.csv",
         :writing      => "./data/Average proficiency on the CSAP_TCAP by race_ethnicity_ Writing.csv"
+      },
+      :economic_profile => {
+        :median_household_income => "./data/Median household income.csv",
+        :children_in_poverty => "./data/School-aged children in poverty.csv",
+        :free_or_reduced_price_lunch => "./data/Students qualifying for free or reduced price lunch.csv",
+        :title_i => "./data/Title I students.csv"
       }
     }
     @dr.load_data(@dr_args)
@@ -49,7 +55,7 @@ class HeadcountAnalystTest < MiniTest::Test
   def test_can_average_years_from_district_hash
     district = @dr.find_by_name("ACADEMY 20")
     district_years = @ha.district_kindergarten_by_year(district)
-    assert_equal 0.4065454545454545, @ha.find_average_years_for_district(district_years)
+    assert_equal 0.4065454545454545, @ha.find_average_of_year_data(district_years)
   end
 
   def test_find_variation
@@ -136,6 +142,10 @@ class HeadcountAnalystTest < MiniTest::Test
 
   def test_high_high_school_grad_and_high_poverty_creates_resultset
     assert_instance_of ResultSet, @ha.high_poverty_and_high_school_graduation
+  end
+
+  def test_high_high_school_grad_and_high_poverty_returns
+    assert_equal 0, @ha.high_poverty_and_high_school_graduation
   end
 
   def test_high_high_school_grad_and_high_poverty_districts_is_array

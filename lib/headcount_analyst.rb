@@ -55,14 +55,14 @@ class HeadcountAnalyst
   end
 
   def get_rate_variation(years)
-    this_average = find_average_years_for_district(years[0])
-    other_average = find_average_years_for_district(years[1])
+    this_average = find_average_of_year_data(years[0])
+    other_average = find_average_of_year_data(years[1])
     find_variation([this_average, other_average])
   end
 
-  def find_average_years_for_district(years)
+  def find_average_of_year_data(years)
     years = years.reject{|year, value| value == "N/A"}
-    our_sum = years.values.inject(0) do |sum, value|
+    our_sum = years.values.reduce(0) do |sum, value|
       sum + value
     end
     return 0 if years.length == 0
@@ -81,10 +81,6 @@ class HeadcountAnalyst
     district_1 = find_district(name_1)
     district_2 = find_district(name_2)
     [district_1, district_2]
-  end
-
-  def find_district(district_name)
-    @district_repository.find_by_name(district_name)
   end
 
   def has_correlation(values)
@@ -132,21 +128,21 @@ class HeadcountAnalyst
     subjects = [:math, :reading, :writing] if subjects.compact.empty?
     @district_repository.testing_repo.data.map do |test_object|
       if !weight.nil?
-        average = get_weighted_average(test_object, grade, subjects, weight)
+        average = get_growth_weighted_average(test_object, grade, subjects, weight)
       else
-        average = get_average(test_object, grade, subjects)
+        average = get_growth_average(test_object, grade, subjects)
       end
       {:name => test_object.name, :growth => average}
     end
   end
 
-  def get_weighted_average(test_object, grade, subjects, weight)
+  def get_growth_weighted_average(test_object, grade, subjects, weight)
     subjects.reduce(0) do |sum, subject|
       sum + (test_object.growth_by_grade_over_years(grade, subject) * weight[subject])
     end
   end
 
-  def get_average(test_object, grade, subjects)
+  def get_growth_average(test_object, grade, subjects)
     sum = subjects.reduce(0) do |sum, subject|
       sum + test_object.growth_by_grade_over_years(grade, subject)
     end
@@ -172,10 +168,73 @@ class HeadcountAnalyst
   end
 
   def high_poverty_and_high_school_graduation
-    # state_results
-    result_set = ResultSet.new(matching_districts: [], statewide_average: state_results)
+    matching_districts = collect_district_result_entries
+    state_data = {
+      name: "COLORADO",
+      free_and_reduced_price_lunch_rate: state_average(matching_districts, :free_and_reduced_price_lunch_rate),
+      children_in_poverty_rate: state_average(matching_districts, :children_in_poverty_rate),
+      high_school_graduation_rate: state_average(matching_districts, :high_school_graduation_rate)
+    }
+    state_results = ResultEntry.new(state_data)
+    # remove district objects that don't meet criteria
+    result_set = ResultSet.new(
+                            matching_districts: matching_districts,
+                            statewide_average: state_results
+                          )
+    result_set.statewide_average
     # Above the statewide average in number of students qualifying for free and reduced price lunch
     # Above the statewide average percentage of school-aged children in poverty
     # Above the statewide average high school graduation rate
+  end
+
+  private
+
+  def state_average(districts, category)
+    sum = districts.reduce(0) do |sum, district|
+      sum + district.send(category)
+    end
+    sum / districts.length
+  end
+
+  def average_lunch_students(economic_object)
+    economic_object.average_number_of_lunch_students
+  end
+
+  def average_poverty_students(economic_object)
+    find_average_of_year_data(economic_object.data[:children_in_poverty])
+  end
+
+  def average_high_school_grad(enrollment_object)
+    find_average_of_year_data(enrollment_object.data[:high_school_graduation])
+  end
+
+  def collect_district_result_entries
+    @district_repository.data.map do |district|
+      next if district.name == "COLORADO"
+      economic = district.economic_profile
+      enrollment = district.enrollment
+      data = {
+        name: district.name,
+        free_and_reduced_price_lunch_rate: average_lunch_students(economic),
+        children_in_poverty_rate: average_poverty_students(economic),
+        high_school_graduation_rate: average_high_school_grad(enrollment)
+      }
+      ResultEntry.new(data)
+    end.compact
+  end
+
+  def state_lunch_average(matching_districts)
+  end
+
+  def find_district(district_name)
+    @district_repository.find_by_name(district_name)
+  end
+
+  def find_economic_profile(name)
+    @district_repository.economic_profile_repo.find_by_name(name)
+  end
+
+  def find_enrollment(name)
+    @district_repository.enrollment_repo.find_by_name(name)
   end
 end
