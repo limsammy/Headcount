@@ -10,6 +10,19 @@ class HeadcountAnalystTest < MiniTest::Test
     }}
     @dr.load_data(@dr_args)
     @ha = HeadcountAnalyst.new(@dr)
+
+    # @swt = StatewideTestRepository.new
+    @statewide_testing_args = {
+      :statewide_testing => {
+        :third_grade  => "./data/3rd grade students scoring proficient or above on the CSAP_TCAP.csv",
+        :eighth_grade => "./data/8th grade students scoring proficient or above on the CSAP_TCAP.csv",
+        :math         => "./data/Average proficiency on the CSAP_TCAP by race_ethnicity_ Math.csv",
+        :reading      => "./data/Average proficiency on the CSAP_TCAP by race_ethnicity_ Reading.csv",
+        :writing      => "./data/Average proficiency on the CSAP_TCAP by race_ethnicity_ Writing.csv"
+      }
+    }
+    @dr.load_data(@statewide_testing_args)
+    @ha_test = HeadcountAnalyst.new(@dr)
   end
 
   def test_headcount_analyst_exists
@@ -26,6 +39,10 @@ class HeadcountAnalystTest < MiniTest::Test
 
   def test_headcount_analyst_responds_to_kindergarten_participation_against_high_school_graduation
     assert_respond_to(@ha, :kindergarten_participation_against_high_school_graduation)
+  end
+
+  def test_headcount_analyst_responds_to_top_statewide_test_year_over_year_growth
+    assert_respond_to(@ha_test, :top_statewide_test_year_over_year_growth)
   end
 
   def test_kindergarten_participation_rate_variation_returns_right_value
@@ -65,5 +82,49 @@ class HeadcountAnalystTest < MiniTest::Test
   def test_can_correlate_across_districts
     result = @ha.kindergarten_participation_correlates_with_high_school_graduation(:across => ['ACADEMY 20', 'ADAMS COUNTY 14', 'ADAMS-ARAPAHOE 28J'])
     refute result
+  end
+
+  def test_raises_error_if_missing_grade_arg
+    assert_raises(InsufficientInformationError){@ha_test.top_statewide_test_year_over_year_growth(subject: :math)}
+  end
+
+  def test_raises_error_if_grade_not_allowed
+    assert_raises(UnknownDataError){@ha_test.top_statewide_test_year_over_year_growth(grade: 10)}
+  end
+
+  def test_get_districts_and_growths
+    assert_instance_of Array, @ha_test.get_districts_and_growths(3, :math)
+  end
+
+  def test_get_districts_and_growths_has_district_data_pair
+    assert_equal 'ACADEMY 20', @ha_test.get_districts_and_growths(3, :math)[1][:name]
+  end
+
+  def test_can_find_single_top_district_growth
+    expected = ['SPRINGFIELD RE-4', 0.149]
+    assert_equal expected, @ha_test.find_single_top_district_growth(@ha_test.get_districts_and_growths(3, :math))
+  end
+
+  def test_can_find_top_statewide_test_year_over_year_growth
+    expected = ['SPRINGFIELD RE-4', 0.149]
+    result = @ha_test.top_statewide_test_year_over_year_growth(grade: 3, subject: :math)
+    assert_equal expected, result
+  end
+
+  def test_find_multiple_top_district_growths_returns_right_amount
+    expected = [["SPRINGFIELD RE-4", 0.149], ["WESTMINSTER 50", 0.1], ["CENTENNIAL R-1", 0.088]]
+    result = @ha_test.top_statewide_test_year_over_year_growth(grade: 3, top: 3, subject: :math)
+    assert_equal expected, result
+  end
+
+  def test_find_7_top_districts_returns_right_amount
+    result = @ha_test.top_statewide_test_year_over_year_growth(grade: 3, top: 7, subject: :math)
+    assert_equal 7, result.count
+  end
+
+  def test_top_statewide_works_for_grade
+    expected = ['SPRINGFIELD RE-4', 0.399]
+    result = @ha_test.top_statewide_test_year_over_year_growth(grade: 3)
+    assert_equal expected, result
   end
 end

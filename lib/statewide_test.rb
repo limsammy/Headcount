@@ -14,8 +14,8 @@ class StatewideTest
       :grade => [3,8],
       :race => [:asian, :black, :pacific_islander, :hispanic, :native_american, :two_or_more, :white],
       :subject => [:math, :reading, :writing],
-      :year => [*(2008..2014)],
-      :csap_year => [*(2011..2014)]
+      :year => valid_3_or_8_years,
+      :csap_year => valid_ethnicity_years
     }
     args.each do |set, value|
       raise UnknownDataError unless valid[set].include?(value)
@@ -26,6 +26,49 @@ class StatewideTest
     validate_args({grade:grade})
     return @data[:third_grade] if grade == 3
     return @data[:eighth_grade] if grade == 8
+  end
+
+  def find_by_category(grade, subject = nil)
+    validate_args({grade:grade}) # SAM: Do we need to validate again here?
+    if grade == 3
+      if subject.nil?
+        return get_all_subjects_for_grade_by_year(:third_grade)
+      else
+        return get_category_by_years_test(:third_grade, subject)
+      end
+    elsif grade == 8
+      if subject.nil?
+        return get_all_subjects_for_grade_by_year(:eighth_grade)
+      else
+        return get_category_by_years_test(:eighth_grade, subject)
+      end
+    end
+  end
+
+  def get_category_by_years_test(category, subject)
+    formatted = {}
+    @data[category].each do |year, test_result|
+      formatted[year] =  test_result[subject]
+    end
+    formatted
+  end
+
+  def get_all_subjects_for_grade_by_year(grade)
+    formatted = {}
+    @data[grade].each do |year, test_collection|
+      formatted[year] = test_collection.values.inject(0) {|sum, n| sum + n.to_f}
+    end
+    formatted
+  end
+
+  def growth_by_grade_over_years(grade, subject = nil)
+    validate_args({grade:grade})
+    validate_args({subject:subject}) if !subject.nil?
+    max_year = find_by_category(grade, subject).keys.max
+    min_year = find_by_category(grade, subject).keys.min
+    max_val = find_by_category(grade, subject)[max_year].to_f
+    min_val = find_by_category(grade, subject)[min_year].to_f
+    ((max_val - min_val) / (max_year - min_year)).round(3)
   end
 
   def proficient_by_race_or_ethnicity(race)
@@ -98,5 +141,22 @@ class StatewideTest
         update_data(value, look_in[category])
       end
     end
+  end
+
+  private
+
+  def valid_3_or_8_years
+    third_years = @data[:third_grade].keys.flatten.sort
+    eigth_years = @data[:eighth_grade].keys.flatten.sort
+    years = third_years + eigth_years
+    [*(years.first..years.last)]
+  end
+
+  def valid_ethnicity_years
+    reading_years = @data[:reading].keys.flatten.sort
+    math_years = @data[:math].keys.flatten.sort
+    writing_years = @data[:writing].keys.flatten.sort
+    years = reading_years + math_years + writing_years
+    [*(years.first..years.last)]
   end
 end

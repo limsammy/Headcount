@@ -59,6 +59,81 @@ class StatewideTestTest < MiniTest::Test
       }
     }
     @swt = StatewideTest.new(@swt_seed_data)
+
+    @headcount_seed_data = {
+      :name => "HEADCOUNT TEST",
+      :third_grade => {
+        2008 => {
+          :math    => 0.697,
+          :reading => 0.703,
+          :writing => 0.501
+        },
+        2009 => {
+          :math    => 0.691,
+          :reading => 0.726,
+          :writing => 0.536
+        },
+        2010 => {
+          :math    => 0.706,
+          :reading => 0.698,
+          :writing => 0.514
+        }
+      },
+      :eighth_grade => {
+        2008 => {
+          :math    => 0.469,
+          :reading => 0.703,
+          :writing => 0.529
+        },
+        2009 => {
+          :math    => 0.499,
+          :reading => 0.726,
+          :writing => 0.528
+        },
+        2010 => {
+          :math    => 0.510,
+          :reading => 0.679,
+          :writing => 0.549
+        }
+      },
+      :math => {
+        2011 => {
+          :all_students     => 0.5573,
+          :asian            => 0.7094,
+          :black            => 0.3333,
+          :pacific_islander => 0.541,
+          :hispanic         => 0.3926,
+          :native_american  => 0.3981,
+          :two_or_more      => 0.6101,
+          :white            => 0.6585
+        }
+      },
+      :reading => {
+        2011 => {
+          :all_students     => 0.68,
+          :asian            => 0.7482,
+          :black            => 0.4861,
+          :pacific_islander => 0.6586,
+          :hispanic         => 0.4984,
+          :native_american  => 0.527,
+          :two_or_more      => 0.7438,
+          :white            => 0.7893
+        }
+      },
+      :writing => {
+        2011 => {
+          :all_students     => 0.5531,
+          :asian            => 0.6569,
+          :black            => 0.3701,
+          :pacific_islander => 0.5583,
+          :hispanic         => 0.368,
+          :native_american  => 0.3788,
+          :two_or_more      => 0.6169,
+          :white            => 0.6633
+        }
+      }
+    }
+    @swt1 = StatewideTest.new(@headcount_seed_data)
   end
 
   def test_statewide_test_exists
@@ -265,6 +340,62 @@ class StatewideTestTest < MiniTest::Test
   def test_swt_by_grade_in_year_returns_proficiency_for_math_asian_2011
     result = @swt.proficient_for_subject_by_race_in_year(:math, :asian, 2011)
     expected = 0.7094
+    assert_equal expected, result
+  end
+
+  # def test_find_by_category_finds_third_grade_seed_data => depreciated
+  #   result = @swt1.find_by_category(3)[2008][:math]
+  #   expected = 0.697
+  #   assert_equal expected, result
+  # end
+
+  # def test_find_by_category_finds_eighth_grade_seed_data => depreciated
+  #   result = @swt1.find_by_category(8)[2008][:math]
+  #   expected = 0.469
+  #   assert_equal expected, result
+  # end
+
+  def test_find_by_category_finds_third_grade_data_of_subject
+    expected = {
+      2008 => 0.697,
+      2009 => 0.691,
+      2010 => 0.706
+    }
+    assert_equal expected, @swt1.find_by_category(3, :math)
+  end
+
+  def test_find_by_category_finds_eighth_grade_data_of_subject
+    expected = {
+      2008 => 0.469,
+      2009 => 0.499,
+      2010 => 0.510
+    }
+    assert_equal expected, @swt1.find_by_category(8, :math)
+  end
+
+  def test_find_growth_over_years_for_eighth_grade_math
+    expected = 0.021
+    assert_equal expected, @swt1.growth_by_grade_over_years(8, :math)
+  end
+
+  def test_find_growth_over_years_for_third_grade_math
+    expected = 0.005
+    assert_equal expected, @swt1.growth_by_grade_over_years(3, :math)
+  end
+
+  def test_find_by_category_will_find_all_subjects_for_grade
+    expected = {2008=>1.9009999999999998,
+                2009=>1.9529999999999998,
+                2010=>1.918}
+    result = @swt1.find_by_category(3)
+    assert_equal expected, result
+  end
+
+  def test_get_all_subjects_for_grade_by_year_returns_correct_output
+    expected = {2008=>1.9009999999999998,
+                2009=>1.9529999999999998,
+                2010=>1.918}
+    result = @swt1.get_all_subjects_for_grade_by_year(:third_grade)
     assert_equal expected, result
   end
 end
