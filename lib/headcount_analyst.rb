@@ -101,23 +101,56 @@ class HeadcountAnalyst
     end
   end
 
-  def top_statewide_test_year_over_year_growth(data)
-    # SAM: Do we need these validations here or can we rely on later validations?
-    raise InsufficientInformationError, 'A grade must be provided to answer this question.' unless data.key?(:grade)
-    raise UnknownDataError, "#{data[:grade]} is not a known grade." if data[:grade] != 3 && data[:grade] != 8
-    if data.key?(:subject) && !data.key?(:top)
-      find_single_top_district_growth(get_districts_and_growths(data[:grade], data[:subject]))
-    elsif data.key?(:subject) && data.key?(:top)
-      find_multiple_top_district_growths(get_districts_and_growths(data[:grade], data[:subject]), data[:top])
-    elsif !data.key?(:subject) && !data.key?(:top)
-      find_single_top_district_growth(get_districts_and_growths(data[:grade]))
+  def validate_args(args)
+    valid = {
+      :grade => [3,8],
+      :subject => [:math, :reading, :writing],
+      :top => [*(1..181)]
+    }
+    raise InsufficientInformationError, 'A grade must be provided to answer this question.' unless args.key?(:grade)
+    args.each do |set, value|
+      if set != :weighting
+        is_valid = valid[set].include?(value)
+      else
+        is_valid = value.reduce(0) {|sum, (subject, weight)| sum + weight} == 1
+      end
+      raise UnknownDataError unless is_valid
     end
   end
 
-  def get_districts_and_growths(grade, subject = nil)
-    @district_repository.testing_repo.data.map do |test_object|
-      {:name => test_object.name, :growth => test_object.growth_by_grade_over_years(grade, subject)}
+  def top_statewide_test_year_over_year_growth(data)
+    validate_args(data)
+    growths = get_districts_and_growths(data[:grade], [data[:subject]], data[:weighting])
+    if !data.key?(:top)
+      find_single_top_district_growth(growths)
+    elsif data.key?(:top)
+      find_multiple_top_district_growths(growths, data[:top])
     end
+  end
+
+  def get_districts_and_growths(grade, subjects, weight = nil)
+    subjects = [:math, :reading, :writing] if subjects.compact.empty?
+    @district_repository.testing_repo.data.map do |test_object|
+      if !weight.nil?
+        average = get_weighted_average(test_object, grade, subjects, weight)
+      else
+        average = get_average(test_object, grade, subjects)
+      end
+      {:name => test_object.name, :growth => average}
+    end
+  end
+
+  def get_weighted_average(test_object, grade, subjects, weight)
+    subjects.reduce(0) do |sum, subject|
+      sum + (test_object.growth_by_grade_over_years(grade, subject) * weight[subject])
+    end
+  end
+
+  def get_average(test_object, grade, subjects)
+    sum = subjects.reduce(0) do |sum, subject|
+      sum + test_object.growth_by_grade_over_years(grade, subject)
+    end
+    sum / subjects.length
   end
 
   def find_single_top_district_growth(collection)
