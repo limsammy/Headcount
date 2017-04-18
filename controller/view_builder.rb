@@ -1,16 +1,18 @@
 require 'erb'
 class ViewBuilder
-  attr_reader :analyst
+  attr_reader :analyst, :districts
 
   def initialize(analyst)
     @analyst = analyst
+    @district_repository = analyst.district_repository
+    @districts = get_districts_for_web
     run
   end
 
   def run
     build_index
     build_districts
-    # build_enrollments
+    build_enrollments
     # build_tests
     # build_economic
     output_confirmation
@@ -19,20 +21,32 @@ class ViewBuilder
   def build_index
     template_main_index = File.read "./views/index.erb"
     erb_template = ERB.new template_main_index
-    districts = get_districts_for_web
     main_index = erb_template.result(binding)
     build_erb(main_index)
   end
 
   def build_districts
-    template_main_index = File.read "./views/district/index.erb"
-    erb_template = ERB.new template_main_index
-    districts = get_districts_for_web
+    template_district_index = File.read "./views/district/index.erb"
+    erb_template = ERB.new template_district_index
     districts.each do |district|
       district_name = district[:name]
       district_slug = "districts/" + district[:slug]
       district_index = erb_template.result(binding)
       build_erb(district_index, district_slug)
+    end
+  end
+
+  def build_enrollments
+    template_district_enrollment = File.read "./views/district/enrollment.erb"
+    erb_template = ERB.new template_district_enrollment
+    districts.each do |district|
+      district_name = district[:name]
+      district_slug = "districts/" + district[:slug]
+      enrollment = @district_repository.find_by_name(district_name).enrollment
+      d_k_part = enrollment.kindergarten_participation_by_year.sort.to_h
+      d_k_part_against_co = analyst.kindergarten_participation_rate_variation(district_name, :against => 'COLORADO')
+      district_index = erb_template.result(binding)
+      build_erb(district_index, district_slug, "enrollment.html")
     end
   end
 
