@@ -131,4 +131,10 @@ class HeadcountAnalystTest < MiniTest::Test
   def test_weight_throws_error_if_not_1
     assert_raises (UnknownDataError){@ha_test.top_statewide_test_year_over_year_growth(grade: 8, :weighting => {:math => 0.6, :reading => 0.5, :writing => 0.0})}
   end
+
+  def test_weighting_results_by_subject
+    top_performer = @ha_test.top_statewide_test_year_over_year_growth(grade: 8, :weighting => {:math => 0.5, :reading => 0.5, :writing => 0.0})
+    assert_equal "OURAY R-1", top_performer.first
+    assert_in_delta 0.153, top_performer.last, 0.005
+  end
 end

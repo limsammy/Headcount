@@ -118,8 +118,6 @@ class HeadcountAnalyst
 
   def top_statewide_test_year_over_year_growth(data)
     raise InsufficientInformationError, 'A grade must be provided to answer this question.' unless data.key?(:grade)
-    # raise UnknownDataError, "#{data[:grade]} is not a known grade." if data[:grade] != 3 && data[:grade] != 8
-    # raise UnknownDataError, "Weights do not add up to 1." if data[:weighting].reduce(0) {|sum, (subject, weight)| sum + weight} == 1
     validate_args(data)
     growths = get_districts_and_growths(data[:grade], [data[:subject]], data[:weighting])
     if !data.key?(:top)
@@ -132,15 +130,26 @@ class HeadcountAnalyst
   def get_districts_and_growths(grade, subjects, weight = nil)
     subjects = [:math, :reading, :writing] if subjects.compact.empty?
     @district_repository.testing_repo.data.map do |test_object|
-      # find districts growth in each subject
-      # test_object.growth_by_grade_over_years(grade, subject)
-      # get each subjects growth, then add and average by subjects.length
-      sum = subjects.reduce(0) do |sum, subject|
-        sum + test_object.growth_by_grade_over_years(grade, subject)
+      if !weight.nil?
+        average = get_weighted_average(test_object, grade, subjects, weight)
+      else
+        average = get_average(test_object, grade, subjects)
       end
-      average = sum / subjects.length
       {:name => test_object.name, :growth => average}
     end
+  end
+
+  def get_weighted_average(test_object, grade, subjects, weight)
+    subjects.reduce(0) do |sum, subject|
+      sum + (test_object.growth_by_grade_over_years(grade, subject) * weight[subject])
+    end
+  end
+
+  def get_average(test_object, grade, subjects)
+    sum = subjects.reduce(0) do |sum, subject|
+      sum + test_object.growth_by_grade_over_years(grade, subject)
+    end
+    sum / subjects.length
   end
 
   def find_single_top_district_growth(collection)
