@@ -9,10 +9,10 @@ class EconomicProfile
 
   def validate_args(args)
     valid = {
-      :median_income_years => [*(2005..2013)],
-      :children_in_poverty_years => [*(1995..2013)],
-      :free_or_reduced_price_lunch_years => [*(2000..2014)],
-      :title_i_years => [*(2009..2014)]
+      :median_income_years => available_median_income_years,
+      :children_in_poverty_years => @data[:children_in_poverty].keys,
+      :free_or_reduced_years => @data[:free_or_reduced_price_lunch].keys,
+      :title_i_years => @data[:title_i].keys
     }
     args.each do |set, value|
       raise UnknownDataError unless valid[set].include?(value)
@@ -37,13 +37,13 @@ class EconomicProfile
   end
 
   def free_or_reduced_price_lunch_percentage_in_year(year)
-    validate_args({free_or_reduced_price_lunch_years:year})
+    validate_args({free_or_reduced_years:year})
     # binding.pry
     @data[:free_or_reduced_price_lunch][year][:percentage]
   end
 
   def free_or_reduced_price_lunch_number_in_year(year)
-    validate_args({free_or_reduced_price_lunch_years:year})
+    validate_args({free_or_reduced_years:year})
     @data[:free_or_reduced_price_lunch][year][:total]
   end
 
@@ -73,5 +73,10 @@ class EconomicProfile
 
   def average_array(numbers)
     numbers.reduce(&:+) / numbers.length
+  end
+
+  def available_median_income_years
+    our_years = @data[:median_household_income].keys.flatten.sort
+    [*(our_years.first..our_years.last)]
   end
 end
