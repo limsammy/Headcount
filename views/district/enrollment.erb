@@ -46,6 +46,7 @@
     </div> -->
   </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+  <script src="../../../build/assets/js/Chart.LinearGauge.js" ></script>
   <script>
     <% k_part_by_year_labels = d_k_part.keys.map(&:to_s) %>
     <% k_part_by_year_data = d_k_part.values %>
@@ -71,8 +72,7 @@
     var k_part_against_co = document.getElementById("k-part-against-co");
     var k_part_against_co_data = {
         labels: [
-            "<%= "#{district_name}" %>",
-            ""
+            "<%= "#{district_name}" %>"
         ],
         datasets: [{
                 label: "Percent Kindergarten Participation Rate Compared to CO",
@@ -80,12 +80,13 @@
                     'rgba(54, 162, 235, 0.2)',
                     'rgba(0,0,0,0)'
                 ],
-                data: [<%= d_k_part_against_co %>, <%= 1 - d_k_part_against_co %>]
+                data: [<%= d_k_part_against_co %>]
             }]
     };
     var myKPartAgainstCO = new Chart(k_part_against_co, {
-        type: 'pie',
+        type: 'bar',
         data: k_part_against_co_data
+
     });
   </script>
-<%= File.read("./views/template_parts/footer.erb") %>
+<%= File.read("./views/template_parts/footer-charts.erb") %>

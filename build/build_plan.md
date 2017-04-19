@@ -2,7 +2,7 @@
 2. Build directories of each district with an index file and pages for each enrollment, economic, & testing file in a districts directory
 3. Enrollment
  - K part by year (bar graph)
- - K part compared to statewide (pie chart)
+ - K part compared to statewide (bar graph)
  - K part trend against statewide (line graph)
  - HS Grad rate by year (bar graph)
  - Does K part predict HS Grad for district (yes/no)
