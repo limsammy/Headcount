@@ -8,6 +8,10 @@ task :test do
   Dir.glob('./test/*_test.rb').each { |file| require file}
 end
 
+task :build do
+  require './headcount'
+end
+
 namespace :sanitation do
   desc "Check line lengths & whitespace with Cane"
   task :lines do
