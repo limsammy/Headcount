@@ -14,7 +14,7 @@ class ViewBuilder
     build_districts
     build_enrollments
     build_testing
-    # build_economic
+    build_economic
     output_confirmation
   end
 
@@ -64,7 +64,41 @@ class ViewBuilder
     end
   end
 
+  def build_economic
+    template_district_economic = File.read "./views/district/economic.erb"
+    erb_template = ERB.new template_district_economic
+    districts.each do |district|
+      district_name = district[:name]
+      district_slug = "districts/" + district[:slug]
+
+      data = gather_economic_data(district)
+
+      district_index = erb_template.result(binding)
+      build_erb(district_index, district_slug, "economic.html")
+    end
+  end
+
   private
+
+  def gather_economic_data(district)
+    economic = @district_repository.find_by_name(district[:name]).economic_profile
+    {
+      d_children_in_poverty: economic.data[:children_in_poverty] || {},
+      d_title_i: economic.data[:title_i],
+      d_median_income: economic.data[:median_household_income],
+      d_lunch_precentage: get_lunch_data(economic, :percentage),
+      d_lunch_total: get_lunch_data(economic, :total),
+    }
+  end
+
+  def get_lunch_data(economic, measure)
+    results = economic.data[:free_or_reduced_price_lunch]
+    data = {}
+    results.each do |year, scores|
+       data[year] = scores[measure]
+    end
+    data
+  end
 
   def gather_testing_data(district)
     testing = @district_repository.find_by_name(district[:name]).statewide_test
