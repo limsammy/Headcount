@@ -15,6 +15,7 @@ class ViewBuilder
     build_enrollments
     build_testing
     build_economic
+    build_analyst
     output_confirmation
   end
 
@@ -76,6 +77,23 @@ class ViewBuilder
       district_index = erb_template.result(binding)
       build_erb(district_index, district_slug, "economic.html")
     end
+  end
+
+  def build_analyst
+    template_analyst = File.read "./views/headcount.erb"
+    erb_template = ERB.new template_analyst
+
+    top_3rd_grade = analyst.top_statewide_test_year_over_year_growth(grade: 3)
+    top_8th_grade = analyst.top_statewide_test_year_over_year_growth(grade: 8)
+    top_3rd_math = analyst.top_statewide_test_year_over_year_growth(grade: 3, top: 3, subject: :math)
+    top_3rd_reading = analyst.top_statewide_test_year_over_year_growth(grade: 3, top: 3, subject: :reading)
+    top_3rd_writing = analyst.top_statewide_test_year_over_year_growth(grade: 3, top: 3, subject: :writing)
+    top_8th_math = analyst.top_statewide_test_year_over_year_growth(grade: 8, top: 3, subject: :math)
+    top_8th_reading = analyst.top_statewide_test_year_over_year_growth(grade: 8, top: 3, subject: :reading)
+    top_8th_writing = analyst.top_statewide_test_year_over_year_growth(grade: 8, top: 3, subject: :writing)
+    
+    analyst = erb_template.result(binding)
+    build_erb(analyst, '', 'headcount.html')
   end
 
   private

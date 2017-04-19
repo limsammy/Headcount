@@ -155,7 +155,7 @@ class HeadcountAnalyst
     top = collection.max_by{|x| x[:growth]}
     final = []
     final << top[:name]
-    final << top[:growth]
+    final << top[:growth].round(3)
     return final
   end
 
