@@ -76,7 +76,7 @@ class HeadcountAnalystTest < MiniTest::Test
   end
 
   def test_find_all_correlations_returns_count_of_true_for_all_district
-    result = @ha.count_all_correlations
+    result = @ha.count_all_correlations_k_to_hs
     assert_instance_of Fixnum, result
     assert result < 180
   end
@@ -178,5 +178,20 @@ class HeadcountAnalystTest < MiniTest::Test
     # 87635.4 / 57408 <- Average from CO in income file
     # 0.766 / 1.527 = .502
     assert_equal 0.502, @ha.kindergarten_participation_against_household_income("ACADEMY 20")
+  end
+
+  def test_kindergarten_participation_correlates_with_household_income_is_false_for_ACADEMY_20
+    refute @ha.kindergarten_participation_correlates_with_household_income(for: "ACADEMY 20")
+  end
+
+  def test_kindergarten_participation_correlates_with_household_income_for_STATEWIDE
+    refute @ha.kindergarten_participation_correlates_with_household_income(for: "STATEWIDE")
+  end
+
+  def test_kindergarten_participation_correlates_with_household_income_for_across_districts
+    args = {
+      across: ['ACADEMY 20', 'COLORADO']
+    }
+    refute @ha.kindergarten_participation_correlates_with_household_income(args)
   end
 end

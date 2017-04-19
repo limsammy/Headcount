@@ -11,10 +11,10 @@ class HeadcountAnalyst
   def kindergarten_participation_correlates_with_high_school_graduation(args)
     if args.key?(:across)
       districts = args[:across].map {|name| find_district(name)}
-      correlation_count = count_all_correlations(districts)
+      correlation_count = count_all_correlations_k_to_hs(districts)
       has_correlation([correlation_count, districts.length])
     elsif args[:for] == "STATEWIDE"
-      correlation_count = count_all_correlations
+      correlation_count = count_all_correlations_k_to_hs
       length_without_CO = (@district_repository.data.length - 1.0)
       has_correlation([correlation_count, length_without_CO])
     else
@@ -23,7 +23,7 @@ class HeadcountAnalyst
     end
   end
 
-  def count_all_correlations(set = @district_repository.data)
+  def count_all_correlations_k_to_hs(set = @district_repository.data)
     set.count do |district|
       next if district.name == "COLORADO"
       args = {for: district.name}
@@ -209,6 +209,29 @@ class HeadcountAnalyst
 
   def district_median_income(district)
     district.economic_profile.median_household_income_average.to_f
+  end
+
+  def kindergarten_participation_correlates_with_household_income(args)
+    if args.key?(:across)
+      districts = args[:across].map {|name| find_district(name)}
+      correlation_count = count_all_correlations_k_to_income(districts)
+      has_correlation([correlation_count, districts.length])
+    elsif args[:for] == "STATEWIDE"
+      correlation_count = count_all_correlations_k_to_income
+      length_without_CO = (@district_repository.data.length - 1.0)
+      has_correlation([correlation_count, length_without_CO])
+    else
+      variation = kindergarten_participation_against_household_income(args[:for])
+      variation > 0.6 && variation < 1.5
+    end
+  end
+
+  def count_all_correlations_k_to_income(set = @district_repository.data)
+    set.count do |district|
+      next if district.name == "COLORADO"
+      args = {for: district.name}
+      kindergarten_participation_correlates_with_household_income(args)
+    end
   end
 
   private
