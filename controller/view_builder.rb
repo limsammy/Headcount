@@ -77,10 +77,12 @@ class ViewBuilder
       d_8_by_years_math: get_grade_year_subject_scores(testing, 8, :math),
       d_8_by_years_reading: get_grade_year_subject_scores(testing, 8, :reading),
       d_8_by_years_writing: get_grade_year_subject_scores(testing, 8, :writing),
-      # d_k_part_against_co: analyst.kindergarten_participation_rate_variation(district[:name], :against => 'COLORADO'),
-      # d_k_part_against_co_trend: analyst.kindergarten_participation_rate_variation_trend(district[:name], :against => 'COLORADO'),
-      # d_hs_grad: enrollment.graduation_rate_by_year.sort.to_h,
-      # d_k_part_predict_hs_grad: analyst.kindergarten_participation_correlates_with_high_school_graduation(for: district[:name])
+      d_race_math_labels: testing.data[:math].keys.map(&:to_s),
+      d_race_math_data_all: get_race_data(testing.data[:math]),
+      d_race_reading_labels: testing.data[:reading].keys.map(&:to_s),
+      d_race_reading_data_all: get_race_data(testing.data[:reading]),
+      d_race_writing_labels: testing.data[:writing].keys.map(&:to_s),
+      d_race_writing_data_all: get_race_data(testing.data[:writing]),
     }
   end
 
@@ -89,6 +91,25 @@ class ViewBuilder
     results.map do |year, scores|
       scores[subject]
     end
+  end
+
+  def get_race_data(scores_by_year)
+    data = {
+      :all_students     => [],
+      :asian            => [],
+      :black            => [],
+      :"hawaiian/pacific_islander" => [],
+      :hispanic         => [],
+      :native_american  => [],
+      :two_or_more      => [],
+      :white            => []
+    }
+    scores_by_year.each do |year, scores|
+      scores.each do |race, score|
+        data[race] << score
+      end
+    end
+    data
   end
 
   def gather_enrollment_data(district)
