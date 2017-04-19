@@ -91,7 +91,7 @@ class ViewBuilder
     top_8th_math = analyst.top_statewide_test_year_over_year_growth(grade: 8, top: 3, subject: :math)
     top_8th_reading = analyst.top_statewide_test_year_over_year_growth(grade: 8, top: 3, subject: :reading)
     top_8th_writing = analyst.top_statewide_test_year_over_year_growth(grade: 8, top: 3, subject: :writing)
-    
+
     analyst = erb_template.result(binding)
     build_erb(analyst, '', 'headcount.html')
   end
@@ -176,16 +176,16 @@ class ViewBuilder
   end
 
   def build_erb(erb, sub_dir = '', filename = "index.html")
-    Dir.mkdir("build") unless Dir.exists? "build"
+    Dir.mkdir("docs") unless Dir.exists? "docs"
 
     if sub_dir != ''
-      Dir.mkdir("build/districts") unless Dir.exists? "build/districts"
-      if !Dir.exists?("build/#{sub_dir}")
-        Dir.mkdir("build/#{sub_dir}")
+      Dir.mkdir("docs/districts") unless Dir.exists? "docs/districts"
+      if !Dir.exists?("docs/#{sub_dir}")
+        Dir.mkdir("docs/#{sub_dir}")
       end
     end
 
-    filename = "build/" + sub_dir + "/" + filename
+    filename = "docs/" + sub_dir + "/" + filename
 
     File.open(filename, 'w') do |file|
       file.puts erb

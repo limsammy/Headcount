@@ -1,0 +1,290 @@
+<html>
+<head>
+  <meta charset='utf-8'>
+  <title>Headcount Analyst!</title>
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+</head>
+<body>
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/">Headcount Analyst</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav navbar-left">
+        <li><a href="/">All Districts</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<div class="container-fluid">
+  <div class="jumbotron">
+     <div class="row">
+
+  <h2 class="sub-header">Statewide Testing Information for WIGGINS RE-50(J)</h2>
+  <p>
+    <a type="button" class="btn btn-default" href='/districts/districts/wiggins-re-50(j)/index.html'>Back to district main page</a>
+  </p>
+
+  <div class="row">
+    <div class="col-md-6">
+      <div class="panel panel-success">
+        <div class="panel-heading">3rd Grade Proficiency by Grade</div>
+        <div class="panel-body"><canvas id="grade-3-proficiency-by-grade" width="400" height="400"></canvas></div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="panel panel-success">
+        <div class="panel-heading">8th Grade Proficiency by Grade</div>
+        <div class="panel-body"><canvas id="grade-8-proficiency-by-grade" width="400" height="400"></canvas></div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-4">
+      <div class="panel panel-success">
+        <div class="panel-heading">Ethnicity Proficient in Math</div>
+        <div class="panel-body"><canvas id="ethnicity-proficient-in-math" width="400" height="400"></canvas></div>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="panel panel-success">
+        <div class="panel-heading">Ethnicity Proficient in Reading</div>
+        <div class="panel-body"><canvas id="ethnicity-proficient-in-reading" width="400" height="400"></canvas></div>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="panel panel-success">
+        <div class="panel-heading">Ethnicity Proficient in Writing</div>
+        <div class="panel-body"><canvas id="ethnicity-proficient-in-writing" width="400" height="400"></canvas></div>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+  <script>
+    
+    
+    
+    
+    var grade_3_by_years = document.getElementById("grade-3-proficiency-by-grade");
+    var grade_3_by_years_data = {
+        labels: ["2008", "2009", "2010", "2011", "2012", "2013", "2014"],
+        datasets: [{
+                label: "Math",
+                backgroundColor:'rgba(54, 162, 235, 0.2)',
+                data: [0.595, 0.583, 0.793, 0.737, 0.632, 0.872, 0.738]
+            },
+            {
+                label: "Reading",
+                backgroundColor:'rgba(255, 99, 132, 0.2)',
+                data: [0.694, 0.694, 0.75, 0.921, 0.789, 0.921, 0.786]
+            },
+            {
+                label: "Writing",
+                backgroundColor:'rgba(255, 206, 86, 0.2)',
+                data: [0.541, 0.528, 0.714, 0.474, 0.368, 0.641, 0.452]
+            }]
+    };
+    var my3rdGradeByYears = new Chart(grade_3_by_years, {
+        type: 'bar',
+        data: grade_3_by_years_data
+    });
+    
+    
+    
+    
+    var grade_8_by_years = document.getElementById("grade-8-proficiency-by-grade");
+    var grade_8_by_years_data = {
+        labels: ["2008", "2009", "2010", "2011", "2012", "2013", "2014"],
+        datasets: [{
+                label: "Math",
+                backgroundColor:'rgba(54, 162, 235, 0.2)',
+                data: [0.34, 0.387, 0.564, 0.529, 0.59, 0.477, 0.25]
+            },
+            {
+                label: "Reading",
+                backgroundColor:'rgba(255, 99, 132, 0.2)',
+                data: [0.647, 0.484, 0.718, 0.765, 0.846, 0.795, 0.679]
+            },
+            {
+                label: "Writing",
+                backgroundColor:'rgba(255, 206, 86, 0.2)',
+                data: [0.471, 0.323, "N/A", 0.618, 0.667, 0.568, 0.464]
+            }]
+    };
+    var my8thGradeByYears = new Chart(grade_8_by_years, {
+        type: 'bar',
+        data: grade_8_by_years_data
+    });
+    
+    var race_math = document.getElementById("ethnicity-proficient-in-math");
+    var race_math_data = {
+        labels: ["2011", "2012", "2013", "2014"],
+        datasets: [{
+                label: "All Students",
+                backgroundColor:'rgba(54, 162, 235, 0.2)',
+                data: [0.58, 0.568, 0.6, 0.556]
+            },
+            {
+                label: "Asian",
+                backgroundColor:'rgba(255, 99, 132, 0.2)',
+                data: ["N/A", 0.0, 0.0, 0.0]
+            },
+            {
+                label: "Black",
+                backgroundColor:'rgba(255, 206, 86, 0.2)',
+                data: ["N/A", 0.0, 0.0, 0.0]
+            },
+            {
+                label: "Pacific Islander",
+                backgroundColor:'rgba(75, 192, 192, 0.2)',
+                data: ["N/A", 0.0, 0.0, 0.0]
+            },
+            {
+                label: "Hispanic",
+                backgroundColor:'rgba(153, 102, 255, 0.2)',
+                data: [0.373, 0.354, 0.393, 0.356]
+            },
+            {
+                label: "Native American",
+                backgroundColor:'rgba(255, 159, 64, 0.2)',
+                data: ["N/A", 0.0, 0.0, 0.0]
+            },
+            {
+                label: "Two or More",
+                backgroundColor:'rgba(54, 162, 235, 0.2)',
+                data: ["N/A", 0.0, 0.0, 0.0]
+            },
+            {
+                label: "White",
+                backgroundColor:'rgba(255, 99, 132, 0.2)',
+                data: [0.655, 0.638, 0.647, 0.624]
+            }]
+    };
+    var myMathByRace = new Chart(race_math, {
+        type: 'bar',
+        data: race_math_data
+    });
+    
+    var race_reading = document.getElementById("ethnicity-proficient-in-reading");
+    var race_reading_data = {
+        labels: ["2011", "2012", "2013", "2014"],
+        datasets: [{
+                label: "All Students",
+                backgroundColor:'rgba(54, 162, 235, 0.2)',
+                data: [0.75, 0.782, 0.813, 0.752]
+            },
+            {
+                label: "Asian",
+                backgroundColor:'rgba(255, 99, 132, 0.2)',
+                data: [0.0, 0.0, 0.0, 0.0]
+            },
+            {
+                label: "Black",
+                backgroundColor:'rgba(255, 206, 86, 0.2)',
+                data: [0.0, 0.0, 0.0, 0.0]
+            },
+            {
+                label: "Pacific Islander",
+                backgroundColor:'rgba(75, 192, 192, 0.2)',
+                data: [0.0, 0.0, 0.0, 0.0]
+            },
+            {
+                label: "Hispanic",
+                backgroundColor:'rgba(153, 102, 255, 0.2)',
+                data: [0.52, 0.6, 0.623, 0.005]
+            },
+            {
+                label: "Native American",
+                backgroundColor:'rgba(255, 159, 64, 0.2)',
+                data: [0.0, 0.0, 0.0, 0.0]
+            },
+            {
+                label: "Two or More",
+                backgroundColor:'rgba(54, 162, 235, 0.2)',
+                data: [0.0, 0.0, 0.0, 0.0]
+            },
+            {
+                label: "White",
+                backgroundColor:'rgba(255, 99, 132, 0.2)',
+                data: [0.828, 0.845, 0.859, 0.008]
+            }]
+    };
+    var myReadingByRace = new Chart(race_reading, {
+        type: 'bar',
+        data: race_reading_data
+    });
+    
+    var race_writing = document.getElementById("ethnicity-proficient-in-writing");
+    var race_writing_data = {
+        labels: ["2011", "2012", "2013", "2014"],
+        datasets: [{
+                label: "All Students",
+                fill: false,
+                backgroundColor:'rgba(54, 162, 235, 0.2)',
+                data: [0.586, 0.593, 0.658, 0.629]
+            },
+            {
+                label: "Asian",
+                fill: false,
+                backgroundColor:'rgba(255, 99, 132, 0.2)',
+                data: [0.0, 0.0, 0.0, 0.0]
+            },
+            {
+                label: "Black",
+                fill: false,
+                backgroundColor:'rgba(255, 206, 86, 0.2)',
+                data: [0.0, 0.0, 0.0, 0.0]
+            },
+            {
+                label: "Pacific Islander",
+                fill: false,
+                backgroundColor:'rgba(75, 192, 192, 0.2)',
+                data: [0.0, 0.0, 0.0, 0.0]
+            },
+            {
+                label: "Hispanic",
+                fill: false,
+                backgroundColor:'rgba(153, 102, 255, 0.2)',
+                data: [0.387, 0.369, 0.426, 0.411]
+            },
+            {
+                label: "Native American",
+                fill: false,
+                backgroundColor:'rgba(255, 159, 64, 0.2)',
+                data: [0.0, 0.0, 0.0, 0.0]
+            },
+            {
+                label: "Two or More",
+                fill: false,
+                backgroundColor:'rgba(54, 162, 235, 0.2)',
+                data: [0.0, 0.0, 0.0, 0.0]
+            },
+            {
+                label: "White",
+                fill: false,
+                backgroundColor:'rgba(255, 99, 132, 0.2)',
+                data: [0.665, 0.672, 0.72, 0.701]
+            }]
+    };
+    var myWritingByRace = new Chart(race_writing, {
+        type: 'bar',
+        data: race_writing_data
+    });
+  </script>
+<!-- Latest compiled and minified JavaScript -->
+</div>
+</div>
+</div>
+<script
+  src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</body>
+</html>
+
