@@ -1,6 +1,6 @@
 <%= File.read("./views/template_parts/header.erb") %>
 <%= File.read("./views/template_parts/nav.erb") %>
-  <h2 class="sub-header">Enrollment information for <%= "#{district_name}" %></h2>
+  <h2 class="sub-header">Enrollment Information for <%= "#{district_name}" %></h2>
   <p>
     <a type="button" class="btn btn-default" href='/districts/<%= "#{district_slug}" %>/index.html'>Back to district main page</a>
   </p>
@@ -20,8 +20,8 @@
     </div>
     <div class="col-sm-4">
       <div class="panel panel-primary">
-        <div class="panel-heading">Kinder Participation trend compared to CO</div>
-        <div class="panel-body">[line graph]</div>
+        <div class="panel-heading">Kindergarten Participation trend compared to CO</div>
+        <div class="panel-body"><canvas id="k-part-against-co-trend" width="400" height="400"></canvas></div>
       </div>
     </div>
   </div>
@@ -29,13 +29,16 @@
     <div class="col-sm-4">
       <div class="panel panel-primary">
         <div class="panel-heading">High School Graduation rate by year</div>
-        <div class="panel-body">[bar graph]</div>
+        <div class="panel-body"><canvas id="hs-grad-by-year" width="400" height="400"></canvas></div>
       </div>
     </div>
     <div class="col-sm-4">
       <div class="panel panel-primary">
-        <div class="panel-heading">Kindergarten Participation predict High School Graduation?</div>
-        <div class="panel-body">[Yes/No]</div>
+        <div class="panel-heading">Does Kindergarten Participation predict High School Graduation?</div>
+        <div class="panel-body" style="text-align:center">
+          <h2>For this district:</h2>
+          <h1><%= data[:d_k_part_predict_hs_grad].to_s.capitalize %></h1>
+        </div>
       </div>
     </div>
     <!-- <div class="col-sm-4">
@@ -48,8 +51,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
   <script src="../../../build/assets/js/Chart.LinearGauge.js" ></script>
   <script>
-    <% k_part_by_year_labels = d_k_part.keys.map(&:to_s) %>
-    <% k_part_by_year_data = d_k_part.values %>
+    <% k_part_by_year_labels = data[:d_k_part].keys.map(&:to_s) %>
+    <% k_part_by_year_data = data[:d_k_part].values %>
     var k_part_by_year = document.getElementById("k-part-by-year");
     var k_part_by_year_data = {
         labels: <%= k_part_by_year_labels %>,
@@ -68,7 +71,6 @@
         type: 'bar',
         data: k_part_by_year_data
     });
-    <% d_k_part_against_co %>
     var k_part_against_co = document.getElementById("k-part-against-co");
     var k_part_against_co_data = {
         labels: [
@@ -80,13 +82,51 @@
                     'rgba(54, 162, 235, 0.2)',
                     'rgba(0,0,0,0)'
                 ],
-                data: [<%= d_k_part_against_co %>]
+                data: [<%= data[:d_k_part_against_co] %>]
             }]
     };
     var myKPartAgainstCO = new Chart(k_part_against_co, {
         type: 'bar',
         data: k_part_against_co_data
 
+    });
+    <% k_part_against_co_trend_labels = data[:d_k_part_against_co_trend].keys.map(&:to_s) %>
+    <% k_part_against_co_trend_data = data[:d_k_part_against_co_trend].values %>
+    var k_part_against_co_trend = document.getElementById("k-part-against-co-trend");
+    var k_part_against_co_trend_data = {
+        labels: <%= k_part_against_co_trend_labels %>,
+        datasets: [{
+                label: "Percent Kindergarten Participation Rate Compared to CO - Trend",
+                backgroundColor:[
+                    'rgba(54, 162, 235, 0.2)'
+                ],
+                data: <%= k_part_against_co_trend_data %>
+            }]
+    };
+    var myKPartAgainstCOTrend = new Chart(k_part_against_co_trend, {
+        type: 'line',
+        data: k_part_against_co_trend_data
+
+    });
+    <% hs_grad_by_year_labels = data[:d_hs_grad].keys.map(&:to_s) %>
+    <% hs_grad_by_year_data = data[:d_hs_grad].values %>
+    var hs_grad_by_year = document.getElementById("hs-grad-by-year");
+    var hs_grad_by_year_data = {
+        labels: <%= hs_grad_by_year_labels %>,
+        datasets: [{
+                label: "Percent High School Graduation Participation",
+                backgroundColor:'rgba(54, 162, 235, 0.2)',
+                    // 'rgba(255, 99, 132, 0.2)',
+                    // 'rgba(255, 206, 86, 0.2)',
+                    // 'rgba(75, 192, 192, 0.2)',
+                    // 'rgba(153, 102, 255, 0.2)',
+                    // 'rgba(255, 159, 64, 0.2)'
+                data: <%= hs_grad_by_year_data %>
+            }]
+    };
+    var myHSGradByYear = new Chart(hs_grad_by_year, {
+        type: 'bar',
+        data: hs_grad_by_year_data
     });
   </script>
 <%= File.read("./views/template_parts/footer-charts.erb") %>

@@ -42,15 +42,26 @@ class ViewBuilder
     districts.each do |district|
       district_name = district[:name]
       district_slug = "districts/" + district[:slug]
-      enrollment = @district_repository.find_by_name(district_name).enrollment
-      d_k_part = enrollment.kindergarten_participation_by_year.sort.to_h
-      d_k_part_against_co = analyst.kindergarten_participation_rate_variation(district_name, :against => 'COLORADO')
+
+      data = gather_enrollment_data(district)
+
       district_index = erb_template.result(binding)
       build_erb(district_index, district_slug, "enrollment.html")
     end
   end
 
   private
+
+  def gather_enrollment_data(district)
+    enrollment = @district_repository.find_by_name(district[:name]).enrollment
+    {
+      d_k_part: enrollment.kindergarten_participation_by_year.sort.to_h,
+      d_k_part_against_co: analyst.kindergarten_participation_rate_variation(district[:name], :against => 'COLORADO'),
+      d_k_part_against_co_trend: analyst.kindergarten_participation_rate_variation_trend(district[:name], :against => 'COLORADO'),
+      d_hs_grad: enrollment.graduation_rate_by_year.sort.to_h,
+      d_k_part_predict_hs_grad: analyst.kindergarten_participation_correlates_with_high_school_graduation(for: district[:name])
+    }
+  end
   def build_erb(erb, sub_dir = '', filename = "index.html")
     Dir.mkdir("build") unless Dir.exists? "build"
 
