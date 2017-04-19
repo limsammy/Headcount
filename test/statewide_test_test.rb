@@ -133,7 +133,7 @@ class StatewideTestTest < MiniTest::Test
         }
       }
     }
-    @ha = StatewideTest.new(@headcount_seed_data)
+    @swt1 = StatewideTest.new(@headcount_seed_data)
   end
 
   def test_statewide_test_exists
@@ -343,25 +343,13 @@ class StatewideTestTest < MiniTest::Test
     assert_equal expected, result
   end
 
-  def test_find_by_category_finds_third_grade_seed_data
-    result = @ha.find_by_category(3)[2008][:math]
-    expected = 0.697
-    assert_equal expected, result
-  end
-
-  def test_find_by_category_finds_eighth_grade_seed_data
-    result = @ha.find_by_category(8)[2008][:math]
-    expected = 0.469
-    assert_equal expected, result
-  end
-
   def test_find_by_category_finds_third_grade_data_of_subject
     expected = {
       2008 => 0.697,
       2009 => 0.691,
       2010 => 0.706
     }
-    assert_equal expected, @ha.find_by_category(3, :math)
+    assert_equal expected, @swt1.find_by_category(3, :math)
   end
 
   def test_find_by_category_finds_eighth_grade_data_of_subject
@@ -370,16 +358,24 @@ class StatewideTestTest < MiniTest::Test
       2009 => 0.499,
       2010 => 0.510
     }
-    assert_equal expected, @ha.find_by_category(8, :math)
+    assert_equal expected, @swt1.find_by_category(8, :math)
   end
 
   def test_find_growth_over_years_for_eighth_grade_math
-    expected = 0.020500000000000018
-    assert_equal expected, @ha.growth_by_grade_over_years(8, :math)
+    expected = 0.021
+    assert_equal expected, @swt1.growth_by_grade_over_years(8, :math)
   end
 
   def test_find_growth_over_years_for_third_grade_math
-    expected = 0.004500000000000004
-    assert_equal expected, @ha.growth_by_grade_over_years(3, :math)
+    expected = 0.005
+    assert_equal expected, @swt1.growth_by_grade_over_years(3, :math)
   end
+
+  # def test_find_by_category_will_find_all_subjects_for_grade
+  #   expected = {2008=>1.9009999999999998,
+  #               2009=>1.9529999999999998,
+  #               2010=>1.918}
+  #   result = @swt1.find_by_category(3, :math)
+  #   assert_equal expected, result
+  # end
 end
