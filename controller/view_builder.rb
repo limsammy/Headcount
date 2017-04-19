@@ -62,6 +62,7 @@ class ViewBuilder
       d_k_part_predict_hs_grad: analyst.kindergarten_participation_correlates_with_high_school_graduation(for: district[:name])
     }
   end
+  
   def build_erb(erb, sub_dir = '', filename = "index.html")
     Dir.mkdir("build") unless Dir.exists? "build"
 

@@ -1,0 +1,51 @@
+<%= File.read("./views/template_parts/header.erb") %>
+<%= File.read("./views/template_parts/nav.erb") %>
+  <h2 class="sub-header">Statewide Testing Information for <%= "#{district_name}" %></h2>
+  <p>
+    <a type="button" class="btn btn-default" href='/districts/<%= "#{district_slug}" %>/index.html'>Back to district main page</a>
+  </p>
+
+  <div class="row">
+    <div class="col-sm-4">
+      <div class="panel panel-primary">
+        <div class="panel-heading">3rd Grade Proficiency by Grade</div>
+        <div class="panel-body"><canvas id="grade-3-proficiency-by-grade" width="400" height="400"></canvas><br/>[Bar]</div>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="panel panel-primary">
+        <div class="panel-heading">8th Grade Proficiency by Grade</div>
+        <div class="panel-body"><canvas id="grade-8-proficiency-by-grade" width="400" height="400"></canvas><br/>[Bar]</div>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="panel panel-primary">
+        <div class="panel-heading">Ethnicity Proficient by Subject</div>
+        <div class="panel-body"><canvas id="ethnicity-proficient-by-subject" width="400" height="400"></canvas><br/>[Line Chart]</div>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+  <script>
+    <% grade_3_by_years_labels = data[:d_3_by_years].keys.map(&:to_s) %>
+    <% grade_3_by_years_data = data[:d_3_by_years].values %>
+    var grade_3_by_years = document.getElementById("k-part-by-year");
+    var grade_3_by_years_data = {
+        labels: <%= grade_3_by_years_labels %>,
+        datasets: [{
+                label: "Scores for 3rd Grade by Year",
+                backgroundColor:'rgba(54, 162, 235, 0.2)',
+                    // 'rgba(255, 99, 132, 0.2)',
+                    // 'rgba(255, 206, 86, 0.2)',
+                    // 'rgba(75, 192, 192, 0.2)',
+                    // 'rgba(153, 102, 255, 0.2)',
+                    // 'rgba(255, 159, 64, 0.2)'
+                data: <%= grade_3_by_years_data %>
+            }]
+    };
+    var my3rdGradeByYears = new Chart(grade_3_by_years, {
+        type: 'bar',
+        data: grade_3_by_years_data
+    });
+  </script>
+<%= File.read("./views/template_parts/footer-charts.erb") %>
