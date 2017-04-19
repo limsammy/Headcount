@@ -61,11 +61,11 @@ class HeadcountAnalyst
   end
 
   def find_average_of_year_data(years)
-    years = years.reject{|year, value| value == "N/A"}
-    our_sum = years.values.reduce(0) do |sum, value|
-      sum + value
-    end
+    years = years.reject{|year, value| value.is_a? String }
     return 0 if years.length == 0
+    our_sum = years.values.reduce(0) do |sum, value|
+      sum + value.to_f
+    end
     our_sum / years.length
   end
 
@@ -174,23 +174,55 @@ class HeadcountAnalyst
     state_data.merge!(state_average(districts, :children_in_poverty_rate))
     state_data.merge!(state_average(districts, :high_school_graduation_rate))
     statewide = ResultEntry.new(state_data)
-    matching_districts = reject_low_districts(districts, statewide)
+    keep_high_poverty_high_grad(districts, statewide)
     ResultSet.new(
-      matching_districts: matching_districts,
+      matching_districts: districts,
       statewide_average: statewide
     )
   end
 
+  def high_income_disparity
+    districts = collect_district_result_entries
+    state_data = {name: "COLORADO"}
+    state_data.merge!(state_average(districts, :children_in_poverty_rate))
+    state_data.merge!(state_average(districts, :median_household_income))
+    statewide = ResultEntry.new(state_data)
+    keep_high_income_disparity(districts, statewide)
+    ResultSet.new(
+      matching_districts: districts,
+      statewide_average: statewide
+    )
+  end
+
+  def kindergarten_participation_against_household_income(name)
+    kindergarten_variation = kindergarten_participation_rate_variation(name, :against => 'COLORADO')
+    income_variation = median_income_variation(name)
+    (kindergarten_variation / income_variation).round(3)
+  end
+
+  def median_income_variation(district)
+    this_district, other_district = districts_to_compare(district, "COLORADO")
+    this_average = district_median_income(this_district)
+    other_average = district_median_income(other_district)
+    find_variation([this_average, other_average])
+  end
+
+  def district_median_income(district)
+    district.economic_profile.median_household_income_average.to_f
+  end
+
   private
 
-  def reject_low_districts(districts, statewide)
-    districts.keep_if do |district|
-      meets_all_high_poverty_high_grad_rate_criteria(district,statewide)
+  def keep_high_income_disparity(ds, co)
+    ds.keep_if do |d|
+      higher_income?(d, co) && higher_poverty?(d, co)
     end
   end
 
-  def meets_all_high_poverty_high_grad_rate_criteria(d, co)
-    higher_lunch?(d, co) && higher_poverty?(d, co) && higher_grad?(d, co)
+  def keep_high_poverty_high_grad(ds, co)
+    ds.keep_if do |d|
+      higher_lunch?(d, co) && higher_poverty?(d, co) && higher_grad?(d, co)
+    end
   end
 
   def higher_lunch?(d, co)
@@ -203,6 +235,10 @@ class HeadcountAnalyst
 
   def higher_grad?(d, co)
     d.high_school_graduation_rate > co.high_school_graduation_rate
+  end
+
+  def higher_income?(d, co)
+    d.median_household_income > co.median_household_income
   end
 
   def state_average(districts, category)
@@ -220,6 +256,10 @@ class HeadcountAnalyst
     find_average_of_year_data(economic_object.data[:children_in_poverty]).round(3)
   end
 
+  def average_median_income(economic_object)
+    find_average_of_year_data(economic_object.data[:median_household_income]).round(3)
+  end
+
   def average_high_school_grad(enrollment_object)
     find_average_of_year_data(enrollment_object.data[:high_school_graduation]).round(3)
   end
@@ -233,7 +273,8 @@ class HeadcountAnalyst
         name: district.name,
         free_and_reduced_price_lunch_rate: average_lunch_students(economic),
         children_in_poverty_rate: average_poverty_students(economic),
-        high_school_graduation_rate: average_high_school_grad(enrollment)
+        high_school_graduation_rate: average_high_school_grad(enrollment),
+        median_household_income: average_median_income(economic)
       }
       ResultEntry.new(data)
     end.compact

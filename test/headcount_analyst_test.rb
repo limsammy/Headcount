@@ -155,4 +155,28 @@ class HeadcountAnalystTest < MiniTest::Test
   def test_high_high_school_grad_and_high_poverty_statewide_is_resultentry
     assert_instance_of ResultEntry, @ha.high_poverty_and_high_school_graduation.statewide_average
   end
+
+  def test_income_disparity_creates_resultset
+    assert_instance_of ResultSet, @ha.high_income_disparity
+  end
+
+  def test_income_disparity_districts_is_array
+    assert_instance_of Array, @ha.high_income_disparity.matching_districts
+  end
+
+  def test_income_disparity_districts_has_14_districts
+    assert_equal 14, @ha.high_income_disparity.matching_districts.length
+  end
+
+  def test_income_disparity_statewide_is_resultentry
+    assert_instance_of ResultEntry, @ha.high_income_disparity.statewide_average
+  end
+
+  def test_kindergarten_against_income_returns_variation_for_ACADEMY_20
+    # 87635.4 / 49662.987 = 1.765 <- average of all district incomes except CO
+    # 0.766 / 1.765
+    # 87635.4 / 57408 <- Average from CO in income file
+    # 0.766 / 1.527 = .502
+    assert_equal 0.502, @ha.kindergarten_participation_against_household_income("ACADEMY 20")
+  end
 end

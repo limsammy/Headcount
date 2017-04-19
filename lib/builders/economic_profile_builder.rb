@@ -51,7 +51,7 @@ class EconomicProfileBuilder
     if row[:dataformat] == "Percent"
       row[:data] = format_percent(row[:data])
     end
-    if row[:dataformat] == "Number"
+    if row[:dataformat] == "Number" || row[:dataformat] == "Currency"
       row[:data] = row[:data].to_i
     end
     if category == :median_household_income
