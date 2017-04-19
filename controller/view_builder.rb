@@ -13,7 +13,7 @@ class ViewBuilder
     build_index
     build_districts
     build_enrollments
-    # build_tests
+    build_testing
     # build_economic
     output_confirmation
   end
@@ -50,7 +50,46 @@ class ViewBuilder
     end
   end
 
+  def build_testing
+    template_district_testing = File.read "./views/district/testing.erb"
+    erb_template = ERB.new template_district_testing
+    districts.each do |district|
+      district_name = district[:name]
+      district_slug = "districts/" + district[:slug]
+
+      data = gather_testing_data(district)
+
+      district_index = erb_template.result(binding)
+      build_erb(district_index, district_slug, "testing.html")
+    end
+  end
+
   private
+
+  def gather_testing_data(district)
+    testing = @district_repository.find_by_name(district[:name]).statewide_test
+    {
+      d_3_by_years: testing.proficient_by_grade(3),
+      d_3_by_years_math: get_grade_year_subject_scores(testing, 3, :math),
+      d_3_by_years_reading: get_grade_year_subject_scores(testing, 3, :reading),
+      d_3_by_years_writing: get_grade_year_subject_scores(testing, 3, :writing),
+      d_8_by_years: testing.proficient_by_grade(8),
+      d_8_by_years_math: get_grade_year_subject_scores(testing, 8, :math),
+      d_8_by_years_reading: get_grade_year_subject_scores(testing, 8, :reading),
+      d_8_by_years_writing: get_grade_year_subject_scores(testing, 8, :writing),
+      # d_k_part_against_co: analyst.kindergarten_participation_rate_variation(district[:name], :against => 'COLORADO'),
+      # d_k_part_against_co_trend: analyst.kindergarten_participation_rate_variation_trend(district[:name], :against => 'COLORADO'),
+      # d_hs_grad: enrollment.graduation_rate_by_year.sort.to_h,
+      # d_k_part_predict_hs_grad: analyst.kindergarten_participation_correlates_with_high_school_graduation(for: district[:name])
+    }
+  end
+
+  def get_grade_year_subject_scores(testing, year, subject)
+    results = testing.proficient_by_grade(year)
+    results.map do |year, scores|
+      scores[subject]
+    end
+  end
 
   def gather_enrollment_data(district)
     enrollment = @district_repository.find_by_name(district[:name]).enrollment
@@ -62,7 +101,7 @@ class ViewBuilder
       d_k_part_predict_hs_grad: analyst.kindergarten_participation_correlates_with_high_school_graduation(for: district[:name])
     }
   end
-  
+
   def build_erb(erb, sub_dir = '', filename = "index.html")
     Dir.mkdir("build") unless Dir.exists? "build"
 
