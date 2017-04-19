@@ -1,0 +1,193 @@
+<html>
+<head>
+  <meta charset='utf-8'>
+  <title>Headcount Analyst!</title>
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+</head>
+<body>
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/">Headcount Analyst</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav navbar-left">
+        <li><a href="/">All Districts</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<div class="container-fluid">
+  <div class="jumbotron">
+     <div class="row">
+
+  <h2 class="sub-header">Economic Profile Information for BRUSH RE-2(J)</h2>
+  <p>
+    <a type="button" class="btn btn-default" href='/districts/districts/brush-re-2(j)/index.html'>Back to district main page</a>
+  </p>
+
+  <div class="row">
+    <div class="col-sm-4">
+      <div class="panel panel-danger">
+        <div class="panel-heading">Children in Poverty</div>
+        <div class="panel-body"><canvas id="children-in-poverty" width="400" height="400"></canvas></div>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="panel panel-danger">
+        <div class="panel-heading">Title I</div>
+        <div class="panel-body"><canvas id="title-i" width="400" height="400"></canvas></div>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="panel panel-danger">
+        <div class="panel-heading">Median Household Income</div>
+        <div class="panel-body"><canvas id="median-household-income" width="400" height="400"></canvas></div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="panel panel-danger">
+        <div class="panel-heading">Free or Reduced Price Lunch - Percent</div>
+        <div class="panel-body"><canvas id="free-or-reduced-lunch-percent" width="400" height="400"></canvas></div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="panel panel-danger">
+        <div class="panel-heading">Free or Reduced Price Lunch - Number</div>
+        <div class="panel-body"><canvas id="free-or-reduced-lunch-total" width="400" height="400"></canvas></div>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+  <script>
+    
+    
+    var children_in_poverty = document.getElementById("children-in-poverty");
+    var children_in_poverty_data = {
+        labels: ["1995", "1997", "1999", "2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013"],
+        datasets: [{
+                label: "Percent of Children",
+                backgroundColor:'rgba(255, 99, 132, 0.2)',
+                data: [0.139, 0.161, 0.113, 0.12, 0.112, 0.11, 0.114, 0.104, 0.125, 0.123, 0.115, 0.129, 0.149, 0.145, 0.158, 0.175, 0.167]
+            }]
+    };
+    var children_in_poverty_options = {
+      scales: {
+        yAxes: [{
+            display: true,
+            ticks: {
+                suggestedMin: 0,    // minimum will be 0, unless there is a lower value.
+                suggestedMax: 1
+            }
+        }]
+      }
+    }
+    var myChildrenInPoverty = new Chart(children_in_poverty, {
+        type: 'line',
+        data: children_in_poverty_data,
+        options: children_in_poverty_options
+    });
+    
+    
+    var title_i = document.getElementById("title-i");
+    var title_i_data = {
+        labels: ["2009", "2011", "2012", "2013", "2014"],
+        datasets: [{
+                label: "Percent",
+                backgroundColor:'rgba(255, 99, 132, 0.2)',
+                data: [0.051, 0.118, 0.152, 0.097, 0.133]
+            }]
+    };
+    var title_i_options = {
+      scales: {
+        yAxes: [{
+            display: true,
+            ticks: {
+                suggestedMin: 0,    // minimum will be 0, unless there is a lower value.
+                suggestedMax: 1
+            }
+        }]
+      }
+    }
+    var myTitleI = new Chart(title_i, {
+        type: 'line',
+        data: title_i_data,
+        options: title_i_options
+    });
+    
+    
+    var median_income = document.getElementById("median-household-income");
+    var median_income_data = {
+        labels: ["[2005, 2009]", "[2006, 2010]", "[2008, 2012]", "[2007, 2011]", "[2009, 2013]"],
+        datasets: [{
+                label: "Percent",
+                backgroundColor:'rgba(255, 99, 132, 0.2)',
+                data: [42537, 42487, 36298, 39738, 41181]
+            }]
+    };
+    var myMedianIncome = new Chart(median_income, {
+        type: 'line',
+        data: median_income_data,
+        // options: median_income_options
+    });
+    
+    
+    var lunch_precentage = document.getElementById("free-or-reduced-lunch-percent");
+    var lunch_precentage_data = {
+        labels: ["2014", "2012", "2011", "2010", "2009", "2013", "2008", "2007", "2006", "2005", "2004", "2003", "2002", "2001", "2000"],
+        datasets: [{
+                label: "Percent",
+                backgroundColor:'rgba(255, 99, 132, 0.2)',
+                data: [0.545, 0.559, 0.522, 0.515, 0.517, 0.52, 0.502, 0.51, 0.501, 0.529, 0.502, 0.46, 0.428, 0.427, 0.43]
+            }]
+    };
+    var lunch_precentage_options = {
+      scales: {
+        yAxes: [{
+            display: true,
+            ticks: {
+                suggestedMin: 0,    // minimum will be 0, unless there is a lower value.
+                suggestedMax: 1
+            }
+        }]
+      }
+    }
+    var myFreeReducedLunchPrecentage = new Chart(lunch_precentage, {
+        type: 'line',
+        data: lunch_precentage_data,
+        options: lunch_precentage_options
+    });
+    
+    
+    var lunch_total = document.getElementById("free-or-reduced-lunch-total");
+    var lunch_total_data = {
+        labels: ["2014", "2012", "2011", "2010", "2009", "2013", "2008", "2007", "2006", "2005", "2004", "2003", "2002", "2001", "2000"],
+        datasets: [{
+                label: "Children",
+                backgroundColor:'rgba(255, 99, 132, 0.2)',
+                data: [827, 864, 784, 778, 768, 813, 768, 785, 790, 801, 771, 730, 655, 675, 656]
+            }]
+    };
+    var myFreeReducedLunchNumber = new Chart(lunch_total, {
+        type: 'line',
+        data: lunch_total_data
+    });
+  </script>
+<!-- Latest compiled and minified JavaScript -->
+</div>
+</div>
+</div>
+<script
+  src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</body>
+</html>
+

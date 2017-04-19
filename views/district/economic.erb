@@ -1,0 +1,157 @@
+<%= File.read("./views/template_parts/header.erb") %>
+<%= File.read("./views/template_parts/nav.erb") %>
+  <h2 class="sub-header">Economic Profile Information for <%= "#{district_name}" %></h2>
+  <p>
+    <a type="button" class="btn btn-default" href='/districts/<%= "#{district_slug}" %>/index.html'>Back to district main page</a>
+  </p>
+
+  <div class="row">
+    <div class="col-sm-4">
+      <div class="panel panel-danger">
+        <div class="panel-heading">Children in Poverty</div>
+        <div class="panel-body"><canvas id="children-in-poverty" width="400" height="400"></canvas></div>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="panel panel-danger">
+        <div class="panel-heading">Title I</div>
+        <div class="panel-body"><canvas id="title-i" width="400" height="400"></canvas></div>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="panel panel-danger">
+        <div class="panel-heading">Median Household Income</div>
+        <div class="panel-body"><canvas id="median-household-income" width="400" height="400"></canvas></div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="panel panel-danger">
+        <div class="panel-heading">Free or Reduced Price Lunch - Percent</div>
+        <div class="panel-body"><canvas id="free-or-reduced-lunch-percent" width="400" height="400"></canvas></div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="panel panel-danger">
+        <div class="panel-heading">Free or Reduced Price Lunch - Number</div>
+        <div class="panel-body"><canvas id="free-or-reduced-lunch-total" width="400" height="400"></canvas></div>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+  <script>
+    <% children_in_poverty_labels = data[:d_children_in_poverty].keys.map(&:to_s) %>
+    <% children_in_poverty_data = data[:d_children_in_poverty].values %>
+    var children_in_poverty = document.getElementById("children-in-poverty");
+    var children_in_poverty_data = {
+        labels: <%= children_in_poverty_labels %>,
+        datasets: [{
+                label: "Percent of Children",
+                backgroundColor:'rgba(255, 99, 132, 0.2)',
+                data: <%= children_in_poverty_data %>
+            }]
+    };
+    var children_in_poverty_options = {
+      scales: {
+        yAxes: [{
+            display: true,
+            ticks: {
+                suggestedMin: 0,    // minimum will be 0, unless there is a lower value.
+                suggestedMax: 1
+            }
+        }]
+      }
+    }
+    var myChildrenInPoverty = new Chart(children_in_poverty, {
+        type: 'line',
+        data: children_in_poverty_data,
+        options: children_in_poverty_options
+    });
+    <% title_i_labels = data[:d_title_i].keys.map(&:to_s) %>
+    <% title_i_data = data[:d_title_i].values %>
+    var title_i = document.getElementById("title-i");
+    var title_i_data = {
+        labels: <%= title_i_labels %>,
+        datasets: [{
+                label: "Percent",
+                backgroundColor:'rgba(255, 99, 132, 0.2)',
+                data: <%= title_i_data %>
+            }]
+    };
+    var title_i_options = {
+      scales: {
+        yAxes: [{
+            display: true,
+            ticks: {
+                suggestedMin: 0,    // minimum will be 0, unless there is a lower value.
+                suggestedMax: 1
+            }
+        }]
+      }
+    }
+    var myTitleI = new Chart(title_i, {
+        type: 'line',
+        data: title_i_data,
+        options: title_i_options
+    });
+    <% median_income_labels = data[:d_median_income].keys.map(&:to_s) %>
+    <% median_income_data = data[:d_median_income].values %>
+    var median_income = document.getElementById("median-household-income");
+    var median_income_data = {
+        labels: <%= median_income_labels %>,
+        datasets: [{
+                label: "Percent",
+                backgroundColor:'rgba(255, 99, 132, 0.2)',
+                data: <%= median_income_data %>
+            }]
+    };
+    var myMedianIncome = new Chart(median_income, {
+        type: 'line',
+        data: median_income_data,
+        // options: median_income_options
+    });
+    <% lunch_precentage_labels = data[:d_lunch_precentage].keys.map(&:to_s) %>
+    <% lunch_precentage_data = data[:d_lunch_precentage].values %>
+    var lunch_precentage = document.getElementById("free-or-reduced-lunch-percent");
+    var lunch_precentage_data = {
+        labels: <%= lunch_precentage_labels %>,
+        datasets: [{
+                label: "Percent",
+                backgroundColor:'rgba(255, 99, 132, 0.2)',
+                data: <%= lunch_precentage_data %>
+            }]
+    };
+    var lunch_precentage_options = {
+      scales: {
+        yAxes: [{
+            display: true,
+            ticks: {
+                suggestedMin: 0,    // minimum will be 0, unless there is a lower value.
+                suggestedMax: 1
+            }
+        }]
+      }
+    }
+    var myFreeReducedLunchPrecentage = new Chart(lunch_precentage, {
+        type: 'line',
+        data: lunch_precentage_data,
+        options: lunch_precentage_options
+    });
+    <% lunch_total_labels = data[:d_lunch_total].keys.map(&:to_s) %>
+    <% lunch_total_data = data[:d_lunch_total].values %>
+    var lunch_total = document.getElementById("free-or-reduced-lunch-total");
+    var lunch_total_data = {
+        labels: <%= lunch_total_labels %>,
+        datasets: [{
+                label: "Children",
+                backgroundColor:'rgba(255, 99, 132, 0.2)',
+                data: <%= lunch_total_data %>
+            }]
+    };
+    var myFreeReducedLunchNumber = new Chart(lunch_total, {
+        type: 'line',
+        data: lunch_total_data
+    });
+  </script>
+<%= File.read("./views/template_parts/footer.erb") %>

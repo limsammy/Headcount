@@ -3,6 +3,7 @@ require_relative 'result_set'
 require 'pry'
 
 class HeadcountAnalyst
+  attr_reader :district_repository
 
   def initialize(district_repository)
     @district_repository = district_repository
@@ -88,6 +89,7 @@ class HeadcountAnalyst
   end
 
   def find_variation(values)
+    values.map!(&:to_f)
     (values[0] / values[1]).round(3)
   end
 
@@ -153,7 +155,7 @@ class HeadcountAnalyst
     top = collection.max_by{|x| x[:growth]}
     final = []
     final << top[:name]
-    final << top[:growth]
+    final << top[:growth].round(3)
     return final
   end
 
