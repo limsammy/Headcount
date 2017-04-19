@@ -1,5 +1,6 @@
 class EconomicProfile
-  attr_reader :name, :data
+  attr_reader :name,
+              :data
 
   def initialize(args)
     @name = args[:name]
@@ -47,6 +48,12 @@ class EconomicProfile
     @data[:free_or_reduced_price_lunch][year][:total]
   end
 
+  def average_number_of_lunch_students
+    lunch_data = @data[:free_or_reduced_price_lunch]
+    students = sum_lunch_student_totals(lunch_data.values)
+    (students / lunch_data.length).round(3)
+  end
+
   def title_i_in_year(year)
     validate_args({title_i_years:year})
     @data[:title_i][year]
@@ -78,5 +85,10 @@ class EconomicProfile
   def available_median_income_years
     our_years = @data[:median_household_income].keys.flatten.sort
     [*(our_years.first..our_years.last)]
+  end
+
+  def sum_lunch_student_totals(totals)
+    totals = totals.reject{|value| value[:total].class == String}
+    totals.reduce(0) {|sum, value| sum + value[:total]}
   end
 end

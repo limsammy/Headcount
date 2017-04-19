@@ -140,4 +140,8 @@ class EconomicProfileTest < MiniTest::Test
   def test_title_i_in_year_returns_value
     assert_equal 0.543, @ep.title_i_in_year(2014)
   end
+
+  def test_average_number_of_lunch_students_find_average_count
+    assert_equal 550, @ep.average_number_of_lunch_students
+  end
 end
