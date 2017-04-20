@@ -158,7 +158,7 @@ class HeadcountAnalyst
     top = collection.max_by{|x| x[:growth]}
     final = []
     final << top[:name]
-    final << top[:growth]
+    final << top[:growth].round(3)
     return final
   end
 
@@ -203,9 +203,10 @@ class HeadcountAnalyst
   end
 
   def kindergarten_participation_against_household_income(name)
-    kindergarten_variation = kindergarten_participation_rate_variation(name, :against => 'COLORADO')
+    compare = {:against => 'COLORADO'}
+    k_v = kindergarten_participation_rate_variation(name, compare)
     income_variation = median_income_variation(name)
-    (kindergarten_variation / income_variation).round(3)
+    (k_v / income_variation).round(3)
   end
 
   def median_income_variation(district)
@@ -229,8 +230,8 @@ class HeadcountAnalyst
       length_without_CO = (@district_repository.data.length - 1.0)
       has_correlation([correlation_count, length_without_CO])
     else
-      variation = kindergarten_participation_against_household_income(args[:for])
-      variation > 0.6 && variation < 1.5
+      v = kindergarten_participation_against_household_income(args[:for])
+      v > 0.6 && v < 1.5
     end
   end
 
@@ -284,7 +285,8 @@ class HeadcountAnalyst
   end
 
   def average_poverty_students(economic_object)
-    find_average_of_year_data(economic_object.data[:children_in_poverty]).round(3)
+    data = economic_object.data[:children_in_poverty]
+    find_average_of_year_data(data).round(3)
   end
 
   def average_median_income(economic_object)
