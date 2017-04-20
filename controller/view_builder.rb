@@ -1,4 +1,6 @@
 require 'erb'
+require 'nokogiri'
+require 'httparty'
 class ViewBuilder
   attr_reader :analyst, :districts
 
@@ -6,6 +8,8 @@ class ViewBuilder
     @analyst = analyst
     @district_repository = analyst.district_repository
     @districts = get_districts_for_web
+    page = HTTParty.get('https://en.wikipedia.org/wiki/List_of_school_districts_in_Colorado')
+    @district_page = Nokogiri::HTML(page)
     run
   end
 
@@ -32,6 +36,14 @@ class ViewBuilder
     districts.each do |district|
       district_name = district[:name]
       district_slug = "districts/" + district[:slug]
+      link_to_district = find_district_link(district_name)
+      info_box = ''
+      if !link_to_district.nil? && !link_to_district.empty?
+        page = HTTParty.get("https://en.wikipedia.org" + link_to_district)
+        parse_file = Nokogiri::HTML(page)
+        info_box = parse_file.css('.infobox')
+        binding.pry if info_box == ''
+      end
       district_index = erb_template.result(binding)
       build_erb(district_index, district_slug)
     end
@@ -223,5 +235,11 @@ class ViewBuilder
 
   def make_district_slug(name)
     name.downcase.gsub(" ", "-").gsub('/','-')
+  end
+
+  def find_district_link(name)
+    return '' if name == "COLORADO"
+    first_word = name.split(" ").first.downcase.capitalize
+    @district_page.xpath("//a[contains(text(), '#{first_word}')]")[0]["href"] if @district_page.xpath("//a[contains(text(), '#{first_word}')]")[0]
   end
 end
