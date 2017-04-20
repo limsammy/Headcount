@@ -103,7 +103,8 @@ class HeadcountAnalyst
       :subject => [:math, :reading, :writing],
       :top => [*(1..181)]
     }
-    raise InsufficientInformationError, 'A grade must be provided to answer this question.' unless args.key?(:grade)
+    message = 'A grade must be provided to answer this question.'
+    raise InsufficientInformationError, message unless args.key?(:grade)
     args.each do |set, value|
       if set != :weighting
         is_valid = valid[set].include?(value)
@@ -116,7 +117,10 @@ class HeadcountAnalyst
 
   def top_statewide_test_year_over_year_growth(data)
     validate_args(data)
-    growths = get_districts_and_growths(data[:grade], [data[:subject]], data[:weighting])
+    grade = data[:grade]
+    subject = [data[:subject]]
+    weight = data[:weighting]
+    growths = get_districts_and_growths(grade, subject, weight)
     if !data.key?(:top)
       find_single_top_district_growth(growths)
     elsif data.key?(:top)
@@ -124,13 +128,13 @@ class HeadcountAnalyst
     end
   end
 
-  def get_districts_and_growths(grade, subjects, weight = nil)
-    subjects = [:math, :reading, :writing] if subjects.compact.empty?
+  def get_districts_and_growths(grade, subs, weight = nil)
+    subs = [:math, :reading, :writing] if subs.compact.empty?
     @district_repository.testing_repo.data.map do |test_object|
       if !weight.nil?
-        average = get_growth_weighted_average(test_object, grade, subjects, weight)
+        average = get_growth_weighted_average(test_object, grade, subs, weight)
       else
-        average = get_growth_average(test_object, grade, subjects)
+        average = get_growth_average(test_object, grade, subs)
       end
       {:name => test_object.name, :growth => average}
     end
@@ -138,7 +142,8 @@ class HeadcountAnalyst
 
   def get_growth_weighted_average(test_object, grade, subjects, weight)
     subjects.reduce(0) do |sum, subject|
-      sum + (test_object.growth_by_grade_over_years(grade, subject) * weight[subject])
+      growth = (test_object.growth_by_grade_over_years(grade, subject)
+      sum + growth * weight[subject])
     end
   end
 
