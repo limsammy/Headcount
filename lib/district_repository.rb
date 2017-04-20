@@ -18,17 +18,20 @@ class DistrictRepository
   def load_data(args)
     if args.key?(:enrollment)
       @enrollment_repo = EnrollmentRepository.new if @enrollment_repo.nil?
-      district_data = @enrollment_repo.load_data({enrollment: args[:enrollment]})
+      data_to_load = {enrollment: args[:enrollment]}
+      district_data = @enrollment_repo.load_data(data_to_load)
       populate_data(district_data)
     end
     if args.key?(:statewide_testing)
       @testing_repo ||= StatewideTestRepository.new
-      district_data = @testing_repo.load_data({statewide_testing: args[:statewide_testing]})
-      populate_data(district_data)
+      data_to_load = {statewide_testing: args[:statewide_testing]}
+      test_data = @testing_repo.load_data(data_to_load)
+      populate_data(test_data)
     end
     if args.key?(:economic_profile)
       @economic_profile_repo ||= EconomicProfileRepository.new
-      district_data = @economic_profile_repo.load_data({economic_profile: args[:economic_profile]})
+      data_to_load = {economic_profile: args[:economic_profile]}
+      district_data = @economic_profile_repo.load_data(data_to_load)
       populate_data(district_data)
     end
   end
