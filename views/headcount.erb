@@ -1,0 +1,95 @@
+<%= File.read("./views/template_parts/header.erb") %>
+<%= File.read("./views/template_parts/nav.erb") %>
+  <h2 class="sub-header">Headcount Analyst</h2>
+
+  <div class="row">
+    <div class="col-md-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">Top District - 3<sup>rd</sup> Grade</div>
+        <div class="panel-body"><%= top_3rd_grade.join(": ") %> </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">Top District - 8<sup>th</sup> Grade</div>
+        <div class="panel-body"><%= top_8th_grade.join(": ") %></div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-4">
+      <div class="panel panel-default">
+        <div class="panel-heading">Top Three Districts - 3<sup>rd</sup> Grade Math Growth</div>
+        <div class="panel-body">
+          <ul class="list-group">
+            <% top_3rd_math.each do |district| %>
+            <li class="list-group-item"><%= district.join(": ") %></li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="panel panel-default">
+        <div class="panel-heading">Top Three Districts - 3<sup>rd</sup> Grade Writing Growth</div>
+        <div class="panel-body">
+          <ul class="list-group">
+            <% top_3rd_writing.each do |district| %>
+            <li class="list-group-item"><%= district.join(": ") %></li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="panel panel-default">
+        <div class="panel-heading">Top Three Districts - 3<sup>rd</sup> Grade Reading Growth</div>
+        <div class="panel-body">
+          <ul class="list-group">
+            <% top_3rd_reading.each do |district| %>
+            <li class="list-group-item"><%= district.join(": ") %></li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-4">
+      <div class="panel panel-default">
+        <div class="panel-heading">Top Three Districts - 8<sup>th</sup> Grade Math Growth</div>
+        <div class="panel-body">
+          <ul class="list-group">
+            <% top_8th_math.each do |district| %>
+            <li class="list-group-item"><%= district.join(": ") %></li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="panel panel-default">
+        <div class="panel-heading">Top Three Districts - 8<sup>th</sup> Grade Writing Growth</div>
+        <div class="panel-body">
+          <ul class="list-group">
+            <% top_8th_writing.each do |district| %>
+            <li class="list-group-item"><%= district.join(": ") %></li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="panel panel-default">
+        <div class="panel-heading">Top Three Districts - 8<sup>th</sup> Grade Reading Growth</div>
+        <div class="panel-body">
+          <ul class="list-group">
+            <% top_8th_reading.each do |district| %>
+            <li class="list-group-item"><%= district.join(": ") %></li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+<%= File.read("./views/template_parts/footer-charts.erb") %>

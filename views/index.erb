@@ -1,0 +1,23 @@
+<%= File.read("./views/template_parts/header.erb") %>
+<%= File.read("./views/template_parts/nav.erb") %>
+
+<h2 class="sub-header">View Information specific information:</h2>
+<div class="table-responsive">
+  <table class="table table-striped">
+    <tr>
+      <th>District</th>
+      <th>Enrollment</th>
+      <th>Statewide Testing</th>
+      <th>Economic Profile</th>
+    </tr>
+  <% districts.each do |district| %>
+      <tr>
+        <td><a href='./districts/<%= "#{district[:slug]}" %>/index.html'><%= "#{district[:name]}" %></a></td>
+        <td><a href='./districts/<%= "#{district[:slug]}" %>/enrollment.html'>Enrollment</a></td>
+        <td><a href='./districts/<%= "#{district[:slug]}" %>/testing.html'>Statewide Testing</a></td>
+        <td><a href='./districts/<%= "#{district[:slug]}" %>/economic.html'>Economic Profile</a></td>
+      </tr>
+    <% end %>
+  </table>
+</div>
+<%= File.read("./views/template_parts/footer.erb") %>

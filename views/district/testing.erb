@@ -1,0 +1,254 @@
+<%= File.read("./views/template_parts/header.erb") %>
+<%= File.read("./views/template_parts/nav.erb") %>
+  <h2 class="sub-header">Statewide Testing Information for <%= "#{district_name}" %></h2>
+  <p>
+    <a type="button" class="btn btn-default" href='./index.html'>Back to district main page</a>
+  </p>
+
+  <div class="row">
+    <div class="col-md-6">
+      <div class="panel panel-success">
+        <div class="panel-heading">3rd Grade Proficiency by Grade</div>
+        <div class="panel-body"><canvas id="grade-3-proficiency-by-grade" width="400" height="400"></canvas></div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="panel panel-success">
+        <div class="panel-heading">8th Grade Proficiency by Grade</div>
+        <div class="panel-body"><canvas id="grade-8-proficiency-by-grade" width="400" height="400"></canvas></div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-4">
+      <div class="panel panel-success">
+        <div class="panel-heading">Ethnicity Proficient in Math</div>
+        <div class="panel-body"><canvas id="ethnicity-proficient-in-math" width="400" height="400"></canvas></div>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="panel panel-success">
+        <div class="panel-heading">Ethnicity Proficient in Reading</div>
+        <div class="panel-body"><canvas id="ethnicity-proficient-in-reading" width="400" height="400"></canvas></div>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="panel panel-success">
+        <div class="panel-heading">Ethnicity Proficient in Writing</div>
+        <div class="panel-body"><canvas id="ethnicity-proficient-in-writing" width="400" height="400"></canvas></div>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+  <script>
+    <% grade_3_by_years_labels = data[:d_3_by_years].keys.map(&:to_s) %>
+    <% grade_3_by_years_math_data = data[:d_3_by_years_math] %>
+    <% grade_3_by_years_reading_data = data[:d_3_by_years_reading] %>
+    <% grade_3_by_years_writing_data = data[:d_3_by_years_writing] %>
+    var grade_3_by_years = document.getElementById("grade-3-proficiency-by-grade");
+    var grade_3_by_years_data = {
+        labels: <%= grade_3_by_years_labels %>,
+        datasets: [{
+                label: "Math",
+                backgroundColor:'rgba(54, 162, 235, 0.2)',
+                data: <%= grade_3_by_years_math_data %>
+            },
+            {
+                label: "Reading",
+                backgroundColor:'rgba(255, 99, 132, 0.2)',
+                data: <%= grade_3_by_years_reading_data %>
+            },
+            {
+                label: "Writing",
+                backgroundColor:'rgba(255, 206, 86, 0.2)',
+                data: <%= grade_3_by_years_writing_data %>
+            }]
+    };
+    var my3rdGradeByYears = new Chart(grade_3_by_years, {
+        type: 'bar',
+        data: grade_3_by_years_data
+    });
+    <% grade_8_by_years_labels = data[:d_8_by_years].keys.map(&:to_s) %>
+    <% grade_8_by_years_math_data = data[:d_8_by_years_math] %>
+    <% grade_8_by_years_reading_data = data[:d_8_by_years_reading] %>
+    <% grade_8_by_years_writing_data = data[:d_8_by_years_writing] %>
+    var grade_8_by_years = document.getElementById("grade-8-proficiency-by-grade");
+    var grade_8_by_years_data = {
+        labels: <%= grade_8_by_years_labels %>,
+        datasets: [{
+                label: "Math",
+                backgroundColor:'rgba(54, 162, 235, 0.2)',
+                data: <%= grade_8_by_years_math_data %>
+            },
+            {
+                label: "Reading",
+                backgroundColor:'rgba(255, 99, 132, 0.2)',
+                data: <%= grade_8_by_years_reading_data %>
+            },
+            {
+                label: "Writing",
+                backgroundColor:'rgba(255, 206, 86, 0.2)',
+                data: <%= grade_8_by_years_writing_data %>
+            }]
+    };
+    var my8thGradeByYears = new Chart(grade_8_by_years, {
+        type: 'bar',
+        data: grade_8_by_years_data
+    });
+    <% race_math_labels = data[:d_race_math_labels] %>
+    var race_math = document.getElementById("ethnicity-proficient-in-math");
+    var race_math_data = {
+        labels: <%= race_math_labels %>,
+        datasets: [{
+                label: "All Students",
+                backgroundColor:'rgba(54, 162, 235, 0.2)',
+                data: <%= data[:d_race_math_data_all][:all_students] %>
+            },
+            {
+                label: "Asian",
+                backgroundColor:'rgba(255, 99, 132, 0.2)',
+                data: <%= data[:d_race_math_data_all][:asian] %>
+            },
+            {
+                label: "Black",
+                backgroundColor:'rgba(255, 206, 86, 0.2)',
+                data: <%= data[:d_race_math_data_all][:black] %>
+            },
+            {
+                label: "Pacific Islander",
+                backgroundColor:'rgba(75, 192, 192, 0.2)',
+                data: <%= data[:d_race_math_data_all][:"hawaiian/pacific_islander"] %>
+            },
+            {
+                label: "Hispanic",
+                backgroundColor:'rgba(153, 102, 255, 0.2)',
+                data: <%= data[:d_race_math_data_all][:hispanic] %>
+            },
+            {
+                label: "Native American",
+                backgroundColor:'rgba(255, 159, 64, 0.2)',
+                data: <%= data[:d_race_math_data_all][:native_american] %>
+            },
+            {
+                label: "Two or More",
+                backgroundColor:'rgba(54, 162, 235, 0.2)',
+                data: <%= data[:d_race_math_data_all][:two_or_more] %>
+            },
+            {
+                label: "White",
+                backgroundColor:'rgba(255, 99, 132, 0.2)',
+                data: <%= data[:d_race_math_data_all][:white] %>
+            }]
+    };
+    var myMathByRace = new Chart(race_math, {
+        type: 'bar',
+        data: race_math_data
+    });
+    <% race_reading_labels = data[:d_race_reading_labels] %>
+    var race_reading = document.getElementById("ethnicity-proficient-in-reading");
+    var race_reading_data = {
+        labels: <%= race_reading_labels %>,
+        datasets: [{
+                label: "All Students",
+                backgroundColor:'rgba(54, 162, 235, 0.2)',
+                data: <%= data[:d_race_reading_data_all][:all_students] %>
+            },
+            {
+                label: "Asian",
+                backgroundColor:'rgba(255, 99, 132, 0.2)',
+                data: <%= data[:d_race_reading_data_all][:asian] %>
+            },
+            {
+                label: "Black",
+                backgroundColor:'rgba(255, 206, 86, 0.2)',
+                data: <%= data[:d_race_reading_data_all][:black] %>
+            },
+            {
+                label: "Pacific Islander",
+                backgroundColor:'rgba(75, 192, 192, 0.2)',
+                data: <%= data[:d_race_reading_data_all][:"hawaiian/pacific_islander"] %>
+            },
+            {
+                label: "Hispanic",
+                backgroundColor:'rgba(153, 102, 255, 0.2)',
+                data: <%= data[:d_race_reading_data_all][:hispanic] %>
+            },
+            {
+                label: "Native American",
+                backgroundColor:'rgba(255, 159, 64, 0.2)',
+                data: <%= data[:d_race_reading_data_all][:native_american] %>
+            },
+            {
+                label: "Two or More",
+                backgroundColor:'rgba(54, 162, 235, 0.2)',
+                data: <%= data[:d_race_reading_data_all][:two_or_more] %>
+            },
+            {
+                label: "White",
+                backgroundColor:'rgba(255, 99, 132, 0.2)',
+                data: <%= data[:d_race_reading_data_all][:white] %>
+            }]
+    };
+    var myReadingByRace = new Chart(race_reading, {
+        type: 'bar',
+        data: race_reading_data
+    });
+    <% race_writing_labels = data[:d_race_writing_labels] %>
+    var race_writing = document.getElementById("ethnicity-proficient-in-writing");
+    var race_writing_data = {
+        labels: <%= race_writing_labels %>,
+        datasets: [{
+                label: "All Students",
+                fill: false,
+                backgroundColor:'rgba(54, 162, 235, 0.2)',
+                data: <%= data[:d_race_writing_data_all][:all_students] %>
+            },
+            {
+                label: "Asian",
+                fill: false,
+                backgroundColor:'rgba(255, 99, 132, 0.2)',
+                data: <%= data[:d_race_writing_data_all][:asian] %>
+            },
+            {
+                label: "Black",
+                fill: false,
+                backgroundColor:'rgba(255, 206, 86, 0.2)',
+                data: <%= data[:d_race_writing_data_all][:black] %>
+            },
+            {
+                label: "Pacific Islander",
+                fill: false,
+                backgroundColor:'rgba(75, 192, 192, 0.2)',
+                data: <%= data[:d_race_writing_data_all][:"hawaiian/pacific_islander"] %>
+            },
+            {
+                label: "Hispanic",
+                fill: false,
+                backgroundColor:'rgba(153, 102, 255, 0.2)',
+                data: <%= data[:d_race_writing_data_all][:hispanic] %>
+            },
+            {
+                label: "Native American",
+                fill: false,
+                backgroundColor:'rgba(255, 159, 64, 0.2)',
+                data: <%= data[:d_race_writing_data_all][:native_american] %>
+            },
+            {
+                label: "Two or More",
+                fill: false,
+                backgroundColor:'rgba(54, 162, 235, 0.2)',
+                data: <%= data[:d_race_writing_data_all][:two_or_more] %>
+            },
+            {
+                label: "White",
+                fill: false,
+                backgroundColor:'rgba(255, 99, 132, 0.2)',
+                data: <%= data[:d_race_writing_data_all][:white] %>
+            }]
+    };
+    var myWritingByRace = new Chart(race_writing, {
+        type: 'bar',
+        data: race_writing_data
+    });
+  </script>
+<%= File.read("./views/template_parts/footer-charts.erb") %>
