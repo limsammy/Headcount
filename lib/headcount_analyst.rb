@@ -18,8 +18,8 @@ class HeadcountAnalyst
       length_without_CO = (@district_repository.data.length - 1.0)
       has_correlation([correlation_count, length_without_CO])
     else
-      variation = kindergarten_participation_against_high_school_graduation(args[:for])
-      variation > 0.6 && variation < 1.5
+      v = kindergarten_participation_against_high_school_graduation(args[:for])
+      v > 0.6 && v < 1.5
     end
   end
 
@@ -31,27 +31,27 @@ class HeadcountAnalyst
     end
   end
 
-  def kindergarten_participation_against_high_school_graduation(district)
-    kindergarten_variation = kindergarten_participation_rate_variation(district, :against => 'COLORADO')
-    district, statewide = districts_to_compare(district, 'COLORADO')
-    district_years = district_high_school_by_year(district)
+  def kindergarten_participation_against_high_school_graduation(d)
+    k_v = kindergarten_participation_rate_variation(d, :against => 'COLORADO')
+    d, statewide = districts_to_compare(d, 'COLORADO')
+    district_years = district_high_school_by_year(d)
     statewide_years = district_high_school_by_year(statewide)
-    high_school_variation = get_rate_variation([district_years, statewide_years])
-    find_variation([kindergarten_variation, high_school_variation])
+    hs_v = get_rate_variation([district_years, statewide_years])
+    find_variation([k_v, hs_v])
   end
 
   def kindergarten_participation_rate_variation(district, compare)
-    this_district, other_district = districts_to_compare(district, compare[:against])
-    this_years = district_kindergarten_by_year(this_district)
-    other_years = district_kindergarten_by_year(other_district)
+    d, other_d = districts_to_compare(district, compare[:against])
+    this_years = district_kindergarten_by_year(d)
+    other_years = district_kindergarten_by_year(other_d)
     get_rate_variation([this_years, other_years])
   end
 
   def kindergarten_participation_rate_variation_trend(district, compare)
-    this_district, other_district = districts_to_compare(district, compare[:against])
-    this_district_years = district_kindergarten_by_year(this_district)
-    other_district_years = district_kindergarten_by_year(other_district)
-    calculate_trend(this_district_years, other_district_years).sort.to_h
+    d, other_d = districts_to_compare(district, compare[:against])
+    d_years = district_kindergarten_by_year(d)
+    other_d_years = district_kindergarten_by_year(other_d)
+    calculate_trend(d_years, other_d_years).sort.to_h
   end
 
   def get_rate_variation(years)
