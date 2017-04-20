@@ -142,8 +142,8 @@ class HeadcountAnalyst
 
   def get_growth_weighted_average(test_object, grade, subjects, weight)
     subjects.reduce(0) do |sum, subject|
-      growth = (test_object.growth_by_grade_over_years(grade, subject)
-      sum + growth * weight[subject])
+      growth = test_object.growth_by_grade_over_years(grade, subject)
+      sum + (growth * weight[subject])
     end
   end
 
@@ -175,9 +175,12 @@ class HeadcountAnalyst
   def high_poverty_and_high_school_graduation
     districts = collect_district_result_entries
     state_data = {name: "COLORADO"}
-    state_data.merge!(state_average(districts, :free_and_reduced_price_lunch_rate))
-    state_data.merge!(state_average(districts, :children_in_poverty_rate))
-    state_data.merge!(state_average(districts, :high_school_graduation_rate))
+    lunch = :free_and_reduced_price_lunch_rate
+    state_data.merge!(state_average(districts, lunch))
+    poverty = :children_in_poverty_rate
+    state_data.merge!(state_average(districts, poverty))
+    grad = :high_school_graduation_rate
+    state_data.merge!(state_average(districts, grad))
     statewide = ResultEntry.new(state_data)
     keep_high_poverty_high_grad(districts, statewide)
     ResultSet.new(
