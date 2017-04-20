@@ -290,11 +290,13 @@ class HeadcountAnalyst
   end
 
   def average_median_income(economic_object)
-    find_average_of_year_data(economic_object.data[:median_household_income]).round(3)
+    data = economic_object.data[:median_household_income]
+    find_average_of_year_data(data).round(3)
   end
 
   def average_high_school_grad(enrollment_object)
-    find_average_of_year_data(enrollment_object.data[:high_school_graduation]).round(3)
+    data = enrollment_object.data[:high_school_graduation]
+    find_average_of_year_data(data).round(3)
   end
 
   def collect_district_result_entries

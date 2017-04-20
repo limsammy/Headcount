@@ -125,7 +125,7 @@ class HeadcountAnalystTest < MiniTest::Test
   end
 
   def test_top_statewide_works_for_grade
-    expected = ["SANGRE DE CRISTO RE-22J", 0.07166666666666666]
+    expected = ["SANGRE DE CRISTO RE-22J", 0.072]
     result = @ha.top_statewide_test_year_over_year_growth(grade: 3)
     assert_equal expected, result
   end
