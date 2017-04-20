@@ -12,9 +12,11 @@ class StatewideTest
   end
 
   def validate_args(args)
+    races = [:asian, :black, :pacific_islander,
+            :hispanic, :native_american, :two_or_more, :white]
     valid = {
       :grade => [3,8],
-      :race => [:asian, :black, :pacific_islander, :hispanic, :native_american, :two_or_more, :white],
+      :race => races,
       :subject => [:math, :reading, :writing],
       :year => valid_3_or_8_years,
       :csap_year => valid_ethnicity_years
