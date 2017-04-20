@@ -41,8 +41,7 @@ class ViewBuilder
       if !link_to_district.nil? && !link_to_district.empty?
         page = HTTParty.get("https://en.wikipedia.org" + link_to_district)
         parse_file = Nokogiri::HTML(page)
-        info_box = parse_file.css('.infobox')
-        binding.pry if info_box == ''
+        info_box = parse_file.css('.infobox').to_html
       end
       district_index = erb_template.result(binding)
       build_erb(district_index, district_slug)
