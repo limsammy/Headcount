@@ -94,7 +94,8 @@ class EconomicProfileBuilder
   end
 
   def is_not_free_or_reduced_lunch(row)
-    row[:poverty_level] && row[:poverty_level] != "Eligible for Free or Reduced Lunch"
+    string = "Eligible for Free or Reduced Lunch"
+    row[:poverty_level] && row[:poverty_level] != string
   end
 
   def is_child_poverty_and_is_not_percent(category, row)
