@@ -84,13 +84,29 @@ class ViewBuilder
     erb_template = ERB.new template_analyst
 
     top_3rd_grade = analyst.top_statewide_test_year_over_year_growth(grade: 3)
+    third_grade = @district_repository.find_by_name(top_3rd_grade[0]).statewide_test
     top_8th_grade = analyst.top_statewide_test_year_over_year_growth(grade: 8)
+    eigth_grade = @district_repository.find_by_name(top_8th_grade[0]).statewide_test
+    data = {
+      d_3_by_years: third_grade.proficient_by_grade(3),
+      d_3_by_years_math: get_grade_year_subject_scores(third_grade, 3, :math),
+      d_3_by_years_reading: get_grade_year_subject_scores(third_grade, 3, :reading),
+      d_3_by_years_writing: get_grade_year_subject_scores(third_grade, 3, :writing),
+      d_8_by_years: eigth_grade.proficient_by_grade(8),
+      d_8_by_years_math: get_grade_year_subject_scores(eigth_grade, 8, :math),
+      d_8_by_years_reading: get_grade_year_subject_scores(eigth_grade, 8, :reading),
+      d_8_by_years_writing: get_grade_year_subject_scores(eigth_grade, 8, :writing),
+    }
     top_3rd_math = analyst.top_statewide_test_year_over_year_growth(grade: 3, top: 3, subject: :math)
     top_3rd_reading = analyst.top_statewide_test_year_over_year_growth(grade: 3, top: 3, subject: :reading)
     top_3rd_writing = analyst.top_statewide_test_year_over_year_growth(grade: 3, top: 3, subject: :writing)
     top_8th_math = analyst.top_statewide_test_year_over_year_growth(grade: 8, top: 3, subject: :math)
     top_8th_reading = analyst.top_statewide_test_year_over_year_growth(grade: 8, top: 3, subject: :reading)
     top_8th_writing = analyst.top_statewide_test_year_over_year_growth(grade: 8, top: 3, subject: :writing)
+    high_poverty_and_grad_rate_rs = analyst.high_poverty_and_high_school_graduation
+    high_poverty_and_grad_rate = high_poverty_and_grad_rate_rs.matching_districts
+    income_disparity_rs = analyst.high_income_disparity
+    income_disparity = income_disparity_rs.matching_districts
 
     analyst = erb_template.result(binding)
     build_erb(analyst, '', 'headcount.html')

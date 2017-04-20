@@ -5,14 +5,20 @@
   <div class="row">
     <div class="col-md-6">
       <div class="panel panel-default">
-        <div class="panel-heading">Top District - 3<sup>rd</sup> Grade</div>
-        <div class="panel-body"><%= top_3rd_grade.join(": ") %> </div>
+        <div class="panel-heading">Top District Growth - 3<sup>rd</sup> Grade</div>
+        <div class="panel-body text-center" style="max-height: 550px; height: 550px; padding-bottom:50px;">
+          <h4 class="sub-header"><%= top_3rd_grade.join(": ") %></h4>
+          <canvas id="grade-3-proficiency-by-grade" width="500" height="350"></canvas>
+        </div>
       </div>
     </div>
     <div class="col-md-6">
       <div class="panel panel-default">
-        <div class="panel-heading">Top District - 8<sup>th</sup> Grade</div>
-        <div class="panel-body"><%= top_8th_grade.join(": ") %></div>
+        <div class="panel-heading">Top District Growth - 8<sup>th</sup> Grade</div>
+        <div class="panel-body text-center" style="max-height: 550px; height: 550px; padding-bottom:50px;">
+          <h4 class="sub-header"><%= top_8th_grade.join(": ") %></h4>
+          <canvas id="grade-8-proficiency-by-grade" width="500" height="350"></canvas>
+        </div>
       </div>
     </div>
   </div>
@@ -92,4 +98,111 @@
       </div>
     </div>
   </div>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">High Poverty and a High School Graduation Rate</div>
+        <div class="panel-body">
+          <dl class="row">
+            <dt class="col-sm-3">Which districts match all of these criteria:</dt>
+            <dd class="col-sm-9">Above the statewide average in number of students qualifying for free and reduced price lunch</dd>
+            <dd class="col-sm-9 col-sm-offset-3">Above the statewide average percentage of school-aged children in poverty</dd>
+            <dd class="col-sm-9 col-sm-offset-3">Above the statewide average high school graduation rate</dd>
+          </dl>
+          <ul class="list-group">
+            <% high_poverty_and_grad_rate.each do |district| %>
+            <li class="list-group-item"><h5><%= district.name %></h5>
+              <ul class="list-group">
+                <li class="list-group-item">Children in Free and Reduced Priced Lunch: <%= district.free_and_reduced_price_lunch_rate %></li>
+                <li class="list-group-item">Children in Poverty Rate: <%= district.children_in_poverty_rate %></li>
+                <li class="list-group-item">High School Graduation Rate: <%= district.high_school_graduation_rate %></li>
+              </ul>
+            </li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">Significant Income Disparity</div>
+        <div class="panel-body">
+          <dl class="row">
+            <dt class="col-sm-3">Which districts match all of these criteria:</dt>
+            <dd class="col-sm-9">Above the statewide average in median household income</dd>
+            <dd class="col-sm-9">Above the statewide average percentage of school-aged children in poverty</dd>
+          </dl>
+          <ul class="list-group">
+            <% income_disparity.each do |district| %>
+            <li class="list-group-item"><h5><%= district.name %></h5>
+              <ul class="list-group">
+                <li class="list-group-item">Children in Poverty Rate: <%= district.children_in_poverty_rate %></li>
+                <li class="list-group-item">Median Household Income: $<%= district.median_household_income %></li>
+              </ul>
+            </li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+  <script>
+    <% grade_3_by_years_labels = data[:d_3_by_years].keys.map(&:to_s) %>
+    <% grade_3_by_years_math_data = data[:d_3_by_years_math] %>
+    <% grade_3_by_years_reading_data = data[:d_3_by_years_reading] %>
+    <% grade_3_by_years_writing_data = data[:d_3_by_years_writing] %>
+    var grade_3_by_years = document.getElementById("grade-3-proficiency-by-grade");
+    var grade_3_by_years_data = {
+        labels: <%= grade_3_by_years_labels %>,
+        datasets: [{
+                label: "Math",
+                backgroundColor:'rgba(54, 162, 235, 0.2)',
+                data: <%= grade_3_by_years_math_data %>
+            },
+            {
+                label: "Reading",
+                backgroundColor:'rgba(255, 99, 132, 0.2)',
+                data: <%= grade_3_by_years_reading_data %>
+            },
+            {
+                label: "Writing",
+                backgroundColor:'rgba(255, 206, 86, 0.2)',
+                data: <%= grade_3_by_years_writing_data %>
+            }]
+    };
+    var my3rdGradeByYears = new Chart(grade_3_by_years, {
+        type: 'bar',
+        data: grade_3_by_years_data,
+        options: {maintainAspectRatio: false}
+    });
+    <% grade_8_by_years_labels = data[:d_8_by_years].keys.map(&:to_s) %>
+    <% grade_8_by_years_math_data = data[:d_8_by_years_math] %>
+    <% grade_8_by_years_reading_data = data[:d_8_by_years_reading] %>
+    <% grade_8_by_years_writing_data = data[:d_8_by_years_writing] %>
+    var grade_8_by_years = document.getElementById("grade-8-proficiency-by-grade");
+    var grade_8_by_years_data = {
+        labels: <%= grade_8_by_years_labels %>,
+        datasets: [{
+                label: "Math",
+                backgroundColor:'rgba(54, 162, 235, 0.2)',
+                data: <%= grade_8_by_years_math_data %>
+            },
+            {
+                label: "Reading",
+                backgroundColor:'rgba(255, 99, 132, 0.2)',
+                data: <%= grade_8_by_years_reading_data %>
+            },
+            {
+                label: "Writing",
+                backgroundColor:'rgba(255, 206, 86, 0.2)',
+                data: <%= grade_8_by_years_writing_data %>
+            }]
+    };
+    var my8thGradeByYears = new Chart(grade_8_by_years, {
+        type: 'bar',
+        data: grade_8_by_years_data,
+        options: {maintainAspectRatio: false}
+    });
+    </script>
 <%= File.read("./views/template_parts/footer-charts.erb") %>

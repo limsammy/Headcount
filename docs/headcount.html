@@ -5,7 +5,9 @@
   <!-- Latest compiled and minified CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
   <!-- Optional theme -->
+  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous"> -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
 </head>
 <body>
 
@@ -31,14 +33,20 @@
   <div class="row">
     <div class="col-md-6">
       <div class="panel panel-default">
-        <div class="panel-heading">Top District - 3<sup>rd</sup> Grade</div>
-        <div class="panel-body">SANGRE DE CRISTO RE-22J: 0.072 </div>
+        <div class="panel-heading">Top District Growth - 3<sup>rd</sup> Grade</div>
+        <div class="panel-body text-center" style="max-height: 550px; height: 550px; padding-bottom:50px;">
+          <h4 class="sub-header">SANGRE DE CRISTO RE-22J: 0.072</h4>
+          <canvas id="grade-3-proficiency-by-grade" width="500" height="350"></canvas>
+        </div>
       </div>
     </div>
     <div class="col-md-6">
       <div class="panel panel-default">
-        <div class="panel-heading">Top District - 8<sup>th</sup> Grade</div>
-        <div class="panel-body">OURAY R-1: 0.11</div>
+        <div class="panel-heading">Top District Growth - 8<sup>th</sup> Grade</div>
+        <div class="panel-body text-center" style="max-height: 550px; height: 550px; padding-bottom:50px;">
+          <h4 class="sub-header">OURAY R-1: 0.11</h4>
+          <canvas id="grade-8-proficiency-by-grade" width="500" height="350"></canvas>
+        </div>
       </div>
     </div>
   </div>
@@ -142,6 +150,212 @@
       </div>
     </div>
   </div>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">High Poverty and a High School Graduation Rate</div>
+        <div class="panel-body">
+          <dl class="row">
+            <dt class="col-sm-3">Which districts match all of these criteria:</dt>
+            <dd class="col-sm-9">Above the statewide average in number of students qualifying for free and reduced price lunch</dd>
+            <dd class="col-sm-9 col-sm-offset-3">Above the statewide average percentage of school-aged children in poverty</dd>
+            <dd class="col-sm-9 col-sm-offset-3">Above the statewide average high school graduation rate</dd>
+          </dl>
+          <ul class="list-group">
+            
+            <li class="list-group-item"><h5>DELTA COUNTY 50(J)</h5>
+              <ul class="list-group">
+                <li class="list-group-item">Children in Free and Reduced Priced Lunch: 2296.0</li>
+                <li class="list-group-item">Children in Poverty Rate: 0.177</li>
+                <li class="list-group-item">High School Graduation Rate: 0.833</li>
+              </ul>
+            </li>
+            
+            <li class="list-group-item"><h5>FOUNTAIN 8</h5>
+              <ul class="list-group">
+                <li class="list-group-item">Children in Free and Reduced Priced Lunch: 2585.0</li>
+                <li class="list-group-item">Children in Poverty Rate: 0.166</li>
+                <li class="list-group-item">High School Graduation Rate: 0.832</li>
+              </ul>
+            </li>
+            
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">Significant Income Disparity</div>
+        <div class="panel-body">
+          <dl class="row">
+            <dt class="col-sm-3">Which districts match all of these criteria:</dt>
+            <dd class="col-sm-9">Above the statewide average in median household income</dd>
+            <dd class="col-sm-9">Above the statewide average percentage of school-aged children in poverty</dd>
+          </dl>
+          <ul class="list-group">
+            
+            <li class="list-group-item"><h5>ARCHULETA COUNTY 50 JT</h5>
+              <ul class="list-group">
+                <li class="list-group-item">Children in Poverty Rate: 0.192</li>
+                <li class="list-group-item">Median Household Income: $55902.4</li>
+              </ul>
+            </li>
+            
+            <li class="list-group-item"><h5>BETHUNE R-5</h5>
+              <ul class="list-group">
+                <li class="list-group-item">Children in Poverty Rate: 0.273</li>
+                <li class="list-group-item">Median Household Income: $51518.0</li>
+              </ul>
+            </li>
+            
+            <li class="list-group-item"><h5>BIG SANDY 100J</h5>
+              <ul class="list-group">
+                <li class="list-group-item">Children in Poverty Rate: 0.2</li>
+                <li class="list-group-item">Median Household Income: $51506.2</li>
+              </ul>
+            </li>
+            
+            <li class="list-group-item"><h5>ELLICOTT 22</h5>
+              <ul class="list-group">
+                <li class="list-group-item">Children in Poverty Rate: 0.175</li>
+                <li class="list-group-item">Median Household Income: $51859.4</li>
+              </ul>
+            </li>
+            
+            <li class="list-group-item"><h5>HANOVER 28</h5>
+              <ul class="list-group">
+                <li class="list-group-item">Children in Poverty Rate: 0.167</li>
+                <li class="list-group-item">Median Household Income: $54237.0</li>
+              </ul>
+            </li>
+            
+            <li class="list-group-item"><h5>HINSDALE COUNTY RE 1</h5>
+              <ul class="list-group">
+                <li class="list-group-item">Children in Poverty Rate: 0.205</li>
+                <li class="list-group-item">Median Household Income: $63265.2</li>
+              </ul>
+            </li>
+            
+            <li class="list-group-item"><h5>IGNACIO 11 JT</h5>
+              <ul class="list-group">
+                <li class="list-group-item">Children in Poverty Rate: 0.187</li>
+                <li class="list-group-item">Median Household Income: $51885.4</li>
+              </ul>
+            </li>
+            
+            <li class="list-group-item"><h5>KIT CARSON R-1</h5>
+              <ul class="list-group">
+                <li class="list-group-item">Children in Poverty Rate: 0.187</li>
+                <li class="list-group-item">Median Household Income: $60633.8</li>
+              </ul>
+            </li>
+            
+            <li class="list-group-item"><h5>MANCOS RE-6</h5>
+              <ul class="list-group">
+                <li class="list-group-item">Children in Poverty Rate: 0.166</li>
+                <li class="list-group-item">Median Household Income: $50447.6</li>
+              </ul>
+            </li>
+            
+            <li class="list-group-item"><h5>MIAMI/YODER 60 JT</h5>
+              <ul class="list-group">
+                <li class="list-group-item">Children in Poverty Rate: 0.246</li>
+                <li class="list-group-item">Median Household Income: $50448.2</li>
+              </ul>
+            </li>
+            
+            <li class="list-group-item"><h5>PLATEAU RE-5</h5>
+              <ul class="list-group">
+                <li class="list-group-item">Children in Poverty Rate: 0.176</li>
+                <li class="list-group-item">Median Household Income: $51138.4</li>
+              </ul>
+            </li>
+            
+            <li class="list-group-item"><h5>SARGENT RE-33J</h5>
+              <ul class="list-group">
+                <li class="list-group-item">Children in Poverty Rate: 0.259</li>
+                <li class="list-group-item">Median Household Income: $50034.6</li>
+              </ul>
+            </li>
+            
+            <li class="list-group-item"><h5>WIGGINS RE-50(J)</h5>
+              <ul class="list-group">
+                <li class="list-group-item">Children in Poverty Rate: 0.17</li>
+                <li class="list-group-item">Median Household Income: $52508.8</li>
+              </ul>
+            </li>
+            
+            <li class="list-group-item"><h5>WILEY RE-13 JT</h5>
+              <ul class="list-group">
+                <li class="list-group-item">Children in Poverty Rate: 0.212</li>
+                <li class="list-group-item">Median Household Income: $50934.2</li>
+              </ul>
+            </li>
+            
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+  <script>
+    
+    
+    
+    
+    var grade_3_by_years = document.getElementById("grade-3-proficiency-by-grade");
+    var grade_3_by_years_data = {
+        labels: ["2008", "2009", "2010", "2011", "2012", "2013", "2014"],
+        datasets: [{
+                label: "Math",
+                backgroundColor:'rgba(54, 162, 235, 0.2)',
+                data: [0.476, 0.632, 0.625, 0.607, 0.789, 0.967, 0.905]
+            },
+            {
+                label: "Reading",
+                backgroundColor:'rgba(255, 99, 132, 0.2)',
+                data: [0.476, 0.737, 0.417, 0.536, 0.737, 1.0, 0.905]
+            },
+            {
+                label: "Writing",
+                backgroundColor:'rgba(255, 206, 86, 0.2)',
+                data: [0.143, 0.474, 0.208, 0.143, 0.526, 0.7, 0.571]
+            }]
+    };
+    var my3rdGradeByYears = new Chart(grade_3_by_years, {
+        type: 'bar',
+        data: grade_3_by_years_data,
+        options: {maintainAspectRatio: false}
+    });
+    
+    
+    
+    
+    var grade_8_by_years = document.getElementById("grade-8-proficiency-by-grade");
+    var grade_8_by_years_data = {
+        labels: ["2008", "2009", "2010", "2011", "2012", "2013", "2014"],
+        datasets: [{
+                label: "Math",
+                backgroundColor:'rgba(54, 162, 235, 0.2)',
+                data: [0.391, "N/A", 0.875, "N/A", "N/A", 0.0, 0.0]
+            },
+            {
+                label: "Reading",
+                backgroundColor:'rgba(255, 99, 132, 0.2)',
+                data: [0.87, "N/A", 1.0, "N/A", "N/A", 0.0, 0.0]
+            },
+            {
+                label: "Writing",
+                backgroundColor:'rgba(255, 206, 86, 0.2)',
+                data: [0.696, "N/A", 0.743, "N/A", "N/A", 0.0, 0.0]
+            }]
+    };
+    var my8thGradeByYears = new Chart(grade_8_by_years, {
+        type: 'bar',
+        data: grade_8_by_years_data,
+        options: {maintainAspectRatio: false}
+    });
+    </script>
 <!-- Latest compiled and minified JavaScript -->
 </div>
 </div>

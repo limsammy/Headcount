@@ -1,5 +1,6 @@
 require_relative 'custom_errors'
 require_relative 'result_set'
+require_relative 'result_entry'
 require 'pry'
 
 class HeadcountAnalyst
