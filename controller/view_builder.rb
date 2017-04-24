@@ -131,8 +131,8 @@ class ViewBuilder
       d_children_in_poverty: economic.data[:children_in_poverty] || {},
       d_title_i: economic.data[:title_i],
       d_median_income: economic.data[:median_household_income],
-      d_lunch_precentage: get_lunch_data(economic, :percentage),
-      d_lunch_total: get_lunch_data(economic, :total),
+      d_lunch_precentage: get_lunch_data(economic, :percentage).sort.to_h,
+      d_lunch_total: get_lunch_data(economic, :total).sort.to_h,
     }
   end
 
